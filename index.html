@@ -1479,14 +1479,14 @@ function getColLetter(colIndex) {
             }));
 
             SARINGAN_SHEETS.forEach(s => {
-                const isSpecial = s === '300';
+                const isSpecial300 = (s === '300');
                 dataset[s] = {
-                    maleS1: buildMockAthletes(isSpecial ? 4 : 8),
-                    maleS2: buildMockAthletes(isSpecial ? 4 : 8),
-                    femaleS1: buildMockAthletes(isSpecial ? 4 : 8),
-                    femaleS2: buildMockAthletes(isSpecial ? 4 : 8),
-                    male: buildMockAthletes(isSpecial ? 4 : 8),
-                    female: buildMockAthletes(isSpecial ? 4 : 8)
+                    maleS1: buildMockAthletes(isSpecial300 ? 4 : 8),
+                    maleS2: buildMockAthletes(isSpecial300 ? 4 : 8),
+                    femaleS1: buildMockAthletes(isSpecial300 ? 4 : 8),
+                    femaleS2: buildMockAthletes(isSpecial300 ? 4 : 8),
+                    male: buildMockAthletes(isSpecial300 ? 4 : 8),
+                    female: buildMockAthletes(isSpecial300 ? 4 : 8)
                 };
             });
 
@@ -1503,19 +1503,6 @@ function getColLetter(colIndex) {
                     female: buildMockFieldAthletes(8)
                 };
             });
-        }
-
-        function triggerPrint() {
-            const printSub = document.getElementById('printDocSubHeader');
-            const printTime = document.getElementById('printDocTimestamp');
-            if (printSub) printSub.innerText = `Dokumen Keputusan Rasmi - Acara ${currentMainTab.toUpperCase()}`;
-            if (printTime) printTime.innerText = `Dicetak pada: ${new Date().toLocaleString('ms-MY')}`;
-
-            try {
-                window.print();
-            } catch (e) {
-                openPrintModalFallback();
-            }
         }
 
         function openPrintModalFallback() {
@@ -1790,7 +1777,6 @@ function getColLetter(colIndex) {
         }
 
         async function handleSingleCellSave(type, eventName, category, rowIndex, colIndex, value) {
-            // Strict Security Check for Non-Admin
             if (isEventLocked(type) && (!currentUser || currentUser.role !== 'admin')) {
                 showToast("Acara ini masih dikunci oleh Admin Utama.", "error");
                 logActivity('Cubaan Edit Ditolak', `${currentUser ? currentUser.name : 'Tetamu'} (${currentUser ? currentUser.role : 'tetamu'}) cuba mengedit [${type} - ${eventName}] tetapi acara dikunci.`, 'Gagal');
