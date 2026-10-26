@@ -200,12 +200,12 @@
     <script>
         const GAS_CODE_PADANG = `function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetNames = ["101", "102", "103", "104", "105", "106", "204", "205", "206"];
+  var sheetNames = ["101", "102", "103", "104", "105", "106", "204", "205", "300"];
   var eventsData = {};
   sheetNames.forEach(function(sName) {
     var sheet = ss.getSheetByName(sName);
     if (sheet) {
-      if (["204", "205", "206"].indexOf(sName) !== -1) {
+      if (sName === "300") {
         eventsData[sName] = {
           maleS1: sheet.getRange("A5:G8").getDisplayValues(),
           maleS2: sheet.getRange("A14:G17").getDisplayValues(),
@@ -251,12 +251,12 @@ function getColLetter(colIndex) {
 
         const GAS_CODE_BALAPAN = `function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetNames = ["101", "102", "103", "104", "105", "106", "204", "205", "206"];
+  var sheetNames = ["101", "102", "103", "104", "105", "106", "204", "205", "300"];
   var eventsData = {};
   sheetNames.forEach(function(sName) {
     var sheet = ss.getSheetByName(sName);
     if (sheet) {
-      if (["204", "205", "206"].indexOf(sName) !== -1) {
+      if (sName === "300") {
         eventsData[sName] = {
           male: sheet.getRange("A6:G9").getDisplayValues(),
           female: sheet.getRange("A16:G19").getDisplayValues()
@@ -298,7 +298,7 @@ function getColLetter(colIndex) {
 
         const GAS_CODE_RELAY = `function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheetNames = ["411", "414", "415", "424", "425"];
+  var sheetNames = ["411", "412", "413", "414", "415", "424", "425"];
   var eventsData = {};
   sheetNames.forEach(function(sName) {
     var sheet = ss.getSheetByName(sName);
@@ -467,15 +467,19 @@ function getColLetter(colIndex) {
         <div class="no-print flex items-center gap-2 overflow-x-auto pb-3 mb-6 sm:mb-8 border-b border-slate-200/80 dark:border-slate-800 touch-pan-x">
             <button id="tabBtn-padang" onclick="switchMainTab('padang')" class="py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20 active:scale-95">
                 <i class="fa-solid fa-stopwatch"></i> Acara Saringan
+                <span id="tabLockBadge-padang" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-900/40 text-white border border-white/20">🔒</span>
             </button>
             <button id="tabBtn-balapan" onclick="switchMainTab('balapan')" class="py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-600 hover:bg-slate-200/70 border border-slate-200/60 active:scale-95">
                 <i class="fa-solid fa-flag-checkered"></i> Akhir Balapan
+                <span id="tabLockBadge-balapan" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700">🔒</span>
             </button>
             <button id="tabBtn-relay" onclick="switchMainTab('relay')" class="py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-600 hover:bg-slate-200/70 border border-slate-200/60 active:scale-95">
                 <i class="fa-solid fa-person-running"></i> Acara Relay
+                <span id="tabLockBadge-relay" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700">🔒</span>
             </button>
             <button id="tabBtn-padang_acara" onclick="switchMainTab('padang_acara')" class="py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-600 hover:bg-slate-200/70 border border-slate-200/60 active:scale-95">
                 <i class="fa-solid fa-arrows-left-right-to-line"></i> Acara Padang
+                <span id="tabLockBadge-padang_acara" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700">🔒</span>
             </button>
             <button id="tabBtn-pingat" onclick="switchMainTab('pingat')" class="py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-600 hover:bg-slate-200/70 border border-slate-200/60 active:scale-95">
                 <i class="fa-solid fa-chart-pie"></i> Kedudukan Pingat
@@ -824,7 +828,7 @@ function getColLetter(colIndex) {
                     <label class="block text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1.5">ID Pengguna</label>
                     <div class="relative">
                         <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-400 text-xs sm:text-sm"></i>
-                        <input type="text" id="loginUserId" placeholder="Contoh: 0000" required class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-300 dark:border-slate-700 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
+                        <input type="text" id="loginUserId" placeholder="Admin" required class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-300 dark:border-slate-700 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
                     </div>
                 </div>
 
@@ -869,12 +873,22 @@ function getColLetter(colIndex) {
                 <button id="adminSubTabBtn-urlConfig" onclick="switchAdminSubTab('urlConfig')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-900 border-t-2 border-blue-600 shadow-xs">
                     <i class="fa-solid fa-link"></i> Pengurusan Data (URL API)
                 </button>
+                <button id="adminSubTabBtn-eventLocks" onclick="switchAdminSubTab('eventLocks')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
+                    <i class="fa-solid fa-lock"></i> Kawalan Akses Butang Acara
+                </button>
                 <button id="adminSubTabBtn-users" onclick="switchAdminSubTab('users')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
                     <i class="fa-solid fa-users-gear"></i> Pengurusan Pengguna
                 </button>
                 <button id="adminSubTabBtn-logs" onclick="switchAdminSubTab('logs')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
                     <i class="fa-solid fa-clock-rotate-left"></i> Sejarah & Log Aktiviti
                 </button>
+            </div>
+
+            <div id="adminTabContent-eventLocks" class="space-y-4 hidden">
+                <div class="p-4 bg-blue-50/80 dark:bg-blue-950/40 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 text-xs text-blue-900 dark:text-blue-300 font-medium">
+                    <i class="fa-solid fa-circle-info mr-1 text-blue-600"></i> Hanya Admin Utama boleh membuka atau mengunci akses pengisian data acara. Apabila acara dikunci, Pegawai tidak boleh mengubah sebarang maklumat.
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="eventLockControlsGrid"></div>
             </div>
 
             <div id="adminTabContent-urlConfig" class="space-y-5">
@@ -1077,6 +1091,14 @@ function getColLetter(colIndex) {
         let usersList = JSON.parse(localStorage.getItem('sports_users_list')) || DEFAULT_USERS;
         let activityLogs = JSON.parse(localStorage.getItem('sports_activity_logs')) || [];
 
+        // Dynamic event lock state (Default: ALL LOCKED)
+        let eventLockState = JSON.parse(localStorage.getItem('sports_event_lock_state')) || {
+            padang: true,
+            balapan: true,
+            relay: true,
+            padang_acara: true
+        };
+
         let webAppUrlPadang = localStorage.getItem('sports_webapp_url_padang') || '';
         let webAppUrlBalapan = localStorage.getItem('sports_webapp_url_balapan') || '';
         let webAppUrlRelay = localStorage.getItem('sports_webapp_url_relay') || '';
@@ -1091,175 +1113,29 @@ function getColLetter(colIndex) {
         let currentRelayEvent = '411';     
         let currentPadangAcaraEvent = 'LongJump';
 
-        const SARINGAN_SHEETS = ['101', '102', '103', '104', '105', '106', '204', '205', '206'];
-        const AKHIR_SHEETS = ['101', '102', '103', '104', '105', '106', '204', '205', '206'];
-        const RELAY_SHEETS = ['411', '414', '415', '424', '425'];
+        const SARINGAN_SHEETS = ['101', '102', '103', '104', '105', '106', '204', '205', '300'];
+        const AKHIR_SHEETS = ['101', '102', '103', '104', '105', '106', '204', '205', '300'];
+        const RELAY_SHEETS = ['411', '412', '413', '414', '415', '424', '425'];
         const PADANG_ACARA_SHEETS = ['LongJump', 'HighJump', 'ShotPut'];
 
         let dataset = {};
 
-        function triggerPrint() {
-            // 1. Sync input values to HTML attributes so printed DOM retains user entries
-            document.querySelectorAll('input').forEach(input => {
-                input.setAttribute('value', input.value);
-            });
-
-            // 2. Set timestamp and active event headers
-            const nowStr = new Date().toLocaleString('ms-MY');
-            
-            let activeTabName = "Acara Saringan";
-            let activeEvent = currentSaringanEvent;
-            if (currentMainTab === 'balapan') { activeTabName = "Akhir Balapan"; activeEvent = currentBalapanEvent; }
-            else if (currentMainTab === 'relay') { activeTabName = "Acara Relay"; activeEvent = currentRelayEvent; }
-            else if (currentMainTab === 'padang_acara') { activeTabName = "Acara Padang"; activeEvent = currentPadangAcaraEvent; }
-            else if (currentMainTab === 'pingat') { activeTabName = "Kedudukan & Pungutan Pingat"; activeEvent = ""; }
-
-            const subText = `Keputusan Rasmi: ${activeTabName} ${activeEvent ? ' - Acara ' + activeEvent : ''}`;
-
-            // 3. Get active section DOM content
-            const activeContainerId = `mainTabContent-${currentMainTab}`;
-            const activeEl = document.getElementById(activeContainerId);
-            const contentHtml = activeEl ? activeEl.innerHTML : '';
-
-            // 4. Show the Download Preview Modal
-            showPrintModalFallback(contentHtml, subText, nowStr);
-        }
-
-        function showPrintModalFallback(htmlContent, subText, nowStr) {
-            const fallbackModal = document.getElementById('printModalFallback');
-            const fallbackBody = document.getElementById('printModalFallbackBody');
-            if (!fallbackModal || !fallbackBody) return;
-
-            fallbackBody.innerHTML = `
-                <div class="text-center pb-4 mb-4 border-b border-slate-300 dark:border-slate-700">
-                    <h2 class="font-black text-slate-900 dark:text-white text-lg uppercase">OFFICIAL STATISTICS CENTER</h2>
-                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300 mt-1">${subText}</p>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Dicetak pada: ${nowStr}</p>
-                </div>
-                <div>${htmlContent}</div>
-            `;
-            fallbackModal.classList.remove('hidden');
-        }
-
-        function downloadPrintDocument() {
-            const bodyContent = document.getElementById('printModalFallbackBody')?.innerHTML || '';
-            const fullHtml = `<!DOCTYPE html>
-<html lang="ms">
-<head>
-    <meta charset="UTF-8">
-    <title>Keputusan Rasmi Kejohanan</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 25px; color: #000; background: #fff; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
-        th, td { border: 1px solid #475569; padding: 6px 10px; text-align: left; font-size: 12px; }
-        thead { background-color: #f1f5f9; }
-        .text-center { text-align: center; }
-        .font-bold { font-weight: bold; }
-        input { border: none; background: transparent; text-align: center; font-weight: bold; width: 100%; font-size: 12px; }
-        .no-print { display: none !important; }
-        .grid { display: block !important; }
-        .grid > div { margin-bottom: 20px !important; }
-    </style>
-</head>
-<body>
-    ${bodyContent}
-    <script>
-        window.onload = function() {
-            setTimeout(function() { window.print(); }, 300);
-        };
-    <\/script>
-</body>
-</html>`;
-
-            const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
-            const blobUrl = URL.createObjectURL(blob);
-
-            // Attempt opening standalone window outside iframe sandbox
-            const standaloneWin = window.open(blobUrl, '_blank');
-            if (!standaloneWin) {
-                // If popups are blocked, download HTML file directly
-                const downloadLink = document.createElement('a');
-                downloadLink.href = blobUrl;
-                downloadLink.download = `Keputusan_Rasmi_${currentMainTab}_${new Date().getTime()}.html`;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                showToast("Fail dokumen keputusan telah dimuat turun. Buka fail untuk cetak/simpan PDF.", "success");
+        // Helper Functions for Theme and Security
+        function initTheme() {
+            const savedTheme = localStorage.getItem('sports_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark');
+                updateThemeIcon(true);
             } else {
-                showToast("Dokumen dibuka di tab baharu untuk dicetak.", "success");
+                document.body.classList.remove('dark');
+                updateThemeIcon(false);
             }
-        }
-
-        function closePrintModalFallback() {
-            const fallbackModal = document.getElementById('printModalFallback');
-            if (fallbackModal) fallbackModal.classList.add('hidden');
-        }
-
-        window.onbeforeprint = function() {
-            const timeEl = document.getElementById('printDocTimestamp');
-            const subEl = document.getElementById('printDocSubHeader');
-            if (timeEl) timeEl.innerText = "Dicetak pada: " + new Date().toLocaleString('ms-MY');
-            if (subEl) {
-                let activeTabName = "Saringan";
-                let activeEvent = currentSaringanEvent;
-                if (currentMainTab === 'balapan') { activeTabName = "Akhir Balapan"; activeEvent = currentBalapanEvent; }
-                else if (currentMainTab === 'relay') { activeTabName = "Acara Relay"; activeEvent = currentRelayEvent; }
-                else if (currentMainTab === 'padang_acara') { activeTabName = "Acara Padang"; activeEvent = currentPadangAcaraEvent; }
-                else if (currentMainTab === 'pingat') { activeTabName = "Kedudukan & Pungutan Pingat"; activeEvent = ""; }
-                subEl.innerText = `Keputusan Rasmi: ${activeTabName} ${activeEvent ? ' - Acara ' + activeEvent : ''}`;
-            }
-        };
-
-        function getDeviceInfo() {
-            const ua = navigator.userAgent;
-            let os = "Desktop";
-            if (/android/i.test(ua)) os = "Android";
-            else if (/iPad|iPhone|iPod/.test(ua)) os = "iOS";
-            else if (/windows/i.test(ua)) os = "Windows";
-            else if (/mac/i.test(ua)) os = "macOS";
-            else if (/linux/i.test(ua)) os = "Linux";
-
-            let browser = "Browser";
-            if (/chrome|crios/i.test(ua)) browser = "Chrome";
-            else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
-            else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
-            else if (/edg/i.test(ua)) browser = "Edge";
-
-            return `${clientIpAddress} • ${os} (${browser})`;
-        }
-
-        function detectClientIp() {
-            fetch('https://api.ipify.org?format=json')
-                .then(res => res.json())
-                .then(data => { if (data && data.ip) clientIpAddress = data.ip; })
-                .catch(() => { clientIpAddress = "127.0.0.1"; });
-        }
-
-        function normalizeHouseName(name) {
-            if (!name) return '';
-            const n = name.toString().toLowerCase();
-            if (n.includes('garuda') || n.includes('merah')) return 'Garuda';
-            if (n.includes('rajawali') || n.includes('biru')) return 'Rajawali';
-            if (n.includes('helang') || n.includes('hijau')) return 'Helang';
-            if (n.includes('kenyalang') || n.includes('kuning')) return 'Kenyalang';
-            return name;
-        }
-
-        function getHouseTextColor(house) {
-            const norm = normalizeHouseName(house);
-            if (norm === 'Garuda') return 'text-red-600 dark:text-red-400 font-extrabold';
-            if (norm === 'Rajawali') return 'text-blue-600 dark:text-blue-400 font-extrabold';
-            if (norm === 'Helang') return 'text-emerald-600 dark:text-emerald-400 font-extrabold';
-            if (norm === 'Kenyalang') return 'text-amber-500 dark:text-yellow-400 font-extrabold';
-            return 'text-slate-700 dark:text-slate-300';
         }
 
         function toggleDarkMode() {
             const isDark = document.body.classList.toggle('dark');
             localStorage.setItem('sports_theme', isDark ? 'dark' : 'light');
             updateThemeIcon(isDark);
-            logActivity('Tetapan Tema', `Tukar tema kepada ${isDark ? 'Mod Gelap' : 'Mod Terang'}`, 'Berjaya');
-            showToast(`Bertukar ke ${isDark ? 'Mod Gelap' : 'Mod Terang'}`, "info");
         }
 
         function updateThemeIcon(isDark) {
@@ -1269,16 +1145,484 @@ function getColLetter(colIndex) {
             }
         }
 
-        function initTheme() {
-            const savedTheme = localStorage.getItem('sports_theme');
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-            if (isDark) {
-                document.body.classList.add('dark');
+        function detectClientIp() {
+            fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(data => { clientIpAddress = data.ip || "127.0.0.1"; })
+                .catch(() => { clientIpAddress = "127.0.0.1"; });
+        }
+
+        function checkUserAuth() {
+            const storedUser = localStorage.getItem('sports_current_user');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                hideLoginOverlay();
             } else {
-                document.body.classList.remove('dark');
+                showLoginOverlay();
             }
-            updateThemeIcon(isDark);
+            updateHeaderUserInfo();
+        }
+
+        function showLoginOverlay() {
+            const overlay = document.getElementById('loginOverlay');
+            if (overlay) overlay.classList.remove('hidden');
+        }
+
+        function hideLoginOverlay() {
+            const overlay = document.getElementById('loginOverlay');
+            if (overlay) overlay.classList.add('hidden');
+        }
+
+        function updateHeaderUserInfo() {
+            const nameEl = document.getElementById('headerUserName');
+            if (nameEl) {
+                nameEl.innerText = currentUser ? `${currentUser.name} (${currentUser.role === 'admin' ? 'Admin' : 'Pegawai'})` : 'Tetamu';
+            }
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('loginUserId').value.trim();
+            const passInput = document.getElementById('loginPassword').value.trim();
+            const errorMsg = document.getElementById('loginErrorMsg');
+
+            const foundUser = usersList.find(u => u.id === idInput && u.pass === passInput && u.status === 'Aktif');
+
+            if (foundUser) {
+                currentUser = foundUser;
+                localStorage.setItem('sports_current_user', JSON.stringify(currentUser));
+                if (errorMsg) errorMsg.classList.add('hidden');
+                hideLoginOverlay();
+                updateHeaderUserInfo();
+                logActivity('Log Masuk', `${currentUser.name} berjaya log masuk.`, 'Berjaya');
+                showToast(`Selamat datang, ${currentUser.name}!`, "success");
+                renderAllTables();
+            } else {
+                if (errorMsg) errorMsg.classList.remove('hidden');
+                logActivity('Log Masuk Gagal', `Cubaan log masuk gagal untuk ID: ${idInput}`, 'Gagal');
+            }
+        }
+
+        function handleLogout() {
+            if (currentUser) {
+                logActivity('Log Keluar', `${currentUser.name} log keluar.`, 'Berjaya');
+            }
+            currentUser = null;
+            localStorage.removeItem('sports_current_user');
+            updateHeaderUserInfo();
+            showLoginOverlay();
+            showToast("Anda telah log keluar.", "info");
+        }
+
+        function toggleSetupModal() {
+            const modal = document.getElementById('setupModal');
+            if (!modal) return;
+            if (currentUser && currentUser.role !== 'admin') {
+                showToast("Hanya Admin Utama dibenarkan mengakses Tetapan Admin.", "error");
+                return;
+            }
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                switchAdminSubTab('urlConfig');
+            }
+        }
+
+        function logActivity(category, details, status = 'Berjaya') {
+            const newLog = {
+                timestamp: new Date().toLocaleString('ms-MY'),
+                user: currentUser ? currentUser.name : 'Tetamu',
+                role: currentUser ? (currentUser.role === 'admin' ? 'Admin Utama' : 'Pegawai') : 'Tetamu',
+                category: category,
+                details: details,
+                status: status,
+                ip: clientIpAddress
+            };
+            activityLogs.unshift(newLog);
+            if (activityLogs.length > 100) activityLogs.pop();
+            localStorage.setItem('sports_activity_logs', JSON.stringify(activityLogs));
+            renderLogsTable();
+        }
+
+        function renderLogsTable() {
+            const tbody = document.getElementById('logsTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = activityLogs.map(log => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors text-slate-700 dark:text-slate-300">
+                    <td class="p-3 font-mono text-[11px] whitespace-nowrap">${log.timestamp}</td>
+                    <td class="p-3 font-bold">${log.user} <span class="text-[10px] text-slate-400 font-normal">(${log.role})</span></td>
+                    <td class="p-3 font-semibold text-blue-600 dark:text-blue-400">${log.category}</td>
+                    <td class="p-3">${log.details}</td>
+                    <td class="p-3 text-center">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${log.status === 'Berjaya' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'}">${log.status}</span>
+                    </td>
+                    <td class="p-3 font-mono text-[11px] text-slate-400">${log.ip}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearActivityLogs() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showToast("Hanya Admin Utama yang dibenarkan mengosongkan log.", "error");
+                return;
+            }
+            activityLogs = [];
+            localStorage.setItem('sports_activity_logs', JSON.stringify(activityLogs));
+            renderLogsTable();
+            showToast("Log aktiviti telah dikosongkan.", "info");
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('usersTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = usersList.map((u, idx) => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-3 font-bold text-slate-800 dark:text-slate-100">${u.name}</td>
+                    <td class="p-3 text-center font-mono">${u.id}</td>
+                    <td class="p-3 text-center font-mono text-slate-400">${u.pass}</td>
+                    <td class="p-3 text-center font-semibold text-blue-600 dark:text-blue-400">${u.role === 'admin' ? 'Admin Utama' : 'Pegawai'}</td>
+                    <td class="p-3 text-center">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${u.status === 'Aktif' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'}">${u.status}</span>
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="openEditUserModal(${idx})" class="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-lg"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openAddUserModal() {
+            document.getElementById('userFormTitle').innerText = "Tambah Pengguna Baharu";
+            document.getElementById('userFormIndex').value = "-1";
+            document.getElementById('userFormName').value = "";
+            document.getElementById('userFormId').value = "";
+            document.getElementById('userFormPass').value = "";
+            document.getElementById('userFormRole').value = "pegawai";
+            document.getElementById('userFormStatus').value = "Aktif";
+            document.getElementById('userEditModal').classList.remove('hidden');
+        }
+
+        function openEditUserModal(idx) {
+            const u = usersList[idx];
+            if (!u) return;
+            document.getElementById('userFormTitle').innerText = "Kemaskini Pengguna";
+            document.getElementById('userFormIndex').value = idx;
+            document.getElementById('userFormName').value = u.name;
+            document.getElementById('userFormId').value = u.id;
+            document.getElementById('userFormPass').value = u.pass;
+            document.getElementById('userFormRole').value = u.role;
+            document.getElementById('userFormStatus').value = u.status;
+            document.getElementById('userEditModal').classList.remove('hidden');
+        }
+
+        function closeUserEditModal() {
+            document.getElementById('userEditModal').classList.add('hidden');
+        }
+
+        function saveUserForm(e) {
+            e.preventDefault();
+            const idx = parseInt(document.getElementById('userFormIndex').value);
+            const newUser = {
+                name: document.getElementById('userFormName').value.trim(),
+                id: document.getElementById('userFormId').value.trim(),
+                pass: document.getElementById('userFormPass').value.trim(),
+                role: document.getElementById('userFormRole').value,
+                status: document.getElementById('userFormStatus').value
+            };
+
+            if (idx >= 0) {
+                usersList[idx] = newUser;
+                logActivity('Pengurusan Pengguna', `Kemaskini akaun: ${newUser.name} (${newUser.id})`, 'Berjaya');
+            } else {
+                usersList.push(newUser);
+                logActivity('Pengurusan Pengguna', `Tambah akaun baharu: ${newUser.name} (${newUser.id})`, 'Berjaya');
+            }
+
+            localStorage.setItem('sports_users_list', JSON.stringify(usersList));
+            closeUserEditModal();
+            renderUsersTable();
+            showToast("Maklumat pengguna berjaya disimpan.", "success");
+        }
+
+        function normalizeHouseName(houseStr) {
+            if (!houseStr) return 'Garuda';
+            const h = houseStr.toString().trim().toLowerCase();
+            if (h.includes('garuda') || h.includes('merah') || h.includes('m')) return 'Garuda';
+            if (h.includes('rajawali') || h.includes('biru') || h.includes('b')) return 'Rajawali';
+            if (h.includes('helang') || h.includes('hijau') || h.includes('h')) return 'Helang';
+            if (h.includes('kenyalang') || h.includes('kuning') || h.includes('k')) return 'Kenyalang';
+            return 'Garuda';
+        }
+
+        function getHouseTextColor(houseStr) {
+            const norm = normalizeHouseName(houseStr);
+            if (norm === 'Garuda') return 'text-red-600 dark:text-red-400 font-extrabold';
+            if (norm === 'Rajawali') return 'text-blue-600 dark:text-blue-400 font-extrabold';
+            if (norm === 'Helang') return 'text-emerald-600 dark:text-emerald-400 font-extrabold';
+            if (norm === 'Kenyalang') return 'text-amber-500 dark:text-yellow-400 font-extrabold';
+            return 'font-extrabold';
+        }
+
+        function switchMainTab(tab) {
+            currentMainTab = tab;
+            ['padang', 'balapan', 'relay', 'padang_acara', 'pingat'].forEach(t => {
+                const btn = document.getElementById(`tabBtn-${t}`);
+                const content = document.getElementById(`mainTabContent-${t}`);
+                if (btn) {
+                    if (t === tab) {
+                        btn.className = "py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20 active:scale-95";
+                    } else {
+                        btn.className = "py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 border border-slate-200/60 dark:border-slate-700 active:scale-95";
+                    }
+                }
+                if (content) {
+                    if (t === tab) content.classList.remove('hidden');
+                    else content.classList.add('hidden');
+                }
+            });
+
+            if (tab === 'pingat') renderHouseStats();
+        }
+
+        function renderEventSelectors() {
+            const createBtnHTML = (sheets, current, onClickFn) => sheets.map(s => `
+                <button onclick="${onClickFn}('${s}')" class="px-3 py-1.5 rounded-xl font-black text-xs transition-all active:scale-95 ${s === current ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}">
+                    ${s}
+                </button>
+            `).join('');
+
+            const saringanSel = document.getElementById('saringanEventSelector');
+            if (saringanSel) saringanSel.innerHTML = createBtnHTML(SARINGAN_SHEETS, currentSaringanEvent, 'changeSaringanEvent');
+
+            const balapanSel = document.getElementById('balapanEventSelector');
+            if (balapanSel) balapanSel.innerHTML = createBtnHTML(AKHIR_SHEETS, currentBalapanEvent, 'changeBalapanEvent');
+
+            const relaySel = document.getElementById('relayEventSelector');
+            if (relaySel) relaySel.innerHTML = createBtnHTML(RELAY_SHEETS, currentRelayEvent, 'changeRelayEvent');
+
+            const padangAcaraSel = document.getElementById('padangAcaraEventSelector');
+            if (padangAcaraSel) padangAcaraSel.innerHTML = createBtnHTML(PADANG_ACARA_SHEETS, currentPadangAcaraEvent, 'changePadangAcaraEvent');
+        }
+
+        function changeSaringanEvent(ev) {
+            currentSaringanEvent = ev;
+            const badge = document.getElementById('currentSaringanSheetBadge');
+            if (badge) badge.innerText = ev;
+            renderEventSelectors();
+            renderSaringanTables();
+        }
+
+        function changeBalapanEvent(ev) {
+            currentBalapanEvent = ev;
+            const badge = document.getElementById('currentTrackSheetBadge');
+            if (badge) badge.innerText = ev;
+            renderEventSelectors();
+            renderBalapanTables();
+        }
+
+        function changeRelayEvent(ev) {
+            currentRelayEvent = ev;
+            const badge = document.getElementById('currentRelaySheetBadge');
+            if (badge) badge.innerText = ev;
+            renderEventSelectors();
+            renderRelayTables();
+        }
+
+        function changePadangAcaraEvent(ev) {
+            currentPadangAcaraEvent = ev;
+            const badge = document.getElementById('currentPadangAcaraSheetBadge');
+            if (badge) badge.innerText = ev;
+            renderEventSelectors();
+            renderPadangAcaraTables();
+        }
+
+        function renderSaringanTables() {
+            const evData = dataset[currentSaringanEvent];
+            if (!evData) return;
+            const isSpecial = currentSaringanEvent === '300';
+            renderTrackTable('tableSaringanMale1', evData.maleS1, 'padang', currentSaringanEvent, 'maleS1', 5, 5, 6);
+            renderTrackTable('tableSaringanMale2', evData.maleS2, 'padang', currentSaringanEvent, 'maleS2', isSpecial ? 14 : 18, 5, 6);
+            renderTrackTable('tableSaringanFemale1', evData.femaleS1, 'padang', currentSaringanEvent, 'femaleS1', 5, 13, 14);
+            renderTrackTable('tableSaringanFemale2', evData.femaleS2, 'padang', currentSaringanEvent, 'femaleS2', isSpecial ? 14 : 18, 13, 14);
+        }
+
+        function renderBalapanTables() {
+            const evData = dataset[currentBalapanEvent];
+            if (!evData) return;
+            const isSpecial = currentBalapanEvent === '300';
+            renderTrackTable('tableBalapanMale', evData.male, 'balapan', currentBalapanEvent, 'male', 6, 5, 6);
+            renderTrackTable('tableBalapanFemale', evData.female, 'balapan', currentBalapanEvent, 'female', isSpecial ? 16 : 20, 5, 6);
+        }
+
+        function renderAllTables() {
+            renderSaringanTables();
+            renderBalapanTables();
+            renderRelayTables();
+            renderPadangAcaraTables();
+        }
+
+        function initializeMockDataset() {
+            const buildMockAthletes = (count) => Array.from({ length: count }, (_, i) => ({
+                lane: i + 1,
+                name: `Atlet ${i + 1}`,
+                house: ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'][i % 4],
+                bib: `${100 + i}`,
+                rank: '',
+                time: ''
+            }));
+
+            const buildMockFieldAthletes = (count) => Array.from({ length: count }, (_, i) => ({
+                order: i + 1,
+                name: `Atlet ${i + 1}`,
+                house: ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'][i % 4],
+                bib: `${200 + i}`,
+                p1: '', p2: '', p3: '', p4: '', p5: '', p6: '', best: '', rank: ''
+            }));
+
+            SARINGAN_SHEETS.forEach(s => {
+                const isSpecial = s === '300';
+                dataset[s] = {
+                    maleS1: buildMockAthletes(isSpecial ? 4 : 8),
+                    maleS2: buildMockAthletes(isSpecial ? 4 : 8),
+                    femaleS1: buildMockAthletes(isSpecial ? 4 : 8),
+                    femaleS2: buildMockAthletes(isSpecial ? 4 : 8),
+                    male: buildMockAthletes(isSpecial ? 4 : 8),
+                    female: buildMockAthletes(isSpecial ? 4 : 8)
+                };
+            });
+
+            RELAY_SHEETS.forEach(s => {
+                dataset[s] = {
+                    male: Array.from({ length: 4 }, (_, i) => ({ lane: i + 1, house: ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'][i], time: '', rank: '' })),
+                    female: Array.from({ length: 4 }, (_, i) => ({ lane: i + 1, house: ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'][i], time: '', rank: '' }))
+                };
+            });
+
+            PADANG_ACARA_SHEETS.forEach(s => {
+                dataset[s] = {
+                    male: buildMockFieldAthletes(8),
+                    female: buildMockFieldAthletes(8)
+                };
+            });
+        }
+
+        function triggerPrint() {
+            const printSub = document.getElementById('printDocSubHeader');
+            const printTime = document.getElementById('printDocTimestamp');
+            if (printSub) printSub.innerText = `Dokumen Keputusan Rasmi - Acara ${currentMainTab.toUpperCase()}`;
+            if (printTime) printTime.innerText = `Dicetak pada: ${new Date().toLocaleString('ms-MY')}`;
+
+            try {
+                window.print();
+            } catch (e) {
+                openPrintModalFallback();
+            }
+        }
+
+        function openPrintModalFallback() {
+            const modal = document.getElementById('printModalFallback');
+            const body = document.getElementById('printModalFallbackBody');
+            if (!modal || !body) return;
+
+            let activeContent = document.getElementById(`mainTabContent-${currentMainTab}`);
+            if (activeContent) {
+                body.innerHTML = activeContent.innerHTML;
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closePrintModalFallback() {
+            const modal = document.getElementById('printModalFallback');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function downloadPrintDocument() {
+            const body = document.getElementById('printModalFallbackBody');
+            if (!body) return;
+            const content = `<!DOCTYPE html><html><head><title>Keputusan Rasmi</title><script src="https://cdn.tailwindcss.com"><\/script></head><body class="p-8">${body.innerHTML}</body></html>`;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Keputusan_Kejohanan_${currentMainTab}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Fail cetakan telah dimuat turun.", "success");
+        }
+
+        function isEventLocked(type) {
+            return eventLockState[type] !== false;
+        }
+
+        function updateTabLockBadges() {
+            const types = ['padang', 'balapan', 'relay', 'padang_acara'];
+            types.forEach(t => {
+                const badge = document.getElementById(`tabLockBadge-${t}`);
+                if (badge) {
+                    const locked = isEventLocked(t);
+                    badge.innerHTML = locked ? '🔒' : '🔓';
+                    badge.title = locked ? 'Acara Dikunci' : 'Acara Dibuka';
+                }
+            });
+        }
+
+        function toggleEventLock(type) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showToast("Hanya Admin Utama yang dibenarkan menukar status kunci acara.", "error");
+                return;
+            }
+
+            const beforeStatus = isEventLocked(type) ? 'Dikunci' : 'Dibuka';
+            eventLockState[type] = !eventLockState[type];
+            const afterStatus = eventLockState[type] ? 'Dikunci' : 'Dibuka';
+
+            localStorage.setItem('sports_event_lock_state', JSON.stringify(eventLockState));
+
+            const typeNames = {
+                padang: 'Acara Saringan',
+                balapan: 'Akhir Balapan',
+                relay: 'Acara Relay',
+                padang_acara: 'Acara Padang'
+            };
+
+            logActivity('Kawalan Akses Acara', `${currentUser.name} (${currentUser.role === 'admin' ? 'Admin Utama' : 'Pegawai'}) | ${typeNames[type] || type} | ${beforeStatus} → ${afterStatus}`, 'Berjaya');
+
+            showToast(`${typeNames[type] || type} kini ${afterStatus.toLowerCase()}.`, "info");
+            updateTabLockBadges();
+            renderEventLockControls();
+            renderAllTables();
+        }
+
+        function renderEventLockControls() {
+            const grid = document.getElementById('eventLockControlsGrid');
+            if (!grid) return;
+
+            const events = [
+                { key: 'padang', label: 'Acara Saringan', icon: 'fa-stopwatch', color: 'text-blue-600' },
+                { key: 'balapan', label: 'Akhir Balapan', icon: 'fa-flag-checkered', color: 'text-emerald-600' },
+                { key: 'relay', label: 'Acara Relay', icon: 'fa-person-running', color: 'text-indigo-600' },
+                { key: 'padang_acara', label: 'Acara Padang', icon: 'fa-arrows-left-right-to-line', color: 'text-amber-600' }
+            ];
+
+            grid.innerHTML = events.map(e => {
+                const locked = isEventLocked(e.key);
+                return `
+                    <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid ${e.icon} ${e.color} text-lg"></i>
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-100">${e.label}</h4>
+                                <span class="text-[10px] font-bold ${locked ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}">
+                                    ${locked ? '🔒 Dikunci (Pegawai tidak boleh edit)' : '🔓 Dibuka (Pegawai boleh edit)'}
+                                </span>
+                            </div>
+                        </div>
+                        <button onclick="toggleEventLock('${e.key}')" class="px-3 py-1.5 rounded-xl font-bold text-xs transition-all active:scale-95 flex items-center gap-1.5 shadow-xs ${locked ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-rose-600 hover:bg-rose-700 text-white'}">
+                            <i class="fa-solid ${locked ? 'fa-lock-open' : 'fa-lock'}"></i>
+                            <span>${locked ? 'Buka Akses' : 'Kunci Akses'}</span>
+                        </button>
+                    </div>
+                `;
+            }).join('');
         }
 
         window.onload = function() {
@@ -1298,6 +1642,7 @@ function getColLetter(colIndex) {
             if (webAppUrlPadangAcara && padangAcaraInput) { padangAcaraInput.value = webAppUrlPadangAcara; setFieldSavedState('padang_acara', true); }
 
             updateBadge();
+            updateTabLockBadges();
             renderEventSelectors();
             renderAllTables();
             updateStats();
@@ -1305,102 +1650,30 @@ function getColLetter(colIndex) {
             fetchDataFromBackend();
         };
 
-        function checkUserAuth() {
-            const savedUser = sessionStorage.getItem('sports_current_user');
-            const overlay = document.getElementById('loginOverlay');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                if (overlay) overlay.classList.add('hidden');
-                updateUserHeaderUI();
-            } else {
-                if (overlay) overlay.classList.remove('hidden');
-            }
-        }
-
-        function handleLoginSubmit(event) {
-            event.preventDefault();
-            const idInput = document.getElementById('loginUserId')?.value.trim();
-            const passInput = document.getElementById('loginPassword')?.value.trim();
-            const errorMsg = document.getElementById('loginErrorMsg');
-
-            const matchedUser = usersList.find(u => u.id === idInput && u.pass === passInput);
-
-            if (matchedUser) {
-                if (matchedUser.status !== 'Aktif') {
-                    const errText = document.getElementById('loginErrorText');
-                    if (errText) errText.innerText = "Akaun anda telah dinyahaktifkan.";
-                    errorMsg?.classList.remove('hidden');
-                    logActivity('Log Masuk Gagal', `Percubaan log masuk untuk akaun dinyahaktifkan (${idInput})`, 'Gagal');
-                    return;
-                }
-
-                currentUser = matchedUser;
-                sessionStorage.setItem('sports_current_user', JSON.stringify(currentUser));
-                document.getElementById('loginOverlay')?.classList.add('hidden');
-                errorMsg?.classList.add('hidden');
-
-                updateUserHeaderUI();
-                logActivity('Log Masuk', `Pengguna ${currentUser.name} (${currentUser.id}) berjaya log masuk.`, 'Berjaya');
-                showToast(`Selamat datang, ${currentUser.name}!`, "success");
-            } else {
-                const errText = document.getElementById('loginErrorText');
-                if (errText) errText.innerText = "ID atau Kata Laluan tidak sah.";
-                errorMsg?.classList.remove('hidden');
-                logActivity('Log Masuk Gagal', `ID/Kata Laluan tidak sah dimasukkan (${idInput || '-'})`, 'Gagal');
-            }
-        }
-
-        function handleLogout() {
-            if (currentUser) {
-                logActivity('Log Keluar', `Pengguna ${currentUser.name} (${currentUser.id}) telah log keluar.`, 'Berjaya');
-            }
-            currentUser = null;
-            sessionStorage.removeItem('sports_current_user');
-            document.getElementById('loginOverlay')?.classList.remove('hidden');
-            if (document.getElementById('loginUserId')) document.getElementById('loginUserId').value = '';
-            if (document.getElementById('loginPassword')) document.getElementById('loginPassword').value = '';
-            showToast("Anda telah log keluar.", "info");
-        }
-
-        function updateUserHeaderUI() {
-            if (!currentUser) return;
-            const userNameEl = document.getElementById('headerUserName');
-            if (userNameEl) userNameEl.innerText = currentUser.name;
-        }
-
-        function toggleSetupModal() {
-            if (!currentUser || currentUser.role !== 'admin') {
-                showToast("Akses Terhad: Hanya Admin Utama sahaja dibenarkan mengakses Tetapan Admin.", "error");
-                return;
-            }
-
-            const modal = document.getElementById('setupModal');
-            if (modal) {
-                modal.classList.toggle('hidden');
-                if (!modal.classList.contains('hidden')) {
-                    switchAdminSubTab('urlConfig');
-                }
-            }
-        }
-
         function switchAdminSubTab(tabName) {
             const urlTab = document.getElementById('adminTabContent-urlConfig');
+            const locksTab = document.getElementById('adminTabContent-eventLocks');
             const usersTab = document.getElementById('adminTabContent-users');
             const logsTab = document.getElementById('adminTabContent-logs');
 
             const btnUrl = document.getElementById('adminSubTabBtn-urlConfig');
+            const btnLocks = document.getElementById('adminSubTabBtn-eventLocks');
             const btnUsers = document.getElementById('adminSubTabBtn-users');
             const btnLogs = document.getElementById('adminSubTabBtn-logs');
 
-            [urlTab, usersTab, logsTab].forEach(t => t?.classList.add('hidden'));
+            [urlTab, locksTab, usersTab, logsTab].forEach(t => t?.classList.add('hidden'));
 
-            [btnUrl, btnUsers, btnLogs].forEach(b => {
+            [btnUrl, btnLocks, btnUsers, btnLogs].forEach(b => {
                 if (b) b.className = "py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200";
             });
 
             if (tabName === 'urlConfig') {
                 urlTab?.classList.remove('hidden');
                 if (btnUrl) btnUrl.className = "py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-900 border-t-2 border-blue-600 shadow-xs";
+            } else if (tabName === 'eventLocks') {
+                locksTab?.classList.remove('hidden');
+                if (btnLocks) btnLocks.className = "py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-900 border-t-2 border-rose-600 shadow-xs";
+                renderEventLockControls();
             } else if (tabName === 'users') {
                 usersTab?.classList.remove('hidden');
                 if (btnUsers) btnUsers.className = "py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-900 border-t-2 border-emerald-600 shadow-xs";
@@ -1412,303 +1685,12 @@ function getColLetter(colIndex) {
             }
         }
 
-        function switchMainTab(tab) {
-            currentMainTab = tab;
-            const tabs = ['padang', 'balapan', 'relay', 'padang_acara', 'pingat'];
-            tabs.forEach(t => {
-                const el = document.getElementById(`mainTabContent-${t}`);
-                const btn = document.getElementById(`tabBtn-${t}`);
-                if (el) el.classList.add('hidden');
-                if (btn) btn.className = "py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-600 hover:bg-slate-200/70 border border-slate-200/60 active:scale-95";
-            });
-
-            const activeEl = document.getElementById(`mainTabContent-${tab}`);
-            const activeBtn = document.getElementById(`tabBtn-${tab}`);
-            if (activeEl) activeEl.classList.remove('hidden');
-            if (activeBtn) activeBtn.className = "py-2.5 px-4 rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20 active:scale-95";
-
-            if (tab === 'pingat') renderHouseStats();
-        }
-
-        function renderUsersTable() {
-            const tbody = document.getElementById('usersTableBody');
-            if (!tbody) return;
-
-            let html = '';
-            usersList.forEach((u, index) => {
-                const isAdmin = u.role === 'admin';
-                html += `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-3 px-3.5 font-bold text-slate-800 dark:text-slate-100">${u.name}</td>
-                        <td class="py-3 px-3.5 text-center font-mono font-bold text-slate-600 dark:text-slate-400">${u.id}</td>
-                        <td class="py-3 px-3.5 text-center font-mono text-slate-400">••••</td>
-                        <td class="py-3 px-3.5 text-center">
-                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isAdmin ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-blue-100 text-blue-800 border border-blue-200'}">
-                                ${isAdmin ? 'Admin Utama' : 'Pegawai'}
-                            </span>
-                        </td>
-                        <td class="py-3 px-3.5 text-center">
-                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${u.status === 'Aktif' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-                                ${u.status}
-                            </span>
-                        </td>
-                        <td class="py-3 px-3.5 text-center">
-                            <div class="flex items-center justify-center gap-1.5">
-                                <button onclick="openEditUserModal(${index})" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs active:scale-95" title="Edit">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                ${!isAdmin ? `
-                                    <button onclick="deleteUser(${index})" class="p-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-lg text-xs active:scale-95" title="Hapus">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                ` : '<span class="w-6"></span>'}
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-        }
-
-        function openAddUserModal() {
-            document.getElementById('userFormTitle').innerText = "Tambah Pengguna Baharu";
-            document.getElementById('userFormIndex').value = "-1";
-            document.getElementById('userFormName').value = "";
-            document.getElementById('userFormId').value = "";
-            document.getElementById('userFormPass').value = "0000";
-            document.getElementById('userFormRole').value = "pegawai";
-            document.getElementById('userFormStatus').value = "Aktif";
-            document.getElementById('userEditModal')?.classList.remove('hidden');
-        }
-
-        function openEditUserModal(index) {
-            const u = usersList[index];
-            if (!u) return;
-
-            document.getElementById('userFormTitle').innerText = "Kemaskini Pengguna";
-            document.getElementById('userFormIndex').value = index;
-            document.getElementById('userFormName').value = u.name;
-            document.getElementById('userFormId').value = u.id;
-            document.getElementById('userFormPass').value = u.pass;
-            document.getElementById('userFormRole').value = u.role;
-            document.getElementById('userFormStatus').value = u.status;
-            document.getElementById('userEditModal')?.classList.remove('hidden');
-        }
-
-        function closeUserEditModal() {
-            document.getElementById('userEditModal')?.classList.add('hidden');
-        }
-
-        function saveUserForm(event) {
-            event.preventDefault();
-            const index = parseInt(document.getElementById('userFormIndex').value);
-            const name = document.getElementById('userFormName').value.trim();
-            const id = document.getElementById('userFormId').value.trim();
-            const pass = document.getElementById('userFormPass').value.trim();
-            const role = document.getElementById('userFormRole').value;
-            const status = document.getElementById('userFormStatus').value;
-
-            if (index === -1) {
-                usersList.push({ name, id, pass, role, status });
-                logActivity('Pengurusan Pengguna', `Menambah pengguna: ${name} (${id})`, 'Berjaya');
-                showToast(`Pengguna ${name} berjaya ditambah!`, "success");
-            } else {
-                usersList[index] = { name, id, pass, role, status };
-                logActivity('Pengurusan Pengguna', `Mengemaskini pengguna: ${name} (${id})`, 'Berjaya');
-                showToast(`Pengguna ${name} berjaya dikemaskini!`, "success");
-            }
-
-            localStorage.setItem('sports_users_list', JSON.stringify(usersList));
-            closeUserEditModal();
-            renderUsersTable();
-        }
-
-        function deleteUser(index) {
-            const u = usersList[index];
-            if (!u || u.role === 'admin') return;
-
-            if (confirm(`Adakah anda pasti mahu menghapuskan ${u.name}?`)) {
-                usersList.splice(index, 1);
-                localStorage.setItem('sports_users_list', JSON.stringify(usersList));
-                logActivity('Pengurusan Pengguna', `Menghapuskan pengguna: ${u.name} (${u.id})`, 'Berjaya');
-                showToast("Pengguna berjaya dihapuskan.", "info");
-                renderUsersTable();
-            }
-        }
-
-        function logActivity(kategori, butiran, status = "Berjaya") {
-            const newLog = {
-                timestamp: new Date().toLocaleString(),
-                userName: currentUser ? currentUser.name : 'Sistem',
-                userId: currentUser ? currentUser.id : '-',
-                kategori: kategori,
-                butiran: butiran,
-                status: status,
-                deviceInfo: getDeviceInfo()
-            };
-
-            activityLogs.unshift(newLog);
-            if (activityLogs.length > 100) activityLogs.pop(); 
-            localStorage.setItem('sports_activity_logs', JSON.stringify(activityLogs));
-        }
-
-        function renderLogsTable() {
-            const tbody = document.getElementById('logsTableBody');
-            if (!tbody) return;
-
-            if (activityLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Tiada log aktiviti direkodkan.</td></tr>`;
-                return;
-            }
-
-            let html = '';
-            activityLogs.forEach(l => {
-                const logStatus = l.status || "Berjaya";
-                const isSuccess = logStatus === "Berjaya" || logStatus.includes("OK") || logStatus.toLowerCase().includes("berjaya");
-                const statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isSuccess ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${logStatus}</span>`;
-                const deviceText = l.deviceInfo || getDeviceInfo();
-
-                html += `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-3 px-3.5 font-mono text-slate-400 text-[11px]">${l.timestamp}</td>
-                        <td class="py-3 px-3.5 font-bold text-slate-800 dark:text-slate-100">${l.userName} (${l.userId})</td>
-                        <td class="py-3 px-3.5 font-semibold text-blue-600 dark:text-blue-400">${l.kategori}</td>
-                        <td class="py-3 px-3.5 text-slate-700 dark:text-slate-300">${l.butiran}</td>
-                        <td class="py-3 px-3.5 text-center">${statusBadge}</td>
-                        <td class="py-3 px-3.5 font-mono text-slate-500 dark:text-slate-400 text-[11px]">${deviceText}</td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-        }
-
-        function clearActivityLogs() {
-            if (confirm("Adakah anda pasti mahu memadamkan semua log aktiviti?")) {
-                activityLogs = [];
-                localStorage.removeItem('sports_activity_logs');
-                renderLogsTable();
-                showToast("Log aktiviti telah dikosongkan.", "info");
-            }
-        }
-
-        function renderEventSelectors() {
-            const sarSel = document.getElementById('saringanEventSelector');
-            if (sarSel) {
-                sarSel.innerHTML = SARINGAN_SHEETS.map(s => `
-                    <button onclick="changeSaringanEvent('${s}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${currentSaringanEvent === s ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}">
-                        ${s}
-                    </button>
-                `).join('');
-            }
-
-            const balSel = document.getElementById('balapanEventSelector');
-            if (balSel) {
-                balSel.innerHTML = AKHIR_SHEETS.map(s => `
-                    <button onclick="changeBalapanEvent('${s}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${currentBalapanEvent === s ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}">
-                        ${s}
-                    </button>
-                `).join('');
-            }
-
-            const relSel = document.getElementById('relayEventSelector');
-            if (relSel) {
-                relSel.innerHTML = RELAY_SHEETS.map(s => `
-                    <button onclick="changeRelayEvent('${s}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${currentRelayEvent === s ? 'bg-indigo-600 text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}">
-                        ${s}
-                    </button>
-                `).join('');
-            }
-
-            const padSel = document.getElementById('padangAcaraEventSelector');
-            if (padSel) {
-                padSel.innerHTML = PADANG_ACARA_SHEETS.map(s => `
-                    <button onclick="changePadangAcaraEvent('${s}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${currentPadangAcaraEvent === s ? 'bg-amber-600 text-white shadow-xs' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}">
-                        ${s}
-                    </button>
-                `).join('');
-            }
-        }
-
-        function changeSaringanEvent(s) { currentSaringanEvent = s; renderEventSelectors(); renderAllTables(); }
-        function changeBalapanEvent(s) { currentBalapanEvent = s; renderEventSelectors(); renderAllTables(); }
-        function changeRelayEvent(s) { currentRelayEvent = s; renderEventSelectors(); renderAllTables(); }
-        function changePadangAcaraEvent(s) { currentPadangAcaraEvent = s; renderEventSelectors(); renderAllTables(); }
-
-        function initializeMockDataset() {
-            const houses = ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'];
-            
-            SARINGAN_SHEETS.forEach(s => {
-                const rowCount = ['204','205','206'].includes(s) ? 4 : 8;
-                dataset[s] = {
-                    maleS1: Array.from({length: rowCount}, (_, i) => ({ lane: i+1, name: `Atlet L1-${i+1}`, house: houses[i%4], bib: `L10${i}`, rank: '', time: '' })),
-                    maleS2: Array.from({length: rowCount}, (_, i) => ({ lane: i+1, name: `Atlet L2-${i+1}`, house: houses[(i+1)%4], bib: `L20${i}`, rank: '', time: '' })),
-                    femaleS1: Array.from({length: rowCount}, (_, i) => ({ lane: i+1, name: `Atlet P1-${i+1}`, house: houses[(i+2)%4], bib: `P10${i}`, rank: '', time: '' })),
-                    femaleS2: Array.from({length: rowCount}, (_, i) => ({ lane: i+1, name: `Atlet P2-${i+1}`, house: houses[(i+3)%4], bib: `P20${i}`, rank: '', time: '' })),
-                    male: Array.from({length: rowCount}, (_, i) => ({ lane: i+1, name: `Atlet L-${i+1}`, house: houses[i%4], bib: `L00${i}`, rank: '', time: '' })),
-                    female: Array.from({length: rowCount}, (_, i) => ({ lane: i+1, name: `Atlet P-${i+1}`, house: houses[(i+1)%4], bib: `P00${i}`, rank: '', time: '' }))
-                };
-            });
-
-            RELAY_SHEETS.forEach(s => {
-                dataset[s] = {
-                    male: Array.from({length: 4}, (_, i) => ({ lane: i+1, house: houses[i], time: '', rank: '' })),
-                    female: Array.from({length: 4}, (_, i) => ({ lane: i+1, house: houses[i], time: '', rank: '' }))
-                };
-            });
-
-            PADANG_ACARA_SHEETS.forEach(s => {
-                dataset[s] = {
-                    male: Array.from({length: 8}, (_, i) => ({ order: i+1, name: `Atlet Padang L-${i+1}`, house: houses[i%4], bib: `PL0${i}`, p1:'', p2:'', p3:'', p4:'', p5:'', p6:'', best:'', rank:'' })),
-                    female: Array.from({length: 8}, (_, i) => ({ order: i+1, name: `Atlet Padang P-${i+1}`, house: houses[(i+1)%4], bib: `PP0${i}`, p1:'', p2:'', p3:'', p4:'', p5:'', p6:'', best:'', rank:'' }))
-                };
-            });
-        }
-
-        function renderAllTables() {
-            const bS = document.getElementById('currentSaringanSheetBadge');
-            const bB = document.getElementById('currentTrackSheetBadge');
-            const bR = document.getElementById('currentRelaySheetBadge');
-            const bP = document.getElementById('currentPadangAcaraSheetBadge');
-
-            if (bS) bS.innerText = currentSaringanEvent;
-            if (bB) bB.innerText = currentBalapanEvent;
-            if (bR) bR.innerText = currentRelayEvent;
-            if (bP) bP.innerText = currentPadangAcaraEvent;
-
-            renderSaringanTables();
-            renderBalapanTables();
-            renderRelayTables();
-            renderPadangAcaraTables();
-        }
-
-        function renderSaringanTables() {
-            const evData = dataset[currentSaringanEvent];
-            if (!evData) return;
-
-            const isShort = ['204','205','206'].includes(currentSaringanEvent);
-            const offset2L = isShort ? 14 : 18;
-            const offset2P = isShort ? 14 : 18;
-
-            renderTrackTable('tableSaringanMale1', evData.maleS1, 'padang', currentSaringanEvent, 'maleS1', 5, 5, 6);
-            renderTrackTable('tableSaringanMale2', evData.maleS2, 'padang', currentSaringanEvent, 'maleS2', offset2L, 5, 6);
-            renderTrackTable('tableSaringanFemale1', evData.femaleS1, 'padang', currentSaringanEvent, 'femaleS1', 5, 13, 14);
-            renderTrackTable('tableSaringanFemale2', evData.femaleS2, 'padang', currentSaringanEvent, 'femaleS2', offset2P, 13, 14);
-        }
-
-        function renderBalapanTables() {
-            const evData = dataset[currentBalapanEvent];
-            if (!evData) return;
-
-            const isShort = ['204','205','206'].includes(currentBalapanEvent);
-            const femaleStartRow = isShort ? 16 : 20;
-
-            renderTrackTable('tableBalapanMale', evData.male, 'balapan', currentBalapanEvent, 'male', 6, 5, 6);
-            renderTrackTable('tableBalapanFemale', evData.female, 'balapan', currentBalapanEvent, 'female', femaleStartRow, 5, 6);
-        }
-
         function renderTrackTable(tbodyId, rowData, type, eventName, category, baseRow, colRankIdx, colTimeIdx) {
             const tbody = document.getElementById(tbodyId);
             if (!tbody || !rowData) return;
+
+            const lockedForUser = isEventLocked(type) && (!currentUser || currentUser.role !== 'admin');
+            const disabledAttr = lockedForUser ? 'disabled title="Acara ini masih dikunci oleh Admin Utama."' : '';
 
             tbody.innerHTML = rowData.map((row, idx) => {
                 const actualRow = baseRow + idx;
@@ -1719,10 +1701,10 @@ function getColLetter(colIndex) {
                         <td class="p-2.5 sm:p-3 text-center ${getHouseTextColor(row.house)}">${row.house || '-'}</td>
                         <td class="p-2.5 sm:p-3 text-center font-mono text-slate-400">${row.bib || '-'}</td>
                         <td class="p-2 text-center">
-                            <input type="text" value="${row.rank || ''}" onchange="handleSingleCellSave('${type}', '${eventName}', '${category}', ${actualRow}, ${colRankIdx}, this.value)" class="w-10 sm:w-12 py-1 px-1.5 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-bold focus:ring-2 focus:ring-blue-500 transition-shadow">
+                            <input type="text" ${disabledAttr} value="${row.rank || ''}" onchange="handleSingleCellSave('${type}', '${eventName}', '${category}', ${actualRow}, ${colRankIdx}, this.value)" class="w-10 sm:w-12 py-1 px-1.5 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-bold focus:ring-2 focus:ring-blue-500 transition-shadow ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-2 text-center">
-                            <input type="text" value="${row.time || ''}" placeholder="00:00.00" onchange="handleSingleCellSave('${type}', '${eventName}', '${category}', ${actualRow}, ${colTimeIdx}, this.value)" class="w-18 sm:w-22 py-1 px-1.5 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-blue-500 transition-shadow">
+                            <input type="text" ${disabledAttr} value="${row.time || ''}" placeholder="00:00.00" onchange="handleSingleCellSave('${type}', '${eventName}', '${category}', ${actualRow}, ${colTimeIdx}, this.value)" class="w-18 sm:w-22 py-1 px-1.5 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-blue-500 transition-shadow ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                     </tr>
                 `;
@@ -1733,6 +1715,9 @@ function getColLetter(colIndex) {
             const evData = dataset[currentRelayEvent];
             if (!evData) return;
 
+            const lockedForUser = isEventLocked('relay') && (!currentUser || currentUser.role !== 'admin');
+            const disabledAttr = lockedForUser ? 'disabled title="Acara ini masih dikunci oleh Admin Utama."' : '';
+
             const renderRelayRows = (tbodyId, list, category, baseRow, colTimeIdx, colRankIdx) => {
                 const tbody = document.getElementById(tbodyId);
                 if (!tbody || !list) return;
@@ -1742,10 +1727,10 @@ function getColLetter(colIndex) {
                         <td class="p-2.5 sm:p-3 text-center font-bold text-slate-500">${row.lane || idx+1}</td>
                         <td class="p-2.5 sm:p-3 ${getHouseTextColor(row.house)}">${row.house || '-'}</td>
                         <td class="p-2 text-center">
-                            <input type="text" value="${row.time || ''}" placeholder="00:00.00" onchange="handleSingleCellSave('relay', '${currentRelayEvent}', '${category}', ${baseRow + idx}, ${colTimeIdx}, this.value)" class="w-20 sm:w-24 py-1 px-1.5 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-indigo-500 transition-shadow">
+                            <input type="text" ${disabledAttr} value="${row.time || ''}" placeholder="00:00.00" onchange="handleSingleCellSave('relay', '${currentRelayEvent}', '${category}', ${baseRow + idx}, ${colTimeIdx}, this.value)" class="w-20 sm:w-24 py-1 px-1.5 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-indigo-500 transition-shadow ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-2 text-center">
-                            <input type="text" value="${row.rank || ''}" onchange="handleSingleCellSave('relay', '${currentRelayEvent}', '${category}', ${baseRow + idx}, ${colRankIdx}, this.value)" class="w-12 sm:w-16 py-1 px-1.5 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-bold focus:ring-2 focus:ring-indigo-500 transition-shadow">
+                            <input type="text" ${disabledAttr} value="${row.rank || ''}" onchange="handleSingleCellSave('relay', '${currentRelayEvent}', '${category}', ${baseRow + idx}, ${colRankIdx}, this.value)" class="w-12 sm:w-16 py-1 px-1.5 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-bold focus:ring-2 focus:ring-indigo-500 transition-shadow ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                     </tr>
                 `).join('');
@@ -1759,6 +1744,9 @@ function getColLetter(colIndex) {
             const evData = dataset[currentPadangAcaraEvent];
             if (!evData) return;
 
+            const lockedForUser = isEventLocked('padang_acara') && (!currentUser || currentUser.role !== 'admin');
+            const disabledAttr = lockedForUser ? 'disabled title="Acara ini masih dikunci oleh Admin Utama."' : '';
+
             const renderPadangRows = (tbodyId, list, category, baseRow) => {
                 const tbody = document.getElementById(tbodyId);
                 if (!tbody || !list) return;
@@ -1770,28 +1758,28 @@ function getColLetter(colIndex) {
                         <td class="p-2.5 sm:p-3 ${getHouseTextColor(row.house)}">${row.house || '-'}</td>
                         <td class="p-2.5 sm:p-3 font-mono text-slate-400">${row.bib || '-'}</td>
                         <td class="p-1.5">
-                            <input type="text" value="${row.p1 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 5, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500">
+                            <input type="text" ${disabledAttr} value="${row.p1 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 5, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500 ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-1.5">
-                            <input type="text" value="${row.p2 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 6, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500">
+                            <input type="text" ${disabledAttr} value="${row.p2 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 6, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500 ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-1.5">
-                            <input type="text" value="${row.p3 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 7, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500">
+                            <input type="text" ${disabledAttr} value="${row.p3 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 7, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500 ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-1.5">
-                            <input type="text" value="${row.p4 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 8, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500">
+                            <input type="text" ${disabledAttr} value="${row.p4 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 8, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500 ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-1.5">
-                            <input type="text" value="${row.p5 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 9, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500">
+                            <input type="text" ${disabledAttr} value="${row.p5 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 9, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500 ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-1.5">
-                            <input type="text" value="${row.p6 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 10, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500">
+                            <input type="text" ${disabledAttr} value="${row.p6 || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 10, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-lg border border-slate-300 dark:border-slate-700 font-mono text-xs focus:ring-2 focus:ring-amber-500 ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-1.5 bg-amber-50/60 dark:bg-amber-950/30">
-                            <input type="text" value="${row.best || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 11, this.value)" class="w-16 sm:w-20 py-1 px-1 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-bold focus:ring-2 focus:ring-amber-500">
+                            <input type="text" ${disabledAttr} value="${row.best || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 11, this.value)" class="w-16 sm:w-20 py-1 px-1 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-bold focus:ring-2 focus:ring-amber-500 ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                         <td class="p-1.5">
-                            <input type="text" value="${row.rank || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 12, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-bold focus:ring-2 focus:ring-amber-500">
+                            <input type="text" ${disabledAttr} value="${row.rank || ''}" onchange="handleSingleCellSave('padang_acara', '${currentPadangAcaraEvent}', '${category}', ${baseRow + idx}, 12, this.value)" class="w-10 sm:w-12 py-1 px-1 text-center rounded-xl border border-slate-300 dark:border-slate-700 font-bold focus:ring-2 focus:ring-amber-500 ${lockedForUser ? 'opacity-60 cursor-not-allowed bg-slate-100 dark:bg-slate-800' : ''}">
                         </td>
                     </tr>
                 `).join('');
@@ -1802,6 +1790,14 @@ function getColLetter(colIndex) {
         }
 
         async function handleSingleCellSave(type, eventName, category, rowIndex, colIndex, value) {
+            // Strict Security Check for Non-Admin
+            if (isEventLocked(type) && (!currentUser || currentUser.role !== 'admin')) {
+                showToast("Acara ini masih dikunci oleh Admin Utama.", "error");
+                logActivity('Cubaan Edit Ditolak', `${currentUser ? currentUser.name : 'Tetamu'} (${currentUser ? currentUser.role : 'tetamu'}) cuba mengedit [${type} - ${eventName}] tetapi acara dikunci.`, 'Gagal');
+                renderAllTables();
+                return;
+            }
+
             updateLocalDatasetCell(eventName, category, rowIndex, colIndex, value);
             updateStats();
 
@@ -1863,9 +1859,9 @@ function getColLetter(colIndex) {
             };
 
             if (category === 'maleS1') updateListRow(ev.maleS1, 5, 5, 6);
-            else if (category === 'maleS2') updateListRow(ev.maleS2, ['204','205','206'].includes(eventName) ? 14 : 18, 5, 6);
+            else if (category === 'maleS2') updateListRow(ev.maleS2, eventName === '300' ? 14 : 18, 5, 6);
             else if (category === 'femaleS1') updateListRow(ev.femaleS1, 5, 13, 14);
-            else if (category === 'femaleS2') updateListRow(ev.femaleS2, ['204','205','206'].includes(eventName) ? 14 : 18, 13, 14);
+            else if (category === 'femaleS2') updateListRow(ev.femaleS2, eventName === '300' ? 14 : 18, 13, 14);
             else if (category === 'male') {
                 if (ev.male && ev.male.length > 0) {
                     if (PADANG_ACARA_SHEETS.includes(eventName)) {
@@ -1898,7 +1894,7 @@ function getColLetter(colIndex) {
                             else if (colIndex === 12) ev.female[idx].rank = value;
                         }
                     } else if (RELAY_SHEETS.includes(eventName)) updateListRow(ev.female, 5, 13, 11);
-                    else updateListRow(ev.female, ['204','205','206'].includes(eventName) ? 16 : 20, 5, 6);
+                    else updateListRow(ev.female, eventName === '300' ? 16 : 20, 5, 6);
                 }
             }
         }
