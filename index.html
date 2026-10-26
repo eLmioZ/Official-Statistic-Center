@@ -1305,6 +1305,22 @@ function getColLetter(colIndex) {
             setFieldSavedState('balapan', !!webAppUrlBalapan);
             setFieldSavedState('relay', !!webAppUrlRelay);
             setFieldSavedState('padang_acara', !!webAppUrlPadangAcara);
+            updateLiveConnectionBadge();
+        }
+
+        function updateLiveConnectionBadge() {
+            const badge = document.getElementById('connectionBadge');
+            if (!badge) return;
+
+            const hasActiveUrl = !!(webAppUrlPadang || webAppUrlBalapan || webAppUrlRelay || webAppUrlPadangAcara);
+
+            if (hasActiveUrl) {
+                badge.className = "hidden sm:flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-600/80 px-3 py-1.5 rounded-full text-xs font-semibold text-emerald-400 shadow-sm backdrop-blur-sm animate-pulse";
+                badge.innerHTML = `<i class="fa-solid fa-signal text-emerald-400"></i><span>Mod LIVE</span>`;
+            } else {
+                badge.className = "hidden sm:flex items-center gap-1.5 bg-slate-800/90 border border-slate-700/80 px-3 py-1.5 rounded-full text-xs font-semibold text-amber-400 shadow-sm backdrop-blur-sm";
+                badge.innerHTML = `<i class="fa-solid fa-flask text-amber-400"></i><span>Mod Demo</span>`;
+            }
         }
 
         function toggleDarkMode() {
@@ -2108,6 +2124,8 @@ function getColLetter(colIndex) {
                 fetchService(webAppUrlRelay, RELAY_SHEETS, 'relay'),
                 fetchService(webAppUrlPadangAcara, PADANG_ACARA_SHEETS, 'padang_acara')
             ]);
+
+            updateLiveConnectionBadge();
 
             renderAllTables();
             updateStats();
