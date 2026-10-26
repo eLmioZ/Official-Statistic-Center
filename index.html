@@ -678,7 +678,7 @@ function getColLetter(colIndex) {
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
                         <h3 class="font-bold text-xs sm:text-sm text-blue-900 bg-blue-50/80 dark:bg-blue-950/40 dark:text-blue-300 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 flex items-center gap-2 mb-3.5">
-                            <i class="fa-solid fa-mars text-blue-600"></i> Relay Lelaki (A5:F8)
+                            <i class="fa-solid fa-mars text-blue-600"></i> Relay Lelaki
                         </h3>
                         <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                             <table class="w-full text-xs text-left min-w-[320px]">
@@ -2182,6 +2182,32 @@ function getColLetter(colIndex) {
             document.body.removeChild(temp);
             logActivity('Salin Kod GAS', `Salin kod Google Apps Script [${type}]`, 'Berjaya');
             showToast(`Kod Apps Script (${type}) berjaya disalin!`, "success");
+        }
+
+        function triggerPrint() {
+            // Update printable document timestamp & header
+            const printSubHeader = document.getElementById('printDocSubHeader');
+            const printTimestamp = document.getElementById('printDocTimestamp');
+            if (printSubHeader) {
+                const tabTitles = {
+                    padang: 'Keputusan Acara Saringan',
+                    balapan: 'Keputusan Akhir Balapan',
+                    relay: 'Keputusan Acara Relay',
+                    padang_acara: 'Keputusan Acara Padang',
+                    pingat: 'Kedudukan & Pungutan Pingat Pasukan'
+                };
+                printSubHeader.innerText = tabTitles[currentMainTab] || 'Dokumen Keputusan Rasmi Kejohanan';
+            }
+            if (printTimestamp) {
+                printTimestamp.innerText = `Dicetak pada: ${new Date().toLocaleString('ms-MY')}`;
+            }
+
+            // Attempt native window.print() or fallback to print modal for sandboxed iframe environments
+            try {
+                window.print();
+            } catch (err) {
+                openPrintModalFallback();
+            }
         }
 
         function showToast(message, type = "info") {
