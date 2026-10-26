@@ -139,12 +139,19 @@
         }
 
         @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm 10mm 15mm 10mm;
+            }
             body {
                 background-color: #ffffff !important;
                 color: #000000 !important;
-                font-size: 11px !important;
+                font-size: 10pt !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
-            .no-print, header, footer, #loginOverlay, #setupModal, #toastContainer, #connectionBadge, #autoSyncSpinner, button, .touch-pan-x {
+            /* Hide all interactive & navigation elements */
+            .no-print, header, footer, #loginOverlay, #setupModal, #userEditModal, #toastContainer, #connectionBadge, #autoSyncSpinner, button, input[type="button"], input[type="submit"], .touch-pan-x {
                 display: none !important;
             }
             .print-only {
@@ -154,14 +161,47 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 max-width: 100% !important;
+                width: 100% !important;
             }
-            .shadow-glass, .shadow-xl, .shadow-md, .shadow-sm, .shadow-xs {
+            .shadow-glass, .shadow-xl, .shadow-md, .shadow-sm, .shadow-xs, .shadow-2xl, .shadow-2xs, .shadow-glow-blue {
                 box-shadow: none !important;
                 border: none !important;
             }
-            .bg-white, .bg-slate-50, .bg-slate-100 {
+            .bg-white, .bg-slate-50, .bg-slate-100, .bg-slate-900, .bg-slate-800 {
                 background-color: transparent !important;
+                color: #000000 !important;
             }
+            
+            /* Clean Table Formatting for Print */
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                margin-bottom: 15px !important;
+                page-break-inside: auto !important;
+            }
+            tr {
+                page-break-inside: avoid !important;
+                page-break-after: auto !important;
+            }
+            thead {
+                display: table-header-group !important;
+            }
+            tfoot {
+                display: table-footer-group !important;
+            }
+            th, td {
+                border: 1px solid #64748b !important;
+                padding: 5px 8px !important;
+                color: #000000 !important;
+                font-size: 9pt !important;
+            }
+            thead th {
+                background-color: #f1f5f9 !important;
+                color: #000000 !important;
+                font-weight: bold !important;
+            }
+
+            /* Input Fields Printed cleanly as readable text */
             input[type="text"] {
                 border: none !important;
                 background: transparent !important;
@@ -171,26 +211,28 @@
                 width: 100% !important;
                 text-align: center !important;
                 font-weight: bold !important;
-            }
-            table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-                margin-bottom: 15px !important;
-            }
-            th, td {
-                border: 1px solid #64748b !important;
-                padding: 4px 6px !important;
                 color: #000000 !important;
             }
-            thead {
-                background-color: #f1f5f9 !important;
-                color: #000000 !important;
-            }
+            
+            /* Podium & Cards Print Styles */
             .grid {
-                display: block !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px !important;
             }
-            .grid > div {
-                margin-bottom: 15px !important;
+            
+            /* Official Footer Stamp on Print */
+            .print-footer-stamp {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 8pt;
+                color: #475569;
+                border-t: 1px solid #cbd5e1;
+                padding-top: 4px;
+                background: #ffffff;
             }
         }
     </style>
@@ -434,32 +476,15 @@ function getColLetter(colIndex) {
     <main class="max-w-7xl mx-auto px-3.5 sm:px-6 py-5 sm:py-8 flex-grow w-full">
         
         <!-- Official Printable Document Header -->
-        <div class="hidden print-only mb-6 text-center border-b-2 border-slate-900 pb-4">
-            <h1 class="font-black text-xl uppercase tracking-wider text-slate-900">OFFICIAL STATISTICS CENTER</h1>
-            <p class="text-sm font-bold text-slate-700 mt-1" id="printDocSubHeader">Dokumen Keputusan Rasmi Kejohanan</p>
-            <p class="text-xs text-slate-500 mt-0.5" id="printDocTimestamp"></p>
-        </div>
-
-        <div class="no-print grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-6 sm:mb-8">
-            <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-glass border border-slate-200/80 flex items-center gap-4 transition-all hover:shadow-lg">
-                <div class="p-3.5 sm:p-4 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 text-blue-600 rounded-2xl shrink-0 border border-blue-500/20">
-                    <i class="fa-solid fa-arrows-rotate text-xl sm:text-2xl"></i>
+        <div class="hidden print-only mb-6 text-center border-b-2 border-slate-900 pb-3">
+            <div class="flex items-center justify-between mb-2">
+                <div class="text-left">
+                    <h1 class="font-black text-lg uppercase tracking-wider text-slate-900" id="printDocTitle">OFFICIAL STATISTICS CENTER</h1>
+                    <p class="text-xs font-bold text-slate-700" id="printDocSubHeader">Dokumen Keputusan Rasmi Kejohanan</p>
                 </div>
-                <div>
-                    <span class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest block">Data Kejohanan</span>
-                    <h3 id="statSyncText" class="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 mt-0.5">2-Way SYNC Active</h3>
-                    <p id="statLastUpdate" class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-medium">Kemas kini: Hari ini</p>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-glass border border-slate-200/80 flex items-center gap-4 transition-all hover:shadow-lg">
-                <div class="p-3.5 sm:p-4 bg-gradient-to-br from-amber-500/10 to-yellow-500/10 text-amber-600 rounded-2xl shrink-0 border border-amber-500/20">
-                    <i class="fa-solid fa-crown text-xl sm:text-2xl"></i>
-                </div>
-                <div>
-                    <span class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest block">Pendahulu Ranking</span>
-                    <h3 id="statLeader" class="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 mt-0.5">Rumah <span class="text-red-600 dark:text-red-400 font-extrabold">Garuda</span> (0 Emas)</h3>
-                    <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-medium">Dikira dari Acara Akhir Balapan, Relay & Padang</p>
+                <div class="text-right text-[10px] text-slate-500 font-mono">
+                    <p id="printDocTimestamp">Dijana pada: -</p>
+                    <p id="printDocUser">Dicetak oleh: Pegawai</p>
                 </div>
             </div>
         </div>
@@ -1080,6 +1105,11 @@ function getColLetter(colIndex) {
             </div>
             <div id="printModalFallbackBody" class="overflow-y-auto flex-grow p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100"></div>
         </div>
+    </div>
+
+    <!-- Printable Official Footer Stamp for native print -->
+    <div class="hidden print-only print-footer-stamp">
+        Hak Cipta Terpelihara © <span id="printFooterYear">2026</span> OFFICIAL STATISTICS CENTER. Hak Cipta Terpelihara.
     </div>
 
     <script>
@@ -2389,10 +2419,33 @@ function getColLetter(colIndex) {
 
         // Global functions exposed explicitly to window for inline onclick handlers
         window.triggerPrint = function() {
+            const currentYear = new Date().getFullYear();
+            const yearEl = document.getElementById('printFooterYear');
+            if (yearEl) yearEl.innerText = currentYear;
+
             const printDocTimestamp = document.getElementById('printDocTimestamp');
             if (printDocTimestamp) {
                 printDocTimestamp.innerText = `Dijana pada: ${new Date().toLocaleString('ms-MY')}`;
             }
+
+            const printDocUser = document.getElementById('printDocUser');
+            if (printDocUser) {
+                printDocUser.innerText = `Dicetak oleh: ${currentUser ? currentUser.name : 'Tetamu'} (${currentUser ? currentUser.role : 'Awam'})`;
+            }
+
+            const printSubHeader = document.getElementById('printDocSubHeader');
+            if (printSubHeader) {
+                const names = {
+                    padang: 'Keputusan Acara Saringan',
+                    balapan: 'Keputusan Akhir Balapan',
+                    relay: 'Keputusan Acara Relay',
+                    padang_acara: 'Keputusan Acara Padang',
+                    pingat: 'Kedudukan Pingat & Mata Kejohanan'
+                };
+                printSubHeader.innerText = `Dokumen Keputusan Rasmi: ${names[currentMainTab] || 'Kejohanan'}`;
+            }
+
+            logActivity('Cetakan Dokumen', `Aktiviti mencetak dokumen bagi [${currentMainTab.toUpperCase()}]`, 'Berjaya');
 
             try {
                 window.print();
@@ -2409,7 +2462,17 @@ function getColLetter(colIndex) {
 
             let activeContent = document.getElementById(`mainTabContent-${currentMainTab}`);
             if (activeContent) {
-                body.innerHTML = activeContent.innerHTML;
+                body.innerHTML = `
+                    <div class="text-center pb-4 border-b border-slate-200 dark:border-slate-800 mb-4">
+                        <h2 class="font-black text-lg text-slate-900 dark:text-white">OFFICIAL STATISTICS CENTER</h2>
+                        <p class="text-xs font-bold text-slate-600 dark:text-slate-400">Keputusan Rasmi: ${currentMainTab.toUpperCase()}</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Dijana pada: ${new Date().toLocaleString('ms-MY')}</p>
+                    </div>
+                    ${activeContent.innerHTML}
+                    <div class="mt-6 pt-3 border-t border-slate-200 dark:border-slate-800 text-center text-[10px] text-slate-400">
+                        Hak Cipta Terpelihara © ${new Date().getFullYear()} OFFICIAL STATISTICS CENTER.
+                    </div>
+                `;
             }
             modal.classList.remove('hidden');
         };
@@ -2422,12 +2485,12 @@ function getColLetter(colIndex) {
         window.downloadPrintDocument = function() {
             const body = document.getElementById('printModalFallbackBody');
             if (!body) return;
-            const content = `<!DOCTYPE html><html><head><title>Keputusan Rasmi</title><script src="https://cdn.tailwindcss.com"><\/script></head><body class="p-8">${body.innerHTML}</body></html>`;
+            const content = `<!DOCTYPE html><html><head><title>Keputusan Rasmi - ${currentMainTab.toUpperCase()}</title><script src="https://cdn.tailwindcss.com"><\/script></head><body class="p-8">${body.innerHTML}</body></html>`;
             const blob = new Blob([content], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Keputusan_Kejohanan_${currentMainTab}.html`;
+            a.download = `Keputusan_Kejohanan_${currentMainTab}_${new Date().toISOString().slice(0,10)}.html`;
             a.click();
             URL.revokeObjectURL(url);
             showToast("Fail cetakan telah dimuat turun.", "success");
