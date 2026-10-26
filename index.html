@@ -540,7 +540,7 @@ function getColLetter(colIndex) {
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
-                            <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 1 (Julat A5:G12 / A5:G8)</span>
+                            <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 1</span>
                             <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                                 <table class="w-full text-xs text-left min-w-[340px]">
                                     <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -559,7 +559,7 @@ function getColLetter(colIndex) {
                         </div>
 
                         <div>
-                            <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 2 (Julat A18:G25 / A14:G17)</span>
+                            <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 2</span>
                             <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                                 <table class="w-full text-xs text-left min-w-[340px]">
                                     <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -588,7 +588,7 @@ function getColLetter(colIndex) {
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
-                            <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 1 (Julat I5:O12 / I5:O8)</span>
+                            <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 1</span>
                             <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                                 <table class="w-full text-xs text-left min-w-[340px]">
                                     <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -607,7 +607,7 @@ function getColLetter(colIndex) {
                         </div>
 
                         <div>
-                            <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 2 (Julat I18:O25 / I14:O17)</span>
+                            <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 2</span>
                             <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                                 <table class="w-full text-xs text-left min-w-[340px]">
                                     <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -888,7 +888,7 @@ function getColLetter(colIndex) {
                         <i class="fa-solid fa-sliders text-lg"></i>
                     </div>
                     <div>
-                        <h2 class="font-black text-base sm:text-lg text-slate-900 dark:text-white uppercase tracking-wider">TETAPAN ADMIN & INTEGRASI API</h2>
+                        <h2 class="font-black text-base sm:text-lg text-slate-900 dark:text-white uppercase tracking-wider">TETAPAN ADMIN & INTEGRASI</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400">Pengurusan Sambungan Google Apps Script, Kunci Acara & Pengguna</p>
                     </div>
                 </div>
@@ -1186,7 +1186,7 @@ function getColLetter(colIndex) {
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <i class="fa-solid fa-user text-xs"></i>
                         </span>
-                        <input type="text" id="loginUserId" required placeholder="Contoh: 0000" class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        <input type="text" id="loginUserId" required placeholder="Admin / pengguna" class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                     </div>
                 </div>
 
@@ -1210,7 +1210,7 @@ function getColLetter(colIndex) {
             </form>
 
             <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
-                <span class="text-[11px] text-slate-400">Akaun Default: Admin Utama (ID: <code class="font-bold text-blue-600">0000</code> / Pass: <code class="font-bold text-blue-600">0000</code>)</span>
+                <span class="text-[11px] text-slate-400">sila masukkan ID Pengguna dan Kata Laluan</span>
             </div>
         </div>
     </div>
@@ -1849,13 +1849,52 @@ function getColLetter(colIndex) {
                     <td class="p-3 text-center font-mono text-slate-400">${u.pass}</td>
                     <td class="p-3 text-center font-semibold text-blue-600 dark:text-blue-400">${u.role === 'admin' ? 'Admin Utama' : 'Pegawai'}</td>
                     <td class="p-3 text-center">
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${u.status === 'Aktif' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'}">${u.status}</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${u.status === 'Aktif' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-slate-200 text-slate-700'}">${u.status}</span>
                     </td>
                     <td class="p-3 text-center">
-                        <button onclick="openEditUserModal(${idx})" class="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-lg"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <div class="flex items-center justify-center gap-1">
+                            <button onclick="openEditUserModal(${idx})" title="Sunting Pengguna" class="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="deleteUserAccount(${idx})" title="Hapus Pengguna" class="p-1.5 text-rose-600 hover:bg-rose-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             `).join('');
+        }
+
+        function deleteUserAccount(idx) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showToast("Hanya Admin Utama yang dibenarkan menghapus akaun pengguna.", "error");
+                return;
+            }
+
+            const targetUser = usersList[idx];
+            if (!targetUser) return;
+
+            // Halang pemadaman akaun sendiri atau akaun Admin Utama 0000
+            if (targetUser.id === "0000" || targetUser.id === currentUser.id) {
+                showToast("Akaun Admin Utama tidak boleh dihapuskan!", "error");
+                return;
+            }
+
+            openRankErrorModal(`Adakah anda pasti mahu menghapus akaun ${targetUser.name} (${targetUser.id})?`);
+            
+            // Re-bind modal button dynamically or confirm deletion via alert fallback logic
+            const modalBtn = document.querySelector('#rankErrorModal button');
+            const originalText = modalBtn ? modalBtn.innerText : '';
+            
+            if (confirm(`Adakah anda pasti mahu menghapus akaun ${targetUser.name} (${targetUser.id})?`)) {
+                const deletedName = targetUser.name;
+                const deletedId = targetUser.id;
+                usersList.splice(idx, 1);
+                localStorage.setItem('sports_users_list', JSON.stringify(usersList));
+                renderUsersTable();
+                logActivity('Pengurusan Pengguna', `Akaun pengguna dihapuskan: ${deletedName} (${deletedId})`, 'Berjaya');
+                showToast(`Akaun ${deletedName} berjaya dihapuskan.`, "info");
+            }
         }
 
         function openAddUserModal() {
