@@ -150,7 +150,6 @@
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
-            /* Hide all interactive & navigation elements */
             .no-print, header, footer, #loginOverlay, #setupModal, #userEditModal, #toastContainer, #connectionBadge, #autoSyncSpinner, #rankErrorModal, #categoryConfirmModal, button, input[type="button"], input[type="submit"], .touch-pan-x {
                 display: none !important;
             }
@@ -171,8 +170,6 @@
                 background-color: transparent !important;
                 color: #000000 !important;
             }
-            
-            /* Clean Table Formatting for Print */
             table {
                 width: 100% !important;
                 border-collapse: collapse !important;
@@ -200,8 +197,6 @@
                 color: #000000 !important;
                 font-weight: bold !important;
             }
-
-            /* Input Fields Printed cleanly as readable text */
             input[type="text"] {
                 border: none !important;
                 background: transparent !important;
@@ -213,15 +208,11 @@
                 font-weight: bold !important;
                 color: #000000 !important;
             }
-            
-            /* Podium & Cards Print Styles */
             .grid {
                 display: flex !important;
                 flex-direction: column !important;
                 gap: 12px !important;
             }
-            
-            /* Official Footer Stamp on Print */
             .print-footer-stamp {
                 position: fixed;
                 bottom: 0;
@@ -431,10 +422,10 @@ function getColLetter(colIndex) {
                     </h1>
                     <div class="flex items-center gap-2 text-[11px] sm:text-xs text-slate-400 font-medium">
                         <span class="relative flex h-2 w-2 shrink-0">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                          <span id="firestoreStatusPulse" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span id="firestoreStatusDot" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
-                        <span class="truncate tracking-wide">Official Results & Performance data</span>
+                        <span id="firestoreStatusText" class="truncate tracking-wide">Firestore Connected</span>
                     </div>
                 </div>
             </div>
@@ -865,7 +856,6 @@ function getColLetter(colIndex) {
                     </button>
                 </div>
 
-                <!-- Dynamic Podium & Standings Container -->
                 <div id="houseStatsGrid" class="space-y-8"></div>
             </div>
         </div>
@@ -873,7 +863,7 @@ function getColLetter(colIndex) {
     </main>
 
     <footer class="no-print mt-auto py-5 text-center text-xs text-slate-500 border-t border-slate-200/80 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm">
-        <p class="font-bold tracking-wide">Hak Cipta Terpelihara @ 2026 eL_mioZ</p>
+        <p class="font-bold tracking-wide">Hak Cipta Terpelihara @ 2026 eL_mioZ (Firestore Live Integrated)</p>
     </footer>
 
     <!-- Toast Notification Container -->
@@ -889,7 +879,7 @@ function getColLetter(colIndex) {
                     </div>
                     <div>
                         <h2 class="font-black text-base sm:text-lg text-slate-900 dark:text-white uppercase tracking-wider">TETAPAN ADMIN & INTEGRASI</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Pengurusan Sambungan Google Apps Script, Kunci Acara & Pengguna</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Pengurusan Sambungan Firestore + GAS API, Kunci Acara & Pengguna</p>
                     </div>
                 </div>
                 <button onclick="toggleSetupModal()" class="p-2 text-slate-400 hover:text-rose-500 rounded-xl transition-colors">
@@ -1087,7 +1077,7 @@ function getColLetter(colIndex) {
                 <!-- Activity Logs Sub-Tab -->
                 <div id="adminTabContent-logs" class="hidden space-y-4">
                     <div class="flex items-center justify-between">
-                        <h3 class="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wider">Rekod Aktiviti Sistem</h3>
+                        <h3 class="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wider">Rekod Aktiviti Sistem (Firestore)</h3>
                         <button onclick="clearActivityLogs()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl transition-all active:scale-95 flex items-center gap-1.5">
                             <i class="fa-solid fa-trash-can"></i> Kosongkan Log
                         </button>
@@ -1168,8 +1158,8 @@ function getColLetter(colIndex) {
         </div>
     </div>
 
+    <!-- Login Overlay -->
     <div id="loginOverlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto">
-
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative my-auto">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-500 text-white rounded-3xl flex items-center justify-center mx-auto mb-3.5 shadow-glow-blue">
@@ -1186,7 +1176,7 @@ function getColLetter(colIndex) {
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <i class="fa-solid fa-user text-xs"></i>
                         </span>
-                        <input type="text" id="loginUserId" required placeholder="Admin / pengguna" class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        <input type="text" id="loginUserId" required placeholder="Admin / pegawai" class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                     </div>
                 </div>
 
@@ -1210,7 +1200,7 @@ function getColLetter(colIndex) {
             </form>
 
             <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
-                <span class="text-[11px] text-slate-400">sila masukkan ID Pengguna dan Kata Laluan</span>
+                <span class="text-[11px] text-slate-400">Sistem statistik berintegrasi penuh Firestore DB</span>
             </div>
         </div>
     </div>
@@ -1244,7 +1234,35 @@ function getColLetter(colIndex) {
         </div>
     </div>
 
-    <script>
+    <!-- FIREBASE FIRESTORE 100% INTEGRATION MODULE SCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // FIREBASE CONFIGURATION
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyBJJHHD9-jKidD_v_VKUmACFK1xT0nAr50",
+            authDomain: "official-statistic-center.firebaseapp.com",
+            databaseURL: "https://official-statistic-center-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "official-statistic-center",
+            storageBucket: "official-statistic-center.firebasestorage.app",
+            messagingSenderId: "321807383786",
+            appId: "1:321807383786:web:2383dae0f3a6f1f284ab93",
+            measurementId: "G-FJYNEMCCPM"
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'official-statistic-center';
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Firestore Path Helpers strictly adhering to Mandatory Rule 1
+        const getPublicCollectionRef = (collName) => collection(db, 'artifacts', appId, 'public', 'data', collName);
+        const getPublicDocRef = (collName, docId) => doc(db, 'artifacts', appId, 'public', 'data', collName, docId);
+
+        // DEFAULT STATE DATA
         const DEFAULT_USERS = [
             { id: "0000", name: "Admin Utama", pass: "0000", role: "admin", status: "Aktif" },
             { id: "01", name: "Pegawai 1", pass: "0000", role: "pegawai", status: "Aktif" },
@@ -1252,14 +1270,226 @@ function getColLetter(colIndex) {
         ];
 
         let currentUser = null;
-        let usersList = JSON.parse(localStorage.getItem('sports_users_list')) || DEFAULT_USERS;
-        let activityLogs = JSON.parse(localStorage.getItem('sports_activity_logs')) || [];
+        let usersList = [];
+        let activityLogs = [];
+        let categoryVerifyState = {};
 
-        // Category verification state storage
-        let categoryVerifyState = JSON.parse(localStorage.getItem('sports_category_verify_status')) || {};
+        let eventLockState = {
+            padang: true,
+            balapan: true,
+            relay: true,
+            padang_acara: true
+        };
 
-        let pendingCategoryConfirmTarget = null; // { type, eventName, categoryKey, catLabel }
+        let webAppUrlPadang = '';
+        let webAppUrlBalapan = '';
+        let webAppUrlRelay = '';
+        let webAppUrlPadangAcara = '';
 
+        let pendingSaveCount = 0;
+        let clientIpAddress = "127.0.0.1";
+
+        let currentMainTab = 'padang'; 
+        let currentSaringanEvent = '101'; 
+        let currentBalapanEvent = '101';  
+        let currentRelayEvent = '411';     
+        let currentPadangAcaraEvent = 'LongJump';
+
+        const SARINGAN_SHEETS = ['101', '102', '103', '104', '105', '106', '204', '205', '300'];
+        const AKHIR_SHEETS = ['101', '102', '103', '104', '105', '106', '204', '205', '300'];
+        const RELAY_SHEETS = ['411', '412', '413', '414', '415', '424', '425'];
+        const PADANG_ACARA_SHEETS = ['LongJump', 'HighJump', 'ShotPut'];
+
+        let dataset = {};
+
+        // INITIALIZATION AND FIRESTORE AUTH
+        async function initApp() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                updateFirestoreStatusBadge(true, "Firestore Live");
+            } catch (err) {
+                console.error("Auth Failed:", err);
+                updateFirestoreStatusBadge(false, "Auth Ralat");
+                showToast("Gagal menyambungkan autentikasi Firestore", "error");
+            }
+
+            // Run migration from localStorage ONCE if data exists
+            await executeOneTimeMigrationToFirestore();
+
+            // Set up Realtime Firestore Listeners
+            setupRealtimeListeners();
+
+            initTheme();
+            detectClientIp();
+            checkUserAuth();
+            initializeMockDataset();
+            renderEventSelectors();
+            renderAllTables();
+            updateStats();
+        }
+
+        function updateFirestoreStatusBadge(isOk, text) {
+            const pulse = document.getElementById('firestoreStatusPulse');
+            const dot = document.getElementById('firestoreStatusDot');
+            const label = document.getElementById('firestoreStatusText');
+
+            if (label) label.innerText = text;
+            if (isOk) {
+                if (pulse) pulse.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+                if (dot) dot.className = "relative inline-flex rounded-full h-2 w-2 bg-emerald-500";
+            } else {
+                if (pulse) pulse.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75";
+                if (dot) dot.className = "relative inline-flex rounded-full h-2 w-2 bg-rose-500";
+            }
+        }
+
+        // ONE-TIME MIGRATION SYSTEM (FROM LOCALSTORAGE TO FIRESTORE)
+        async function executeOneTimeMigrationToFirestore() {
+            if (!auth.currentUser) return;
+            try {
+                const metaRef = getPublicDocRef('app_metadata', 'migration_status');
+                const metaSnap = await getDoc(metaRef);
+
+                if (metaSnap.exists() && metaSnap.data().migrated === true) {
+                    // Already migrated to Firestore, clean local storage
+                    cleanAllLocalStorage();
+                    return;
+                }
+
+                showToast("Memulakan migrasi 100% data dari LocalStorage ke Firestore...", "info");
+
+                // Migrate Users
+                const oldUsers = localStorage.getItem('sports_users_list');
+                const usersToSave = oldUsers ? JSON.parse(oldUsers) : DEFAULT_USERS;
+                await setDoc(getPublicDocRef('users', 'user_accounts'), { list: usersToSave });
+
+                // Migrate Audit Logs
+                const oldLogs = localStorage.getItem('sports_activity_logs');
+                const logsToSave = oldLogs ? JSON.parse(oldLogs) : [];
+                await setDoc(getPublicDocRef('activity_logs', 'logs_history'), { list: logsToSave });
+
+                // Migrate Category Verify State
+                const oldCatVerify = localStorage.getItem('sports_category_verify_status');
+                const catVerifyToSave = oldCatVerify ? JSON.parse(oldCatVerify) : {};
+                await setDoc(getPublicDocRef('category_verify_status', 'verify_state'), { state: catVerifyToSave });
+
+                // Migrate Event Lock State
+                const oldLocks = localStorage.getItem('sports_event_lock_state');
+                const locksToSave = oldLocks ? JSON.parse(oldLocks) : eventLockState;
+                await setDoc(getPublicDocRef('event_locks', 'lock_state'), { locks: locksToSave });
+
+                // Migrate API URLs
+                const urlsToSave = {
+                    padang: localStorage.getItem('sports_webapp_url_padang') || '',
+                    balapan: localStorage.getItem('sports_webapp_url_balapan') || '',
+                    relay: localStorage.getItem('sports_webapp_url_relay') || '',
+                    padang_acara: localStorage.getItem('sports_webapp_url_padang_acara') || ''
+                };
+                await setDoc(getPublicDocRef('api_urls', 'config'), urlsToSave);
+
+                // Mark Migration Completed in Firestore
+                await setDoc(metaRef, { migrated: true, timestamp: new Date().toISOString() });
+                
+                cleanAllLocalStorage();
+                showToast("Migrasi ke Firebase Firestore BERJAYA!", "success");
+
+            } catch (err) {
+                console.error("Migration Error:", err);
+            }
+        }
+
+        function cleanAllLocalStorage() {
+            localStorage.removeItem('sports_users_list');
+            localStorage.removeItem('sports_activity_logs');
+            localStorage.removeItem('sports_category_verify_status');
+            localStorage.removeItem('sports_event_lock_state');
+            localStorage.removeItem('sports_webapp_url_padang');
+            localStorage.removeItem('sports_webapp_url_balapan');
+            localStorage.removeItem('sports_webapp_url_relay');
+            localStorage.removeItem('sports_webapp_url_padang_acara');
+        }
+
+        // REALTIME FIRESTORE LISTENERS
+        function setupRealtimeListeners() {
+            if (!auth.currentUser) return;
+
+            // 1. Listen to Users List
+            onSnapshot(getPublicDocRef('users', 'user_accounts'), (docSnap) => {
+                if (docSnap.exists()) {
+                    usersList = docSnap.data().list || DEFAULT_USERS;
+                } else {
+                    usersList = DEFAULT_USERS;
+                    setDoc(getPublicDocRef('users', 'user_accounts'), { list: DEFAULT_USERS });
+                }
+                renderUsersTable();
+            }, (err) => console.error("Users Listener Error:", err));
+
+            // 2. Listen to Activity Logs
+            onSnapshot(getPublicDocRef('activity_logs', 'logs_history'), (docSnap) => {
+                if (docSnap.exists()) {
+                    activityLogs = docSnap.data().list || [];
+                    renderLogsTable();
+                }
+            }, (err) => console.error("Logs Listener Error:", err));
+
+            // 3. Listen to Category Verification State
+            onSnapshot(getPublicDocRef('category_verify_status', 'verify_state'), (docSnap) => {
+                if (docSnap.exists()) {
+                    categoryVerifyState = docSnap.data().state || {};
+                    renderAllTables();
+                    updateStats();
+                }
+            }, (err) => console.error("Verify State Listener Error:", err));
+
+            // 4. Listen to Event Lock State
+            onSnapshot(getPublicDocRef('event_locks', 'lock_state'), (docSnap) => {
+                if (docSnap.exists()) {
+                    eventLockState = docSnap.data().locks || eventLockState;
+                    updateTabLockBadges();
+                    renderEventLockControls();
+                    renderAllTables();
+                }
+            }, (err) => console.error("Lock State Listener Error:", err));
+
+            // 5. Listen to API URLs
+            onSnapshot(getPublicDocRef('api_urls', 'config'), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    webAppUrlPadang = data.padang || '';
+                    webAppUrlBalapan = data.balapan || '';
+                    webAppUrlRelay = data.relay || '';
+                    webAppUrlPadangAcara = data.padang_acara || '';
+
+                    const padangInput = document.getElementById('webAppUrlPadangInput');
+                    const balapanInput = document.getElementById('webAppUrlBalapanInput');
+                    const relayInput = document.getElementById('webAppUrlRelayInput');
+                    const padangAcaraInput = document.getElementById('webAppUrlPadangAcaraInput');
+
+                    if (padangInput) padangInput.value = webAppUrlPadang;
+                    if (balapanInput) balapanInput.value = webAppUrlBalapan;
+                    if (relayInput) relayInput.value = webAppUrlRelay;
+                    if (padangAcaraInput) padangAcaraInput.value = webAppUrlPadangAcara;
+
+                    updateBadge();
+                }
+            }, (err) => console.error("API Config Listener Error:", err));
+
+            // 6. Listen to Events Dataset Realtime Changes
+            onSnapshot(getPublicCollectionRef('events'), (querySnap) => {
+                querySnap.forEach((docSnap) => {
+                    const eventId = docSnap.id;
+                    dataset[eventId] = docSnap.data();
+                });
+                renderAllTables();
+                updateStats();
+            }, (err) => console.error("Events Listener Error:", err));
+        }
+
+        // CATEGORY VERIFICATION LOGIC
         function getCategoryVerificationKey(type, eventName, categoryKey) {
             return `${type}_${eventName}_${categoryKey}`;
         }
@@ -1269,25 +1499,31 @@ function getColLetter(colIndex) {
             return categoryVerifyState[key] === true;
         }
 
-        function setCategoryVerified(type, eventName, categoryKey, verified = true) {
+        async function setCategoryVerified(type, eventName, categoryKey, verified = true) {
             const key = getCategoryVerificationKey(type, eventName, categoryKey);
             categoryVerifyState[key] = verified;
-            localStorage.setItem('sports_category_verify_status', JSON.stringify(categoryVerifyState));
+            try {
+                await setDoc(getPublicDocRef('category_verify_status', 'verify_state'), { state: categoryVerifyState });
+            } catch (err) {
+                console.error("Firestore Category Verification Save Error:", err);
+            }
         }
 
-        function openRankErrorModal(msg) {
+        window.openRankErrorModal = function(msg) {
             const el = document.getElementById('rankErrorText');
             if (el) el.innerText = msg;
             const modal = document.getElementById('rankErrorModal');
             if (modal) modal.classList.remove('hidden');
-        }
+        };
 
-        function closeRankErrorModal() {
+        window.closeRankErrorModal = function() {
             const modal = document.getElementById('rankErrorModal');
             if (modal) modal.classList.add('hidden');
-        }
+        };
 
-        function openCategoryConfirmModal(type, eventName, categoryKey, catLabel) {
+        let pendingCategoryConfirmTarget = null;
+
+        window.openCategoryConfirmModal = function(type, eventName, categoryKey, catLabel) {
             pendingCategoryConfirmTarget = { type, eventName, categoryKey, catLabel };
             const textEl = document.getElementById('categoryConfirmText');
             if (textEl) textEl.innerText = `Adakah anda pasti mahu mengesahkan keputusan kategori ${catLabel}?`;
@@ -1297,41 +1533,41 @@ function getColLetter(colIndex) {
 
             const modal = document.getElementById('categoryConfirmModal');
             if (modal) modal.classList.remove('hidden');
-        }
+        };
 
-        function closeCategoryConfirmModal() {
+        window.closeCategoryConfirmModal = function() {
             pendingCategoryConfirmTarget = null;
             const modal = document.getElementById('categoryConfirmModal');
             if (modal) modal.classList.add('hidden');
-        }
+        };
 
-        function proceedCategoryVerification() {
+        window.proceedCategoryVerification = async function() {
             if (!pendingCategoryConfirmTarget) return;
             const { type, eventName, categoryKey, catLabel } = pendingCategoryConfirmTarget;
             
-            setCategoryVerified(type, eventName, categoryKey, true);
+            await setCategoryVerified(type, eventName, categoryKey, true);
             closeCategoryConfirmModal();
 
-            logActivity('Pengesahan Kategori', `${currentUser ? currentUser.name : 'Pegawai'} mengesahkan kategori ${catLabel} [${type.toUpperCase()} - ${eventName}]`, 'Berjaya');
+            await logActivity('Pengesahan Kategori', `${currentUser ? currentUser.name : 'Pegawai'} mengesahkan kategori ${catLabel} [${type.toUpperCase()} - ${eventName}]`, 'Berjaya');
             showToast(`Kategori ${catLabel} [${eventName}] telah DISAHKAN!`, "success");
 
             renderAllTables();
             updateStats();
-        }
+        };
 
-        function unverifyCategory(type, eventName, categoryKey, catLabel) {
+        window.unverifyCategory = async function(type, eventName, categoryKey, catLabel) {
             if (!currentUser || currentUser.role !== 'admin') {
                 showToast("Hanya Admin Utama yang dibenarkan membatalkan pengesahan kategori.", "error");
                 return;
             }
-            setCategoryVerified(type, eventName, categoryKey, false);
-            logActivity('Nyahsahkan Kategori', `${currentUser.name} membatalkan pengesahan kategori ${catLabel} [${type.toUpperCase()} - ${eventName}]`, 'Berjaya');
+            await setCategoryVerified(type, eventName, categoryKey, false);
+            await logActivity('Nyahsahkan Kategori', `${currentUser.name} membatalkan pengesahan kategori ${catLabel} [${type.toUpperCase()} - ${eventName}]`, 'Berjaya');
             showToast(`Pengesahan kategori ${catLabel} telah dibatalkan.`, "info");
             renderAllTables();
             updateStats();
-        }
+        };
 
-        function validateAndInitiateVerification(type, eventName, categoryKey, catLabel) {
+        window.validateAndInitiateVerification = function(type, eventName, categoryKey, catLabel) {
             const evData = dataset[eventName];
             if (!evData) {
                 openRankErrorModal("Data acara tidak ditemui.");
@@ -1386,7 +1622,7 @@ function getColLetter(colIndex) {
             }
 
             openCategoryConfirmModal(type, eventName, categoryKey, catLabel);
-        }
+        };
 
         function evaluateCategoryStatus(type, eventName, categoryKey) {
             if (isCategoryVerified(type, eventName, categoryKey)) {
@@ -1470,8 +1706,7 @@ function getColLetter(colIndex) {
             container.innerHTML = badgeHTML;
         }
 
-        // Toast & Spinner Helper Functions
-        function showToast(message, type = 'info') {
+        window.showToast = function(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             if (!container) return;
 
@@ -1508,7 +1743,7 @@ function getColLetter(colIndex) {
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.remove(), 300);
             }, 4000);
-        }
+        };
 
         function showAutoSyncSpinner(show) {
             const spinner = document.getElementById('autoSyncSpinner');
@@ -1518,7 +1753,7 @@ function getColLetter(colIndex) {
             }
         }
 
-        function testApiUrl(type) {
+        window.testApiUrl = function(type) {
             const inputIds = { padang: 'webAppUrlPadangInput', balapan: 'webAppUrlBalapanInput', relay: 'webAppUrlRelayInput', padang_acara: 'webAppUrlPadangAcaraInput' };
             const resultIds = { padang: 'testUrlResultPadang', balapan: 'testUrlResultBalapan', relay: 'testUrlResultRelay', padang_acara: 'testUrlResultPadangAcara' };
             const input = document.getElementById(inputIds[type]);
@@ -1554,29 +1789,38 @@ function getColLetter(colIndex) {
                     resDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600"></i> Gagal menyambung: ${err.message}`;
                     showToast("Gagal menyambung ke URL Web App.", "error");
                 });
-        }
+        };
 
-        function saveApiUrl(type) {
+        window.saveApiUrl = async function(type) {
             const inputIds = { padang: 'webAppUrlPadangInput', balapan: 'webAppUrlBalapanInput', relay: 'webAppUrlRelayInput', padang_acara: 'webAppUrlPadangAcaraInput' };
-            const storageKeys = { padang: 'sports_webapp_url_padang', balapan: 'sports_webapp_url_balapan', relay: 'sports_webapp_url_relay', padang_acara: 'sports_webapp_url_padang_acara' };
             const input = document.getElementById(inputIds[type]);
 
             if (!input) return;
             const val = input.value.trim();
-            localStorage.setItem(storageKeys[type], val);
 
             if (type === 'padang') webAppUrlPadang = val;
             else if (type === 'balapan') webAppUrlBalapan = val;
             else if (type === 'relay') webAppUrlRelay = val;
             else if (type === 'padang_acara') webAppUrlPadangAcara = val;
 
-            setFieldSavedState(type, !!val);
-            logActivity('Tetapan API', `Simpan URL API bagi Acara ${type.toUpperCase()}`, 'Berjaya');
-            showToast(`URL API ${type.toUpperCase()} berjaya disimpan!`, "success");
-            fetchDataFromBackend(true);
-        }
+            try {
+                await setDoc(getPublicDocRef('api_urls', 'config'), {
+                    padang: webAppUrlPadang,
+                    balapan: webAppUrlBalapan,
+                    relay: webAppUrlRelay,
+                    padang_acara: webAppUrlPadangAcara
+                });
 
-        function editApiUrl(type) {
+                setFieldSavedState(type, !!val);
+                await logActivity('Tetapan API', `Simpan URL API bagi Acara ${type.toUpperCase()}`, 'Berjaya');
+                showToast(`URL API ${type.toUpperCase()} berjaya disimpan ke Firestore!`, "success");
+                fetchDataFromBackend(true);
+            } catch (err) {
+                showToast("Gagal menyimpan URL API ke Firestore", "error");
+            }
+        };
+
+        window.editApiUrl = function(type) {
             const inputIds = { padang: 'webAppUrlPadangInput', balapan: 'webAppUrlBalapanInput', relay: 'webAppUrlRelayInput', padang_acara: 'webAppUrlPadangAcaraInput' };
             const input = document.getElementById(inputIds[type]);
             if (input) {
@@ -1584,27 +1828,36 @@ function getColLetter(colIndex) {
                 input.select();
                 showToast("Mod suntingan diaktifkan untuk URL API.", "info");
             }
-        }
+        };
 
-        function deleteApiUrl(type) {
+        window.deleteApiUrl = async function(type) {
             const inputIds = { padang: 'webAppUrlPadangInput', balapan: 'webAppUrlBalapanInput', relay: 'webAppUrlRelayInput', padang_acara: 'webAppUrlPadangAcaraInput' };
-            const storageKeys = { padang: 'sports_webapp_url_padang', balapan: 'sports_webapp_url_balapan', relay: 'sports_webapp_url_relay', padang_acara: 'sports_webapp_url_padang_acara' };
             const input = document.getElementById(inputIds[type]);
 
             if (input) input.value = '';
-            localStorage.removeItem(storageKeys[type]);
 
             if (type === 'padang') webAppUrlPadang = '';
             else if (type === 'balapan') webAppUrlBalapan = '';
             else if (type === 'relay') webAppUrlRelay = '';
             else if (type === 'padang_acara') webAppUrlPadangAcara = '';
 
-            setFieldSavedState(type, false);
-            logActivity('Tetapan API', `Hapus URL API bagi Acara ${type.toUpperCase()}`, 'Berjaya');
-            showToast(`URL API ${type.toUpperCase()} telah dihapuskan.`, "info");
-        }
+            try {
+                await setDoc(getPublicDocRef('api_urls', 'config'), {
+                    padang: webAppUrlPadang,
+                    balapan: webAppUrlBalapan,
+                    relay: webAppUrlRelay,
+                    padang_acara: webAppUrlPadangAcara
+                });
 
-        function copyGasCode(type) {
+                setFieldSavedState(type, false);
+                await logActivity('Tetapan API', `Hapus URL API bagi Acara ${type.toUpperCase()}`, 'Berjaya');
+                showToast(`URL API ${type.toUpperCase()} telah dihapuskan dari Firestore.`, "info");
+            } catch (err) {
+                showToast("Gagal menghapus URL API di Firestore", "error");
+            }
+        };
+
+        window.copyGasCode = function(type) {
             let code = GAS_CODE_PADANG;
             if (type === 'balapan') code = GAS_CODE_BALAPAN;
             else if (type === 'relay') code = GAS_CODE_RELAY;
@@ -1618,41 +1871,10 @@ function getColLetter(colIndex) {
             document.body.removeChild(tempInput);
 
             showToast(`Kod Google Apps Script (${type.toUpperCase()}) berjaya disalin!`, "success");
-        }
-
-        // Dynamic event lock state (Default: ALL LOCKED)
-        let eventLockState = JSON.parse(localStorage.getItem('sports_event_lock_state')) || {
-            padang: true,
-            balapan: true,
-            relay: true,
-            padang_acara: true
         };
 
-        let webAppUrlPadang = localStorage.getItem('sports_webapp_url_padang') || '';
-        let webAppUrlBalapan = localStorage.getItem('sports_webapp_url_balapan') || '';
-        let webAppUrlRelay = localStorage.getItem('sports_webapp_url_relay') || '';
-        let webAppUrlPadangAcara = localStorage.getItem('sports_webapp_url_padang_acara') || '';
-
-        let pendingSaveCount = 0;
-        let clientIpAddress = "127.0.0.1";
-
-        let currentMainTab = 'padang'; 
-        let currentSaringanEvent = '101'; 
-        let currentBalapanEvent = '101';  
-        let currentRelayEvent = '411';     
-        let currentPadangAcaraEvent = 'LongJump';
-
-        const SARINGAN_SHEETS = ['101', '102', '103', '104', '105', '106', '204', '205', '300'];
-        const AKHIR_SHEETS = ['101', '102', '103', '104', '105', '106', '204', '205', '300'];
-        const RELAY_SHEETS = ['411', '412', '413', '414', '415', '424', '425'];
-        const PADANG_ACARA_SHEETS = ['LongJump', 'HighJump', 'ShotPut'];
-
-        let dataset = {};
-
-        // Helper Functions for Theme and Security
         function initTheme() {
-            const savedTheme = localStorage.getItem('sports_theme');
-            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.body.classList.add('dark');
                 updateThemeIcon(true);
             } else {
@@ -1700,11 +1922,10 @@ function getColLetter(colIndex) {
             }
         }
 
-        function toggleDarkMode() {
+        window.toggleDarkMode = function() {
             const isDark = document.body.classList.toggle('dark');
-            localStorage.setItem('sports_theme', isDark ? 'dark' : 'light');
             updateThemeIcon(isDark);
-        }
+        };
 
         function updateThemeIcon(isDark) {
             const icon = document.getElementById('themeToggleIcon');
@@ -1721,9 +1942,7 @@ function getColLetter(colIndex) {
         }
 
         function checkUserAuth() {
-            const storedUser = localStorage.getItem('sports_current_user');
-            if (storedUser) {
-                currentUser = JSON.parse(storedUser);
+            if (currentUser) {
                 hideLoginOverlay();
             } else {
                 showLoginOverlay();
@@ -1748,7 +1967,7 @@ function getColLetter(colIndex) {
             }
         }
 
-        function handleLoginSubmit(e) {
+        window.handleLoginSubmit = async function(e) {
             e.preventDefault();
             const idInput = document.getElementById('loginUserId').value.trim();
             const passInput = document.getElementById('loginPassword').value.trim();
@@ -1758,31 +1977,29 @@ function getColLetter(colIndex) {
 
             if (foundUser) {
                 currentUser = foundUser;
-                localStorage.setItem('sports_current_user', JSON.stringify(currentUser));
                 if (errorMsg) errorMsg.classList.add('hidden');
                 hideLoginOverlay();
                 updateHeaderUserInfo();
-                logActivity('Log Masuk', `${currentUser.name} berjaya log masuk.`, 'Berjaya');
+                await logActivity('Log Masuk', `${currentUser.name} berjaya log masuk.`, 'Berjaya');
                 showToast(`Selamat datang, ${currentUser.name}!`, "success");
                 renderAllTables();
             } else {
                 if (errorMsg) errorMsg.classList.remove('hidden');
-                logActivity('Log Masuk Gagal', `Cubaan log masuk gagal untuk ID: ${idInput}`, 'Gagal');
+                await logActivity('Log Masuk Gagal', `Cubaan log masuk gagal untuk ID: ${idInput}`, 'Gagal');
             }
-        }
+        };
 
-        function handleLogout() {
+        window.handleLogout = async function() {
             if (currentUser) {
-                logActivity('Log Keluar', `${currentUser.name} log keluar.`, 'Berjaya');
+                await logActivity('Log Keluar', `${currentUser.name} log keluar.`, 'Berjaya');
             }
             currentUser = null;
-            localStorage.removeItem('sports_current_user');
             updateHeaderUserInfo();
             showLoginOverlay();
             showToast("Anda telah log keluar.", "info");
-        }
+        };
 
-        function toggleSetupModal() {
+        window.toggleSetupModal = function() {
             const modal = document.getElementById('setupModal');
             if (!modal) return;
             if (currentUser && currentUser.role !== 'admin') {
@@ -1793,9 +2010,9 @@ function getColLetter(colIndex) {
             if (!modal.classList.contains('hidden')) {
                 switchAdminSubTab('urlConfig');
             }
-        }
+        };
 
-        function logActivity(category, details, status = 'Berjaya') {
+        async function logActivity(category, details, status = 'Berjaya') {
             const newLog = {
                 timestamp: new Date().toLocaleString('ms-MY'),
                 user: currentUser ? currentUser.name : 'Tetamu',
@@ -1807,7 +2024,14 @@ function getColLetter(colIndex) {
             };
             activityLogs.unshift(newLog);
             if (activityLogs.length > 100) activityLogs.pop();
-            localStorage.setItem('sports_activity_logs', JSON.stringify(activityLogs));
+
+            try {
+                if (auth.currentUser) {
+                    await setDoc(getPublicDocRef('activity_logs', 'logs_history'), { list: activityLogs });
+                }
+            } catch (err) {
+                console.error("Firestore Log Activity Error:", err);
+            }
             renderLogsTable();
         }
 
@@ -1828,16 +2052,20 @@ function getColLetter(colIndex) {
             `).join('');
         }
 
-        function clearActivityLogs() {
+        window.clearActivityLogs = async function() {
             if (!currentUser || currentUser.role !== 'admin') {
                 showToast("Hanya Admin Utama yang dibenarkan mengosongkan log.", "error");
                 return;
             }
             activityLogs = [];
-            localStorage.setItem('sports_activity_logs', JSON.stringify(activityLogs));
+            try {
+                await setDoc(getPublicDocRef('activity_logs', 'logs_history'), { list: [] });
+                showToast("Log aktiviti telah dikosongkan.", "info");
+            } catch (err) {
+                showToast("Gagal mengosongkan log di Firestore", "error");
+            }
             renderLogsTable();
-            showToast("Log aktiviti telah dikosongkan.", "info");
-        }
+        };
 
         function renderUsersTable() {
             const tbody = document.getElementById('usersTableBody');
@@ -1865,7 +2093,7 @@ function getColLetter(colIndex) {
             `).join('');
         }
 
-        function deleteUserAccount(idx) {
+        window.deleteUserAccount = async function(idx) {
             if (!currentUser || currentUser.role !== 'admin') {
                 showToast("Hanya Admin Utama yang dibenarkan menghapus akaun pengguna.", "error");
                 return;
@@ -1874,30 +2102,28 @@ function getColLetter(colIndex) {
             const targetUser = usersList[idx];
             if (!targetUser) return;
 
-            // Halang pemadaman akaun sendiri atau akaun Admin Utama 0000
             if (targetUser.id === "0000" || targetUser.id === currentUser.id) {
                 showToast("Akaun Admin Utama tidak boleh dihapuskan!", "error");
                 return;
             }
 
-            openRankErrorModal(`Adakah anda pasti mahu menghapus akaun ${targetUser.name} (${targetUser.id})?`);
-            
-            // Re-bind modal button dynamically or confirm deletion via alert fallback logic
-            const modalBtn = document.querySelector('#rankErrorModal button');
-            const originalText = modalBtn ? modalBtn.innerText : '';
-            
             if (confirm(`Adakah anda pasti mahu menghapus akaun ${targetUser.name} (${targetUser.id})?`)) {
                 const deletedName = targetUser.name;
                 const deletedId = targetUser.id;
                 usersList.splice(idx, 1);
-                localStorage.setItem('sports_users_list', JSON.stringify(usersList));
+                
+                try {
+                    await setDoc(getPublicDocRef('users', 'user_accounts'), { list: usersList });
+                    await logActivity('Pengurusan Pengguna', `Akaun pengguna dihapuskan: ${deletedName} (${deletedId})`, 'Berjaya');
+                    showToast(`Akaun ${deletedName} berjaya dihapuskan dari Firestore.`, "info");
+                } catch (err) {
+                    showToast("Gagal menghapus akaun di Firestore", "error");
+                }
                 renderUsersTable();
-                logActivity('Pengurusan Pengguna', `Akaun pengguna dihapuskan: ${deletedName} (${deletedId})`, 'Berjaya');
-                showToast(`Akaun ${deletedName} berjaya dihapuskan.`, "info");
             }
-        }
+        };
 
-        function openAddUserModal() {
+        window.openAddUserModal = function() {
             document.getElementById('userFormTitle').innerText = "Tambah Pengguna Baharu";
             document.getElementById('userFormIndex').value = "-1";
             document.getElementById('userFormName').value = "";
@@ -1906,9 +2132,9 @@ function getColLetter(colIndex) {
             document.getElementById('userFormRole').value = "pegawai";
             document.getElementById('userFormStatus').value = "Aktif";
             document.getElementById('userEditModal').classList.remove('hidden');
-        }
+        };
 
-        function openEditUserModal(idx) {
+        window.openEditUserModal = function(idx) {
             const u = usersList[idx];
             if (!u) return;
             document.getElementById('userFormTitle').innerText = "Kemaskini Pengguna";
@@ -1919,13 +2145,13 @@ function getColLetter(colIndex) {
             document.getElementById('userFormRole').value = u.role;
             document.getElementById('userFormStatus').value = u.status;
             document.getElementById('userEditModal').classList.remove('hidden');
-        }
+        };
 
-        function closeUserEditModal() {
+        window.closeUserEditModal = function() {
             document.getElementById('userEditModal').classList.add('hidden');
-        }
+        };
 
-        function saveUserForm(e) {
+        window.saveUserForm = async function(e) {
             e.preventDefault();
             const idx = parseInt(document.getElementById('userFormIndex').value);
             const newUser = {
@@ -1938,17 +2164,22 @@ function getColLetter(colIndex) {
 
             if (idx >= 0) {
                 usersList[idx] = newUser;
-                logActivity('Pengurusan Pengguna', `Kemaskini akaun: ${newUser.name} (${newUser.id})`, 'Berjaya');
+                await logActivity('Pengurusan Pengguna', `Kemaskini akaun: ${newUser.name} (${newUser.id})`, 'Berjaya');
             } else {
                 usersList.push(newUser);
-                logActivity('Pengurusan Pengguna', `Tambah akaun baharu: ${newUser.name} (${newUser.id})`, 'Berjaya');
+                await logActivity('Pengurusan Pengguna', `Tambah akaun baharu: ${newUser.name} (${newUser.id})`, 'Berjaya');
             }
 
-            localStorage.setItem('sports_users_list', JSON.stringify(usersList));
+            try {
+                await setDoc(getPublicDocRef('users', 'user_accounts'), { list: usersList });
+                showToast("Maklumat pengguna berjaya disimpan ke Firestore.", "success");
+            } catch (err) {
+                showToast("Gagal menyimpan akaun pengguna ke Firestore", "error");
+            }
+
             closeUserEditModal();
             renderUsersTable();
-            showToast("Maklumat pengguna berjaya disimpan.", "success");
-        }
+        };
 
         function normalizeHouseName(houseStr) {
             if (!houseStr) return 'Garuda';
@@ -1969,7 +2200,7 @@ function getColLetter(colIndex) {
             return 'font-extrabold';
         }
 
-        function switchMainTab(tab) {
+        window.switchMainTab = function(tab) {
             currentMainTab = tab;
             ['padang', 'balapan', 'relay', 'padang_acara', 'pingat'].forEach(t => {
                 const btn = document.getElementById(`tabBtn-${t}`);
@@ -1988,7 +2219,7 @@ function getColLetter(colIndex) {
             });
 
             if (tab === 'pingat') renderHouseStats();
-        }
+        };
 
         function renderEventSelectors() {
             const createBtnHTML = (sheets, current, onClickFn) => sheets.map(s => `
@@ -2010,37 +2241,37 @@ function getColLetter(colIndex) {
             if (padangAcaraSel) padangAcaraSel.innerHTML = createBtnHTML(PADANG_ACARA_SHEETS, currentPadangAcaraEvent, 'changePadangAcaraEvent');
         }
 
-        function changeSaringanEvent(ev) {
+        window.changeSaringanEvent = function(ev) {
             currentSaringanEvent = ev;
             const badge = document.getElementById('currentSaringanSheetBadge');
             if (badge) badge.innerText = ev;
             renderEventSelectors();
             renderSaringanTables();
-        }
+        };
 
-        function changeBalapanEvent(ev) {
+        window.changeBalapanEvent = function(ev) {
             currentBalapanEvent = ev;
             const badge = document.getElementById('currentTrackSheetBadge');
             if (badge) badge.innerText = ev;
             renderEventSelectors();
             renderBalapanTables();
-        }
+        };
 
-        function changeRelayEvent(ev) {
+        window.changeRelayEvent = function(ev) {
             currentRelayEvent = ev;
             const badge = document.getElementById('currentRelaySheetBadge');
             if (badge) badge.innerText = ev;
             renderEventSelectors();
             renderRelayTables();
-        }
+        };
 
-        function changePadangAcaraEvent(ev) {
+        window.changePadangAcaraEvent = function(ev) {
             currentPadangAcaraEvent = ev;
             const badge = document.getElementById('currentPadangAcaraSheetBadge');
             if (badge) badge.innerText = ev;
             renderEventSelectors();
             renderPadangAcaraTables();
-        }
+        };
 
         function renderSaringanTables() {
             const evData = dataset[currentSaringanEvent];
@@ -2095,32 +2326,38 @@ function getColLetter(colIndex) {
 
             SARINGAN_SHEETS.forEach(s => {
                 const isSpecial300 = (s === '300');
-                dataset[s] = {
-                    maleS1: buildMockAthletes(isSpecial300 ? 4 : 8),
-                    maleS2: buildMockAthletes(isSpecial300 ? 4 : 8),
-                    femaleS1: buildMockAthletes(isSpecial300 ? 4 : 8),
-                    femaleS2: buildMockAthletes(isSpecial300 ? 4 : 8),
-                    male: buildMockAthletes(isSpecial300 ? 4 : 8),
-                    female: buildMockAthletes(isSpecial300 ? 4 : 8)
-                };
+                if (!dataset[s]) {
+                    dataset[s] = {
+                        maleS1: buildMockAthletes(isSpecial300 ? 4 : 8),
+                        maleS2: buildMockAthletes(isSpecial300 ? 4 : 8),
+                        femaleS1: buildMockAthletes(isSpecial300 ? 4 : 8),
+                        femaleS2: buildMockAthletes(isSpecial300 ? 4 : 8),
+                        male: buildMockAthletes(isSpecial300 ? 4 : 8),
+                        female: buildMockAthletes(isSpecial300 ? 4 : 8)
+                    };
+                }
             });
 
             RELAY_SHEETS.forEach(s => {
-                dataset[s] = {
-                    male: Array.from({ length: 4 }, (_, i) => ({ lane: i + 1, house: ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'][i], time: '', rank: '' })),
-                    female: Array.from({ length: 4 }, (_, i) => ({ lane: i + 1, house: ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'][i], time: '', rank: '' }))
-                };
+                if (!dataset[s]) {
+                    dataset[s] = {
+                        male: Array.from({ length: 4 }, (_, i) => ({ lane: i + 1, house: ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'][i], time: '', rank: '' })),
+                        female: Array.from({ length: 4 }, (_, i) => ({ lane: i + 1, house: ['Garuda', 'Rajawali', 'Helang', 'Kenyalang'][i], time: '', rank: '' }))
+                    };
+                }
             });
 
             PADANG_ACARA_SHEETS.forEach(s => {
-                dataset[s] = {
-                    male: buildMockFieldAthletes(8),
-                    female: buildMockFieldAthletes(8)
-                };
+                if (!dataset[s]) {
+                    dataset[s] = {
+                        male: buildMockFieldAthletes(8),
+                        female: buildMockFieldAthletes(8)
+                    };
+                }
             });
         }
 
-        function openPrintModalFallback() {
+        window.openPrintModalFallback = function() {
             const modal = document.getElementById('printModalFallback');
             const body = document.getElementById('printModalFallbackBody');
             if (!modal || !body) return;
@@ -2130,14 +2367,14 @@ function getColLetter(colIndex) {
                 body.innerHTML = activeContent.innerHTML;
             }
             modal.classList.remove('hidden');
-        }
+        };
 
-        function closePrintModalFallback() {
+        window.closePrintModalFallback = function() {
             const modal = document.getElementById('printModalFallback');
             if (modal) modal.classList.add('hidden');
-        }
+        };
 
-        function downloadPrintDocument() {
+        window.downloadPrintDocument = function() {
             const body = document.getElementById('printModalFallbackBody');
             if (!body) return;
             const content = `<!DOCTYPE html><html><head><title>Keputusan Rasmi</title><script src="https://cdn.tailwindcss.com"><\/script></head><body class="p-8">${body.innerHTML}</body></html>`;
@@ -2149,7 +2386,7 @@ function getColLetter(colIndex) {
             a.click();
             URL.revokeObjectURL(url);
             showToast("Fail cetakan telah dimuat turun.", "success");
-        }
+        };
 
         function isEventLocked(type) {
             return eventLockState[type] !== false;
@@ -2167,7 +2404,7 @@ function getColLetter(colIndex) {
             });
         }
 
-        function toggleEventLock(type) {
+        window.toggleEventLock = async function(type) {
             if (!currentUser || currentUser.role !== 'admin') {
                 showToast("Hanya Admin Utama yang dibenarkan menukar status kunci acara.", "error");
                 return;
@@ -2177,22 +2414,25 @@ function getColLetter(colIndex) {
             eventLockState[type] = !eventLockState[type];
             const afterStatus = eventLockState[type] ? 'Dikunci' : 'Dibuka';
 
-            localStorage.setItem('sports_event_lock_state', JSON.stringify(eventLockState));
+            try {
+                await setDoc(getPublicDocRef('event_locks', 'lock_state'), { locks: eventLockState });
+                const typeNames = {
+                    padang: 'Acara Saringan',
+                    balapan: 'Akhir Balapan',
+                    relay: 'Acara Relay',
+                    padang_acara: 'Acara Padang'
+                };
 
-            const typeNames = {
-                padang: 'Acara Saringan',
-                balapan: 'Akhir Balapan',
-                relay: 'Acara Relay',
-                padang_acara: 'Acara Padang'
-            };
+                await logActivity('Kawalan Akses Acara', `${currentUser.name} (${currentUser.role === 'admin' ? 'Admin Utama' : 'Pegawai'}) | ${typeNames[type] || type} | ${beforeStatus} → ${afterStatus}`, 'Berjaya');
+                showToast(`${typeNames[type] || type} kini ${afterStatus.toLowerCase()}.`, "info");
+            } catch (err) {
+                showToast("Gagal menyimpan status kunci di Firestore", "error");
+            }
 
-            logActivity('Kawalan Akses Acara', `${currentUser.name} (${currentUser.role === 'admin' ? 'Admin Utama' : 'Pegawai'}) | ${typeNames[type] || type} | ${beforeStatus} → ${afterStatus}`, 'Berjaya');
-
-            showToast(`${typeNames[type] || type} kini ${afterStatus.toLowerCase()}.`, "info");
             updateTabLockBadges();
             renderEventLockControls();
             renderAllTables();
-        }
+        };
 
         function renderEventLockControls() {
             const grid = document.getElementById('eventLockControlsGrid');
@@ -2227,32 +2467,7 @@ function getColLetter(colIndex) {
             }).join('');
         }
 
-        window.onload = function() {
-            initTheme();
-            detectClientIp();
-            checkUserAuth();
-            initializeMockDataset();
-
-            const padangInput = document.getElementById('webAppUrlPadangInput');
-            const balapanInput = document.getElementById('webAppUrlBalapanInput');
-            const relayInput = document.getElementById('webAppUrlRelayInput');
-            const padangAcaraInput = document.getElementById('webAppUrlPadangAcaraInput');
-
-            if (webAppUrlPadang && padangInput) { padangInput.value = webAppUrlPadang; setFieldSavedState('padang', true); }
-            if (webAppUrlBalapan && balapanInput) { balapanInput.value = webAppUrlBalapan; setFieldSavedState('balapan', true); }
-            if (webAppUrlRelay && relayInput) { relayInput.value = webAppUrlRelay; setFieldSavedState('relay', true); }
-            if (webAppUrlPadangAcara && padangAcaraInput) { padangAcaraInput.value = webAppUrlPadangAcara; setFieldSavedState('padang_acara', true); }
-
-            updateBadge();
-            updateTabLockBadges();
-            renderEventSelectors();
-            renderAllTables();
-            updateStats();
-
-            fetchDataFromBackend();
-        };
-
-        function switchAdminSubTab(tabName) {
+        window.switchAdminSubTab = function(tabName) {
             const urlTab = document.getElementById('adminTabContent-urlConfig');
             const locksTab = document.getElementById('adminTabContent-eventLocks');
             const usersTab = document.getElementById('adminTabContent-users');
@@ -2285,7 +2500,7 @@ function getColLetter(colIndex) {
                 if (btnLogs) btnLogs.className = "py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-900 border-t-2 border-amber-600 shadow-xs";
                 renderLogsTable();
             }
-        }
+        };
 
         function renderTrackTable(tbodyId, rowData, type, eventName, category, baseRow, colRankIdx, colTimeIdx) {
             const tbody = document.getElementById(tbodyId);
@@ -2399,10 +2614,10 @@ function getColLetter(colIndex) {
             renderOverallEventStatus('padang_acara', currentPadangAcaraEvent, 'overallEventStatusBadge-padang_acara');
         }
 
-        async function handleSingleCellSave(type, eventName, category, rowIndex, colIndex, value) {
+        window.handleSingleCellSave = async function(type, eventName, category, rowIndex, colIndex, value) {
             if (isEventLocked(type) && (!currentUser || currentUser.role !== 'admin')) {
                 showToast("Acara ini masih dikunci oleh Admin Utama.", "error");
-                logActivity('Cubaan Edit Ditolak', `${currentUser ? currentUser.name : 'Tetamu'} (${currentUser ? currentUser.role : 'tetamu'}) cuba mengedit [${type} - ${eventName}] tetapi acara dikunci.`, 'Gagal');
+                await logActivity('Cubaan Edit Ditolak', `${currentUser ? currentUser.name : 'Tetamu'} (${currentUser ? currentUser.role : 'tetamu'}) cuba mengedit [${type} - ${eventName}] tetapi acara dikunci.`, 'Gagal');
                 renderAllTables();
                 return;
             }
@@ -2413,18 +2628,27 @@ function getColLetter(colIndex) {
             showAutoSyncSpinner(true);
             pendingSaveCount++;
 
+            // Save updated event dataset to Firestore Realtime DB
+            try {
+                if (auth.currentUser) {
+                    await setDoc(getPublicDocRef('events', eventName), dataset[eventName]);
+                }
+            } catch (err) {
+                console.error("Firestore Event Update Error:", err);
+            }
+
             let targetUrl = webAppUrlPadang;
             if (type === 'balapan') targetUrl = webAppUrlBalapan;
             else if (type === 'relay') targetUrl = webAppUrlRelay;
             else if (type === 'padang_acara') targetUrl = webAppUrlPadangAcara;
 
-            logActivity('Kemaskini Sel', `[${eventName}] Baris ${rowIndex}, Lajur ${colIndex} = "${value}"`, 'Berjaya');
+            await logActivity('Kemaskini Sel', `[${eventName}] Baris ${rowIndex}, Lajur ${colIndex} = "${value}"`, 'Berjaya');
 
             if (!targetUrl) {
                 setTimeout(() => {
                     pendingSaveCount = Math.max(0, pendingSaveCount - 1);
                     if (pendingSaveCount === 0) showAutoSyncSpinner(false);
-                    showToast("Data disimpan (Mode Belum Aktif)", "success");
+                    showToast("Data tersimpan di Firestore!", "success");
                 }, 300);
                 return;
             }
@@ -2438,19 +2662,19 @@ function getColLetter(colIndex) {
                 });
                 const result = JSON.parse(await response.text());
                 if (result.status === 'success') {
-                    showToast("Data berjaya disimpan ke Google Sheets!", "success");
+                    showToast("Data berjaya disengerakkan ke Google Sheets!", "success");
                 } else {
-                    showToast(`Ralat: ${result.message}`, "error");
-                    logActivity('Kemaskini Sel Gagal', `[${eventName}] ${result.message}`, 'Gagal');
+                    showToast(`Ralat GAS: ${result.message}`, "error");
+                    await logActivity('Kemaskini Sel Gagal', `[${eventName}] ${result.message}`, 'Gagal');
                 }
             } catch (err) {
-                showToast(`Gagal menyambung: ${err.message}`, "error");
-                logActivity('Ralat Sambungan', `[${eventName}] ${err.message}`, 'Gagal');
+                showToast(`Ralat Google Sheets: ${err.message}`, "error");
+                await logActivity('Ralat Sambungan', `[${eventName}] ${err.message}`, 'Gagal');
             } finally {
                 pendingSaveCount = Math.max(0, pendingSaveCount - 1);
                 if (pendingSaveCount === 0) showAutoSyncSpinner(false);
             }
-        }
+        };
 
         function updateLocalDatasetCell(eventName, category, rowIndex, colIndex, value) {
             const ev = dataset[eventName];
@@ -2508,8 +2732,8 @@ function getColLetter(colIndex) {
             }
         }
 
-        async function fetchDataFromBackend(isManual = false) {
-            if (isManual) showToast("Membuka data terkini dari Google Sheets...", "info");
+        window.fetchDataFromBackend = async function(isManual = false) {
+            if (isManual) showToast("Memuat turun data dari Google Sheets ke Firestore...", "info");
 
             const fetchService = async (url, sheetList, type) => {
                 if (!url) return;
@@ -2517,7 +2741,7 @@ function getColLetter(colIndex) {
                     const res = await fetch(`${url}?t=${new Date().getTime()}`, { redirect: 'follow' });
                     const json = JSON.parse(await res.text());
                     if (json.status === 'success' && json.events) {
-                        Object.keys(json.events).forEach(sName => {
+                        for (const sName of Object.keys(json.events)) {
                             if (!dataset[sName]) dataset[sName] = {};
                             const rawData = json.events[sName];
 
@@ -2543,7 +2767,12 @@ function getColLetter(colIndex) {
                                 dataset[sName].male = parseField(rawData.male);
                                 dataset[sName].female = parseField(rawData.female);
                             }
-                        });
+
+                            // Sync to Firestore
+                            if (auth.currentUser) {
+                                await setDoc(getPublicDocRef('events', sName), dataset[sName]);
+                            }
+                        }
                     }
                 } catch (e) {
                     console.error("Fetch error for " + type, e);
@@ -2558,15 +2787,11 @@ function getColLetter(colIndex) {
             ]);
 
             updateLiveConnectionBadge();
-
             renderAllTables();
             updateStats();
-            
-            const lastUpdateEl = document.getElementById('statLastUpdate');
-            if (lastUpdateEl) lastUpdateEl.innerText = `Kemas kini: ${new Date().toLocaleTimeString()}`;
 
-            if (isManual) showToast("Data terkini daripada Google Sheets berjaya dimuat turun!", "success");
-        }
+            if (isManual) showToast("Data disinkronkan ke Firestore!", "success");
+        };
 
         function updateStats() {
             const houseMedals = {
@@ -2632,7 +2857,6 @@ function getColLetter(colIndex) {
                 Kenyalang: { name: 'Kenyalang', gold: 0, silver: 0, bronze: 0, total: 0, points: 0 }
             };
 
-            // Tally medals directly from single source of truth
             const tallyEvents = (sheets) => {
                 sheets.forEach(sName => {
                     const ev = dataset[sName];
@@ -2656,16 +2880,10 @@ function getColLetter(colIndex) {
             tallyEvents(RELAY_SHEETS);
             tallyEvents(PADANG_ACARA_SHEETS);
 
-            // Compute Total Medals
             Object.keys(houseMedals).forEach(h => {
                 houseMedals[h].total = houseMedals[h].gold + houseMedals[h].silver + houseMedals[h].bronze;
             });
 
-            // Official Ranking Formula Priority:
-            // 1. Most Gold Medals
-            // 2. If Gold equal -> Most Silver
-            // 3. If Gold & Silver equal -> Most Bronze
-            // 4. If all medals equal -> Most Points
             const sortedHouses = Object.values(houseMedals).sort((a, b) => {
                 if (b.gold !== a.gold) return b.gold - a.gold;
                 if (b.silver !== a.silver) return b.silver - a.silver;
@@ -2673,7 +2891,6 @@ function getColLetter(colIndex) {
                 return b.points - a.points;
             });
 
-            // Filter out houses with active records or show standard list
             const totalRecordedMedals = sortedHouses.reduce((sum, h) => sum + h.total, 0);
 
             if (totalRecordedMedals === 0) {
@@ -2683,46 +2900,40 @@ function getColLetter(colIndex) {
                             <i class="fa-solid fa-trophy text-2xl"></i>
                         </div>
                         <h3 class="font-extrabold text-sm sm:text-base text-slate-800 dark:text-slate-200">Belum Ada Rekod Pingat</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">Keputusan rasmi bagi acara balapan, relay, dan padang akan dipaparkan secara automatik di sini sebaik sahaja disahkan.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">Keputusan rasmi daripada Firestore bagi acara balapan, relay, dan padang akan dipaparkan secara automatik di sini sebaik sahaja disahkan.</p>
                     </div>
                 `;
                 return;
             }
 
-            // Split houses into Podium (Top 3) and Next Positions (4th+)
             const top1 = sortedHouses[0] || null;
             const top2 = sortedHouses[1] || null;
             const top3 = sortedHouses[2] || null;
             const remaining = sortedHouses.slice(3);
 
-            // Construct Podium Card HTML Helper
             const renderPodiumCard = (item, rankPos) => {
                 if (!item) return '';
                 const meta = houseMetadata[item.name] || { name: item.name, color: 'border-slate-300 bg-slate-50 text-slate-800', badgeBg: 'bg-slate-700 text-white', accentColor: 'from-slate-500 to-slate-700', ringColor: 'ring-slate-400/30' };
 
-                let orderStyle = 'order-1 sm:order-2'; // 1st Place (Center)
+                let orderStyle = 'order-1 sm:order-2';
                 let heightStyle = 'min-h-[260px] sm:min-h-[310px] scale-100 sm:scale-105 z-10 border-amber-400 dark:border-amber-500 shadow-glow-blue';
                 let rankBadge = '<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-amber-950 shadow-md mb-2"><i class="fa-solid fa-crown text-amber-800"></i> TEMPAT 1</div>';
                 let pedestalBg = 'bg-gradient-to-t from-amber-500/20 via-amber-400/10 to-transparent border-t-4 border-amber-400';
-                let rankIcon = '🥇';
 
                 if (rankPos === 2) {
-                    orderStyle = 'order-2 sm:order-1'; // 2nd Place (Left)
+                    orderStyle = 'order-2 sm:order-1';
                     heightStyle = 'min-h-[230px] sm:min-h-[270px] z-0 border-slate-300 dark:border-slate-700';
                     rankBadge = '<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-sm mb-2">🥈 TEMPAT 2</div>';
                     pedestalBg = 'bg-gradient-to-t from-slate-400/20 via-slate-300/10 to-transparent border-t-4 border-slate-300 dark:border-slate-600';
-                    rankIcon = '🥈';
                 } else if (rankPos === 3) {
-                    orderStyle = 'order-3'; // 3rd Place (Right)
+                    orderStyle = 'order-3';
                     heightStyle = 'min-h-[220px] sm:min-h-[250px] z-0 border-amber-700/50 dark:border-amber-800/50';
                     rankBadge = '<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-900/20 text-amber-900 dark:text-amber-200 shadow-sm mb-2">🥉 TEMPAT 3</div>';
                     pedestalBg = 'bg-gradient-to-t from-amber-800/20 via-amber-700/10 to-transparent border-t-4 border-amber-700/60';
-                    rankIcon = '🥉';
                 }
 
                 return `
                     <div class="flex-1 flex flex-col justify-between rounded-3xl p-4 sm:p-5 border-2 ${meta.color} ${heightStyle} ${orderStyle} transition-all transform hover:-translate-y-1 duration-300 relative overflow-hidden bg-white dark:bg-slate-900/90 shadow-md">
-                        <!-- Top Header Section -->
                         <div class="text-center relative z-10">
                             ${rankBadge}
                             <h3 class="text-base sm:text-xl font-black tracking-tight uppercase mt-1 ${getHouseTextColor(item.name)}">
@@ -2733,7 +2944,6 @@ function getColLetter(colIndex) {
                             </span>
                         </div>
 
-                        <!-- Medal Breakdown Badges -->
                         <div class="my-3 grid grid-cols-3 gap-1.5 sm:gap-2 text-center text-[11px] sm:text-xs relative z-10">
                             <div class="bg-amber-100/90 dark:bg-amber-950/50 text-amber-950 dark:text-amber-200 rounded-2xl p-1.5 sm:p-2 font-bold border border-amber-200/80 dark:border-amber-800/50 shadow-2xs">
                                 <span class="block text-xs sm:text-sm font-black">🥇 ${item.gold}</span>
@@ -2749,7 +2959,6 @@ function getColLetter(colIndex) {
                             </div>
                         </div>
 
-                        <!-- Footer Total Box Pedestal Base -->
                         <div class="pt-2 px-3 py-2 rounded-2xl ${pedestalBg} text-center relative z-10 flex items-center justify-between">
                             <span class="text-[10px] sm:text-xs font-black uppercase text-slate-500 dark:text-slate-400">JUMLAH PINGAT</span>
                             <span class="text-sm sm:text-lg font-black text-slate-900 dark:text-white bg-white/80 dark:bg-slate-800/90 px-2.5 py-0.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
@@ -2761,7 +2970,6 @@ function getColLetter(colIndex) {
             };
 
             let htmlOutput = `
-                <!-- PODIUM SECTION -->
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-end justify-center gap-4 sm:gap-3 pt-2 pb-4">
                     ${top2 ? renderPodiumCard(top2, 2) : ''}
                     ${top1 ? renderPodiumCard(top1, 1) : ''}
@@ -2769,7 +2977,6 @@ function getColLetter(colIndex) {
                 </div>
             `;
 
-            // REMAINING POSITIONS SECTION (#4 AND ONWARDS)
             if (remaining.length > 0) {
                 htmlOutput += `
                     <div class="pt-6 border-t border-slate-100 dark:border-slate-800">
@@ -2779,7 +2986,6 @@ function getColLetter(colIndex) {
                         <div class="space-y-2.5">
                             ${remaining.map((item, idx) => {
                                 const rankNum = idx + 4;
-                                const meta = houseMetadata[item.name] || { color: 'border-slate-200 bg-white text-slate-800' };
                                 return `
                                     <div class="flex flex-wrap items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 hover:border-slate-300 transition-all gap-3 shadow-2xs">
                                         <div class="flex items-center gap-3">
@@ -2819,12 +3025,7 @@ function getColLetter(colIndex) {
             container.innerHTML = htmlOutput;
         }
 
-        // Global functions exposed explicitly to window for inline onclick handlers
-        window.triggerPrint = function() {
-            const currentYear = new Date().getFullYear();
-            const yearEl = document.getElementById('printFooterYear');
-            if (yearEl) yearEl.innerText = currentYear;
-
+        window.triggerPrint = async function() {
             const printDocTimestamp = document.getElementById('printDocTimestamp');
             if (printDocTimestamp) {
                 printDocTimestamp.innerText = `Dijana pada: ${new Date().toLocaleString('ms-MY')}`;
@@ -2847,56 +3048,17 @@ function getColLetter(colIndex) {
                 printSubHeader.innerText = `Dokumen Keputusan Rasmi: ${names[currentMainTab] || 'Kejohanan'}`;
             }
 
-            logActivity('Cetakan Dokumen', `Aktiviti mencetak dokumen bagi [${currentMainTab.toUpperCase()}]`, 'Berjaya');
+            await logActivity('Cetakan Dokumen', `Aktiviti mencetak dokumen bagi [${currentMainTab.toUpperCase()}]`, 'Berjaya');
 
             try {
                 window.print();
             } catch (err) {
-                console.warn('Direct print blocked or failed, opening fallback modal...', err);
                 openPrintModalFallback();
             }
         };
 
-        window.openPrintModalFallback = function() {
-            const modal = document.getElementById('printModalFallback');
-            const body = document.getElementById('printModalFallbackBody');
-            if (!modal || !body) return;
-
-            let activeContent = document.getElementById(`mainTabContent-${currentMainTab}`);
-            if (activeContent) {
-                body.innerHTML = `
-                    <div class="text-center pb-4 border-b border-slate-200 dark:border-slate-800 mb-4">
-                        <h2 class="font-black text-lg text-slate-900 dark:text-white">OFFICIAL STATISTICS CENTER</h2>
-                        <p class="text-xs font-bold text-slate-600 dark:text-slate-400">Keputusan Rasmi: ${currentMainTab.toUpperCase()}</p>
-                        <p class="text-[10px] text-slate-400 mt-0.5">Dijana pada: ${new Date().toLocaleString('ms-MY')}</p>
-                    </div>
-                    ${activeContent.innerHTML}
-                    <div class="mt-6 pt-3 border-t border-slate-200 dark:border-slate-800 text-center text-[10px] text-slate-400">
-                        Hak Cipta Terpelihara © ${new Date().getFullYear()} OFFICIAL STATISTICS CENTER.
-                    </div>
-                `;
-            }
-            modal.classList.remove('hidden');
-        };
-
-        window.closePrintModalFallback = function() {
-            const modal = document.getElementById('printModalFallback');
-            if (modal) modal.classList.add('hidden');
-        };
-
-        window.downloadPrintDocument = function() {
-            const body = document.getElementById('printModalFallbackBody');
-            if (!body) return;
-            const content = `<!DOCTYPE html><html><head><title>Keputusan Rasmi - ${currentMainTab.toUpperCase()}</title><script src="https://cdn.tailwindcss.com"><\/script></head><body class="p-8">${body.innerHTML}</body></html>`;
-            const blob = new Blob([content], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Keputusan_Kejohanan_${currentMainTab}_${new Date().toISOString().slice(0,10)}.html`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast("Fail cetakan telah dimuat turun.", "success");
-        };
+        // START APP ON LOAD
+        initApp();
     </script>
 </body>
 </html>
