@@ -151,7 +151,7 @@
                 print-color-adjust: exact !important;
             }
             /* Hide all interactive & navigation elements */
-            .no-print, header, footer, #loginOverlay, #setupModal, #userEditModal, #toastContainer, #connectionBadge, #autoSyncSpinner, button, input[type="button"], input[type="submit"], .touch-pan-x {
+            .no-print, header, footer, #loginOverlay, #setupModal, #userEditModal, #toastContainer, #connectionBadge, #autoSyncSpinner, #rankErrorModal, #categoryConfirmModal, button, input[type="button"], input[type="submit"], .touch-pan-x {
                 display: none !important;
             }
             .print-only {
@@ -518,20 +518,26 @@ function getColLetter(colIndex) {
             </div>
 
             <div class="bg-white rounded-3xl p-4 sm:p-7 shadow-glass border border-slate-200/80 space-y-6">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
-                        <i class="fa-solid fa-stopwatch text-blue-600"></i>
-                        Acara <span id="currentSaringanSheetBadge" class="bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 px-2.5 py-1 rounded-xl text-xs sm:text-sm font-black">101</span> - Saringan
-                    </h2>
+                <div class="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
+                            <i class="fa-solid fa-stopwatch text-blue-600"></i>
+                            Acara <span id="currentSaringanSheetBadge" class="bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 px-2.5 py-1 rounded-xl text-xs sm:text-sm font-black">101</span> - Saringan
+                        </h2>
+                        <div id="overallEventStatusBadge-padang"></div>
+                    </div>
                     <button onclick="triggerPrint()" class="no-print px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-all active:scale-95 shadow-sm">
                         <i class="fa-solid fa-print"></i> Cetak Keputusan
                     </button>
                 </div>
 
                 <div class="space-y-5">
-                    <h3 class="font-bold text-xs sm:text-sm text-blue-900 bg-blue-50/80 dark:bg-blue-950/40 dark:text-blue-300 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 flex items-center gap-2">
-                        <i class="fa-solid fa-mars text-blue-600"></i> Kategori Lelaki
-                    </h3>
+                    <div class="flex items-center justify-between flex-wrap gap-2 bg-blue-50/80 dark:bg-blue-950/40 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60">
+                        <h3 class="font-bold text-xs sm:text-sm text-blue-900 dark:text-blue-300 flex items-center gap-2">
+                            <i class="fa-solid fa-mars text-blue-600"></i> Kategori Lelaki
+                        </h3>
+                        <div class="flex items-center gap-2" id="categoryVerifyHeader-padang-male"></div>
+                    </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 1 (Julat A5:G12 / A5:G8)</span>
@@ -574,9 +580,12 @@ function getColLetter(colIndex) {
                 </div>
 
                 <div class="space-y-5 pt-5 border-t border-slate-100 dark:border-slate-800">
-                    <h3 class="font-bold text-xs sm:text-sm text-rose-900 bg-rose-50/80 dark:bg-rose-950/40 dark:text-rose-300 px-4 py-2.5 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 flex items-center gap-2">
-                        <i class="fa-solid fa-venus text-rose-600"></i> Kategori Perempuan
-                    </h3>
+                    <div class="flex items-center justify-between flex-wrap gap-2 bg-rose-50/80 dark:bg-rose-950/40 px-4 py-2.5 rounded-2xl border border-rose-200/60 dark:border-rose-900/60">
+                        <h3 class="font-bold text-xs sm:text-sm text-rose-900 dark:text-rose-300 flex items-center gap-2">
+                            <i class="fa-solid fa-venus text-rose-600"></i> Kategori Perempuan
+                        </h3>
+                        <div class="flex items-center gap-2" id="categoryVerifyHeader-padang-female"></div>
+                    </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <span class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Saringan 1 (Julat I5:O12 / I5:O8)</span>
@@ -627,11 +636,14 @@ function getColLetter(colIndex) {
             </div>
 
             <div class="bg-white rounded-3xl p-4 sm:p-7 shadow-glass border border-slate-200/80 space-y-6">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
-                        <i class="fa-solid fa-flag-checkered text-emerald-600"></i>
-                        Acara <span id="currentTrackSheetBadge" class="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 px-2.5 py-1 rounded-xl text-xs sm:text-sm font-black">101</span> - Akhir Balapan
-                    </h2>
+                <div class="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
+                            <i class="fa-solid fa-flag-checkered text-emerald-600"></i>
+                            Acara <span id="currentTrackSheetBadge" class="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 px-2.5 py-1 rounded-xl text-xs sm:text-sm font-black">101</span> - Akhir Balapan
+                        </h2>
+                        <div id="overallEventStatusBadge-balapan"></div>
+                    </div>
                     <button onclick="triggerPrint()" class="no-print px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-all active:scale-95 shadow-sm">
                         <i class="fa-solid fa-print"></i> Cetak Keputusan
                     </button>
@@ -639,9 +651,12 @@ function getColLetter(colIndex) {
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
-                        <h3 class="font-bold text-xs sm:text-sm text-blue-900 bg-blue-50/80 dark:bg-blue-950/40 dark:text-blue-300 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 flex items-center gap-2 mb-3.5">
-                            <i class="fa-solid fa-mars text-blue-600"></i> Akhir Lelaki
-                        </h3>
+                        <div class="flex items-center justify-between flex-wrap gap-2 bg-blue-50/80 dark:bg-blue-950/40 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 mb-3.5">
+                            <h3 class="font-bold text-xs sm:text-sm text-blue-900 dark:text-blue-300 flex items-center gap-2">
+                                <i class="fa-solid fa-mars text-blue-600"></i> Akhir Lelaki
+                            </h3>
+                            <div class="flex items-center gap-2" id="categoryVerifyHeader-balapan-male"></div>
+                        </div>
                         <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                             <table class="w-full text-xs text-left min-w-[340px]">
                                 <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -660,9 +675,12 @@ function getColLetter(colIndex) {
                     </div>
 
                     <div>
-                        <h3 class="font-bold text-xs sm:text-sm text-rose-900 bg-rose-50/80 dark:bg-rose-950/40 dark:text-rose-300 px-4 py-2.5 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 flex items-center gap-2 mb-3.5">
-                            <i class="fa-solid fa-venus text-rose-600"></i> Akhir Perempuan
-                        </h3>
+                        <div class="flex items-center justify-between flex-wrap gap-2 bg-rose-50/80 dark:bg-rose-950/40 px-4 py-2.5 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 mb-3.5">
+                            <h3 class="font-bold text-xs sm:text-sm text-rose-900 dark:text-rose-300 flex items-center gap-2">
+                                <i class="fa-solid fa-venus text-rose-600"></i> Akhir Perempuan
+                            </h3>
+                            <div class="flex items-center gap-2" id="categoryVerifyHeader-balapan-female"></div>
+                        </div>
                         <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                             <table class="w-full text-xs text-left min-w-[340px]">
                                 <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -690,11 +708,14 @@ function getColLetter(colIndex) {
             </div>
 
             <div class="bg-white rounded-3xl p-4 sm:p-7 shadow-glass border border-slate-200/80 space-y-6">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
-                        <i class="fa-solid fa-person-running text-indigo-600"></i>
-                        Acara <span id="currentRelaySheetBadge" class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300 px-2.5 py-1 rounded-xl text-xs sm:text-sm font-black">411</span> - Relay
-                    </h2>
+                <div class="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
+                            <i class="fa-solid fa-person-running text-indigo-600"></i>
+                            Acara <span id="currentRelaySheetBadge" class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300 px-2.5 py-1 rounded-xl text-xs sm:text-sm font-black">411</span> - Relay
+                        </h2>
+                        <div id="overallEventStatusBadge-relay"></div>
+                    </div>
                     <button onclick="triggerPrint()" class="no-print px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-all active:scale-95 shadow-sm">
                         <i class="fa-solid fa-print"></i> Cetak Keputusan
                     </button>
@@ -702,9 +723,12 @@ function getColLetter(colIndex) {
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
-                        <h3 class="font-bold text-xs sm:text-sm text-blue-900 bg-blue-50/80 dark:bg-blue-950/40 dark:text-blue-300 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 flex items-center gap-2 mb-3.5">
-                            <i class="fa-solid fa-mars text-blue-600"></i> Relay Lelaki
-                        </h3>
+                        <div class="flex items-center justify-between flex-wrap gap-2 bg-blue-50/80 dark:bg-blue-950/40 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 mb-3.5">
+                            <h3 class="font-bold text-xs sm:text-sm text-blue-900 dark:text-blue-300 flex items-center gap-2">
+                                <i class="fa-solid fa-mars text-blue-600"></i> Relay Lelaki
+                            </h3>
+                            <div class="flex items-center gap-2" id="categoryVerifyHeader-relay-male"></div>
+                        </div>
                         <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                             <table class="w-full text-xs text-left min-w-[320px]">
                                 <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -721,9 +745,12 @@ function getColLetter(colIndex) {
                     </div>
 
                     <div>
-                        <h3 class="font-bold text-xs sm:text-sm text-rose-900 bg-rose-50/80 dark:bg-rose-950/40 dark:text-rose-300 px-4 py-2.5 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 flex items-center gap-2 mb-3.5">
-                            <i class="fa-solid fa-venus text-rose-600"></i> Relay Perempuan (I5:N8)
-                        </h3>
+                        <div class="flex items-center justify-between flex-wrap gap-2 bg-rose-50/80 dark:bg-rose-950/40 px-4 py-2.5 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 mb-3.5">
+                            <h3 class="font-bold text-xs sm:text-sm text-rose-900 dark:text-rose-300 flex items-center gap-2">
+                                <i class="fa-solid fa-venus text-rose-600"></i> Relay Perempuan
+                            </h3>
+                            <div class="flex items-center gap-2" id="categoryVerifyHeader-relay-female"></div>
+                        </div>
                         <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                             <table class="w-full text-xs text-left min-w-[320px]">
                                 <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -749,11 +776,14 @@ function getColLetter(colIndex) {
             </div>
 
             <div class="bg-white rounded-3xl p-4 sm:p-7 shadow-glass border border-slate-200/80 space-y-6">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                    <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
-                        <i class="fa-solid fa-arrows-left-right-to-line text-amber-600"></i>
-                        Acara <span id="currentPadangAcaraSheetBadge" class="bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 px-2.5 py-1 rounded-xl text-xs sm:text-sm font-black">LongJump</span>
-                    </h2>
+                <div class="flex items-center justify-between flex-wrap gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
+                            <i class="fa-solid fa-arrows-left-right-to-line text-amber-600"></i>
+                            Acara <span id="currentPadangAcaraSheetBadge" class="bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 px-2.5 py-1 rounded-xl text-xs sm:text-sm font-black">LongJump</span>
+                        </h2>
+                        <div id="overallEventStatusBadge-padang_acara"></div>
+                    </div>
                     <button onclick="triggerPrint()" class="no-print px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-all active:scale-95 shadow-sm">
                         <i class="fa-solid fa-print"></i> Cetak Keputusan
                     </button>
@@ -761,9 +791,12 @@ function getColLetter(colIndex) {
 
                 <div class="space-y-6">
                     <div>
-                        <h3 class="font-bold text-xs sm:text-sm text-blue-900 bg-blue-50/80 dark:bg-blue-950/40 dark:text-blue-300 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 flex items-center gap-2 mb-3.5">
-                            <i class="fa-solid fa-mars text-blue-600"></i> Kategori Lelaki (A9:M16)
-                        </h3>
+                        <div class="flex items-center justify-between flex-wrap gap-2 bg-blue-50/80 dark:bg-blue-950/40 px-4 py-2.5 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 mb-3.5">
+                            <h3 class="font-bold text-xs sm:text-sm text-blue-900 dark:text-blue-300 flex items-center gap-2">
+                                <i class="fa-solid fa-mars text-blue-600"></i> Kategori Lelaki
+                            </h3>
+                            <div class="flex items-center gap-2" id="categoryVerifyHeader-padang_acara-male"></div>
+                        </div>
                         <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                             <table class="w-full text-xs text-left min-w-[620px]">
                                 <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -788,9 +821,12 @@ function getColLetter(colIndex) {
                     </div>
 
                     <div>
-                        <h3 class="font-bold text-xs sm:text-sm text-rose-900 bg-rose-50/80 dark:bg-rose-950/40 dark:text-rose-300 px-4 py-2.5 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 flex items-center gap-2 mb-3.5">
-                            <i class="fa-solid fa-venus text-rose-600"></i> Kategori Perempuan (A26:M33)
-                        </h3>
+                        <div class="flex items-center justify-between flex-wrap gap-2 bg-rose-50/80 dark:bg-rose-950/40 px-4 py-2.5 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 mb-3.5">
+                            <h3 class="font-bold text-xs sm:text-sm text-rose-900 dark:text-rose-300 flex items-center gap-2">
+                                <i class="fa-solid fa-venus text-rose-600"></i> Kategori Perempuan
+                            </h3>
+                            <div class="flex items-center gap-2" id="categoryVerifyHeader-padang_acara-female"></div>
+                        </div>
                         <div class="overflow-x-auto rounded-2xl border border-slate-200/80 shadow-xs">
                             <table class="w-full text-xs text-left min-w-[620px]">
                                 <thead class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200/80">
@@ -840,7 +876,300 @@ function getColLetter(colIndex) {
         <p class="font-bold tracking-wide">Hak Cipta Terpelihara @ 2026 eL_mioZ</p>
     </footer>
 
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Admin Settings Modal -->
+    <div id="setupModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-4xl w-full p-4 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-sliders text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-base sm:text-lg text-slate-900 dark:text-white uppercase tracking-wider">TETAPAN ADMIN & INTEGRASI API</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Pengurusan Sambungan Google Apps Script, Kunci Acara & Pengguna</p>
+                    </div>
+                </div>
+                <button onclick="toggleSetupModal()" class="p-2 text-slate-400 hover:text-rose-500 rounded-xl transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Sub Tabs Navigation -->
+            <div class="flex items-center gap-1 border-b border-slate-200 dark:border-slate-800 mt-4 shrink-0 overflow-x-auto touch-pan-x">
+                <button id="adminSubTabBtn-urlConfig" onclick="switchAdminSubTab('urlConfig')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-900 border-t-2 border-blue-600 shadow-xs">
+                    <i class="fa-solid fa-link text-blue-600"></i> Konfigurasi API Google Sheets
+                </button>
+                <button id="adminSubTabBtn-eventLocks" onclick="switchAdminSubTab('eventLocks')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
+                    <i class="fa-solid fa-lock text-rose-600"></i> Kawalan Akses Acara
+                </button>
+                <button id="adminSubTabBtn-users" onclick="switchAdminSubTab('users')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
+                    <i class="fa-solid fa-users text-emerald-600"></i> Pengurusan Pengguna
+                </button>
+                <button id="adminSubTabBtn-logs" onclick="switchAdminSubTab('logs')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-600"></i> Log Aktiviti
+                </button>
+            </div>
+
+            <div class="overflow-y-auto py-4 flex-grow space-y-6">
+                <!-- URL Config Sub-Tab -->
+                <div id="adminTabContent-urlConfig" class="space-y-6">
+                    <div class="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-xs text-blue-900 dark:text-blue-200 leading-relaxed">
+                        <i class="fa-solid fa-circle-info text-blue-600 dark:text-blue-400 mr-1.5"></i>
+                        <span>Sila salin kod Google Apps Script (GAS) untuk setiap jenis acara, kembangkan skrip di Google Spreadsheet anda sebagai Web App (Deployment: <b>Anyone</b>), kemudian tampal URL Web App yang dihasilkan di bawah.</span>
+                    </div>
+
+                    <!-- Event API 1: Acara Saringan -->
+                    <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                                <h3 class="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wider">1. Acara Saringan</h3>
+                                <span id="badgePadangStatus" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">Belum Disimpan</span>
+                            </div>
+                            <button onclick="copyGasCode('padang')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all active:scale-95 flex items-center gap-1.5">
+                                <i class="fa-solid fa-copy"></i> Salin Kod GAS (Saringan)
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="url" id="webAppUrlPadangInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-mono focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap pt-1">
+                            <button onclick="testApiUrl('padang')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-vial"></i> Uji Sambungan
+                            </button>
+                            <button onclick="saveApiUrl('padang')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-floppy-disk"></i> Simpan
+                            </button>
+                            <button onclick="editApiUrl('padang')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-pen-to-square"></i> Sunting
+                            </button>
+                            <button onclick="deleteApiUrl('padang')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                        <div id="testUrlResultPadang" class="hidden"></div>
+                    </div>
+
+                    <!-- Event API 2: Akhir Balapan -->
+                    <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                                <h3 class="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wider">2. Akhir Balapan</h3>
+                                <span id="badgeBalapanStatus" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">Belum Disimpan</span>
+                            </div>
+                            <button onclick="copyGasCode('balapan')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all active:scale-95 flex items-center gap-1.5">
+                                <i class="fa-solid fa-copy"></i> Salin Kod GAS (Balapan)
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="url" id="webAppUrlBalapanInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-mono focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap pt-1">
+                            <button onclick="testApiUrl('balapan')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-vial"></i> Uji Sambungan
+                            </button>
+                            <button onclick="saveApiUrl('balapan')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-floppy-disk"></i> Simpan
+                            </button>
+                            <button onclick="editApiUrl('balapan')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-pen-to-square"></i> Sunting
+                            </button>
+                            <button onclick="deleteApiUrl('balapan')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                        <div id="testUrlResultBalapan" class="hidden"></div>
+                    </div>
+
+                    <!-- Event API 3: Acara Relay -->
+                    <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+                                <h3 class="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wider">3. Acara Relay</h3>
+                                <span id="badgeRelayStatus" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">Belum Disimpan</span>
+                            </div>
+                            <button onclick="copyGasCode('relay')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all active:scale-95 flex items-center gap-1.5">
+                                <i class="fa-solid fa-copy"></i> Salin Kod GAS (Relay)
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="url" id="webAppUrlRelayInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-mono focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap pt-1">
+                            <button onclick="testApiUrl('relay')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-vial"></i> Uji Sambungan
+                            </button>
+                            <button onclick="saveApiUrl('relay')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-floppy-disk"></i> Simpan
+                            </button>
+                            <button onclick="editApiUrl('relay')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-pen-to-square"></i> Sunting
+                            </button>
+                            <button onclick="deleteApiUrl('relay')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                        <div id="testUrlResultRelay" class="hidden"></div>
+                    </div>
+
+                    <!-- Event API 4: Acara Padang -->
+                    <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                                <h3 class="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wider">4. Acara Padang</h3>
+                                <span id="badgePadangAcaraStatus" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">Belum Disimpan</span>
+                            </div>
+                            <button onclick="copyGasCode('padang_acara')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl transition-all active:scale-95 flex items-center gap-1.5">
+                                <i class="fa-solid fa-copy"></i> Salin Kod GAS (Padang)
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="url" id="webAppUrlPadangAcaraInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-mono focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap pt-1">
+                            <button onclick="testApiUrl('padang_acara')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-vial"></i> Uji Sambungan
+                            </button>
+                            <button onclick="saveApiUrl('padang_acara')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-floppy-disk"></i> Simpan
+                            </button>
+                            <button onclick="editApiUrl('padang_acara')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-pen-to-square"></i> Sunting
+                            </button>
+                            <button onclick="deleteApiUrl('padang_acara')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                        <div id="testUrlResultPadangAcara" class="hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Event Access Lock Sub-Tab -->
+                <div id="adminTabContent-eventLocks" class="hidden space-y-4">
+                    <div class="bg-rose-50 dark:bg-rose-950/30 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/50 text-xs text-rose-900 dark:text-rose-200 leading-relaxed">
+                        <i class="fa-solid fa-shield-halved text-rose-600 mr-1.5"></i>
+                        <span>Gunakan kawalan ini untuk mengunci atau membuka hak suntingan bagi pegawai. Acara yang dikunci tidak boleh diubah oleh Pegawai.</span>
+                    </div>
+                    <div id="eventLockControlsGrid" class="space-y-3"></div>
+                </div>
+
+                <!-- User Management Sub-Tab -->
+                <div id="adminTabContent-users" class="hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wider">Senarai Akaun Pengguna</h3>
+                        <button onclick="openAddUserModal()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all active:scale-95 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-plus"></i> Tambah Pengguna
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-slate-800">
+                        <table class="w-full text-xs text-left min-w-[500px]">
+                            <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
+                                <tr>
+                                    <th class="p-3">Nama Pengguna</th>
+                                    <th class="p-3 text-center">ID</th>
+                                    <th class="p-3 text-center">Kata Laluan</th>
+                                    <th class="p-3 text-center">Peranan</th>
+                                    <th class="p-3 text-center">Status</th>
+                                    <th class="p-3 text-center">Tindakan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Activity Logs Sub-Tab -->
+                <div id="adminTabContent-logs" class="hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wider">Rekod Aktiviti Sistem</h3>
+                        <button onclick="clearActivityLogs()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl transition-all active:scale-95 flex items-center gap-1.5">
+                            <i class="fa-solid fa-trash-can"></i> Kosongkan Log
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-slate-800">
+                        <table class="w-full text-xs text-left min-w-[650px]">
+                            <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
+                                <tr>
+                                    <th class="p-3">Masa</th>
+                                    <th class="p-3">Pengguna</th>
+                                    <th class="p-3">Kategori</th>
+                                    <th class="p-3">Butiran</th>
+                                    <th class="p-3 text-center">Status</th>
+                                    <th class="p-3">IP Address</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Edit / Add Modal -->
+    <div id="userEditModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto">
+            <h3 id="userFormTitle" class="font-black text-base sm:text-lg text-slate-900 dark:text-white uppercase tracking-wide mb-4">Pengurusan Pengguna</h3>
+            <form onsubmit="saveUserForm(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="userFormIndex" value="-1">
+                <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nama</label>
+                    <input type="text" id="userFormName" required class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">ID Pengguna</label>
+                    <input type="text" id="userFormId" required class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-mono">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Kata Laluan</label>
+                    <input type="text" id="userFormPass" required class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-mono">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Peranan</label>
+                        <select id="userFormRole" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold">
+                            <option value="pegawai">Pegawai</option>
+                            <option value="admin">Admin Utama</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Status</label>
+                        <select id="userFormStatus" class="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-3">
+                    <button type="button" onclick="closeUserEditModal()" class="w-1/2 py-2.5 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-xl">BATAL</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md">SIMPAN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Print Modal Fallback -->
+    <div id="printModalFallback" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-4xl w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 shrink-0">
+                <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white uppercase">Pratonton Dokumen Cetakan</h3>
+                <div class="flex items-center gap-2">
+                    <button onclick="downloadPrintDocument()" class="px-3 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold flex items-center gap-1.5"><i class="fa-solid fa-download"></i> Muat Turun HTML</button>
+                    <button onclick="closePrintModalFallback()" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-xl"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+            </div>
+            <div id="printModalFallbackBody" class="overflow-y-auto p-4 flex-grow bg-white text-slate-900 rounded-2xl my-3 border border-slate-200"></div>
+        </div>
+    </div>
+
     <div id="loginOverlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto">
+
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800 relative my-auto">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-500 text-white rounded-3xl flex items-center justify-center mx-auto mb-3.5 shadow-glow-blue">
@@ -852,264 +1181,67 @@ function getColLetter(colIndex) {
 
             <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1.5">ID Pengguna</label>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">ID Pengguna</label>
                     <div class="relative">
-                        <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-400 text-xs sm:text-sm"></i>
-                        <input type="text" id="loginUserId" placeholder="Admin" required class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-300 dark:border-slate-700 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-user text-xs"></i>
+                        </span>
+                        <input type="text" id="loginUserId" required placeholder="Contoh: 0000" class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1.5">Kata Laluan</label>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Kata Laluan</label>
                     <div class="relative">
-                        <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-400 text-xs sm:text-sm"></i>
-                        <input type="password" id="loginPassword" placeholder="••••" required class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-300 dark:border-slate-700 text-xs font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-key text-xs"></i>
+                        </span>
+                        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                     </div>
                 </div>
 
-                <div id="loginErrorMsg" class="hidden p-3.5 rounded-2xl bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 text-xs font-semibold border border-rose-200 dark:border-rose-900/60 flex items-center gap-2.5">
-                    <i class="fa-solid fa-circle-exclamation text-rose-500"></i>
-                    <span id="loginErrorText">ID atau Kata Laluan tidak sah.</span>
+                <div id="loginErrorMsg" class="hidden p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400 text-xs font-bold text-center">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> ID atau Kata Laluan tidak sah!
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-2xl text-xs uppercase tracking-wider transition-all active:scale-95 shadow-md hover:shadow-glow-blue">
-                    Log Masuk
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-extrabold text-xs rounded-2xl shadow-md hover:shadow-glow-blue transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i> LOG MASUK
                 </button>
             </form>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+                <span class="text-[11px] text-slate-400">Akaun Default: Admin Utama (ID: <code class="font-bold text-blue-600">0000</code> / Pass: <code class="font-bold text-blue-600">0000</code>)</span>
+            </div>
         </div>
     </div>
 
-    <div id="setupModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-40 hidden flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-5xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200/80 dark:border-slate-800 my-auto max-h-[92vh] overflow-y-auto">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-200/80 dark:border-slate-800 mb-5">
-                <div class="flex items-center gap-3">
-                    <div class="p-3 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 text-blue-600 rounded-2xl shrink-0 border border-blue-500/20">
-                        <i class="fa-solid fa-user-shield text-lg sm:text-xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-black text-sm sm:text-lg text-slate-800 dark:text-white">Tetapan Admin Utama</h2>
-                        <p class="text-[11px] sm:text-xs text-slate-500">Pengurusan data API, akaun pegawai & log aktiviti</p>
-                    </div>
-                </div>
-                <button onclick="toggleSetupModal()" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl active:scale-95 transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
+    <!-- Rank Error Modal Popup -->
+    <div id="rankErrorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-rose-200 dark:border-rose-900 my-auto text-center">
+            <div class="w-14 h-14 bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
             </div>
-
-            <div class="flex border-b border-slate-200/80 dark:border-slate-800 mb-6 gap-2 overflow-x-auto touch-pan-x">
-                <button id="adminSubTabBtn-urlConfig" onclick="switchAdminSubTab('urlConfig')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-white text-slate-900 border-t-2 border-blue-600 shadow-xs">
-                    <i class="fa-solid fa-link"></i> Pengurusan Data (URL API)
-                </button>
-                <button id="adminSubTabBtn-eventLocks" onclick="switchAdminSubTab('eventLocks')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
-                    <i class="fa-solid fa-lock"></i> Kawalan Akses Butang Acara
-                </button>
-                <button id="adminSubTabBtn-users" onclick="switchAdminSubTab('users')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
-                    <i class="fa-solid fa-users-gear"></i> Pengurusan Pengguna
-                </button>
-                <button id="adminSubTabBtn-logs" onclick="switchAdminSubTab('logs')" class="py-2.5 px-4 rounded-t-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all flex items-center gap-2 bg-slate-200/70 text-slate-600 hover:bg-slate-200">
-                    <i class="fa-solid fa-clock-rotate-left"></i> Sejarah & Log Aktiviti
-                </button>
-            </div>
-
-            <div id="adminTabContent-eventLocks" class="space-y-4 hidden">
-                <div class="p-4 bg-blue-50/80 dark:bg-blue-950/40 rounded-2xl border border-blue-200/60 dark:border-blue-900/60 text-xs text-blue-900 dark:text-blue-300 font-medium">
-                    <i class="fa-solid fa-circle-info mr-1 text-blue-600"></i> Hanya Admin Utama boleh membuka atau mengunci akses pengisian data acara. Apabila acara dikunci, Pegawai tidak boleh mengubah sebarang maklumat.
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="eventLockControlsGrid"></div>
-            </div>
-
-            <div id="adminTabContent-urlConfig" class="space-y-5">
-                <div class="bg-slate-50/80 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-database text-blue-600"></i> Web App URL - Acara Saringan
-                        </span>
-                        <span id="badgePadangStatus" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">Belum Disimpan</span>
-                    </div>
-                    <input type="url" id="webAppUrlPadangInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                    <div class="flex flex-wrap gap-2 pt-1">
-                        <button onclick="testApiUrl('padang')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition-all active:scale-95">Uji</button>
-                        <button onclick="saveApiUrl('padang')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all active:scale-95 shadow-xs">Simpan</button>
-                        <button onclick="editApiUrl('padang')" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold rounded-xl transition-all active:scale-95">Edit</button>
-                        <button onclick="deleteApiUrl('padang')" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold rounded-xl transition-all active:scale-95">Hapus</button>
-                        <button onclick="copyGasCode('padang')" class="ml-auto px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all active:scale-95"><i class="fa-regular fa-copy"></i> Salin Kod GAS</button>
-                    </div>
-                    <div id="testUrlResultPadang" class="hidden"></div>
-                </div>
-
-                <div class="bg-slate-50/80 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-flag-checkered text-emerald-600"></i> Web App URL - Akhir Balapan
-                        </span>
-                        <span id="badgeBalapanStatus" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">Belum Disimpan</span>
-                    </div>
-                    <input type="url" id="webAppUrlBalapanInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                    <div class="flex flex-wrap gap-2 pt-1">
-                        <button onclick="testApiUrl('balapan')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition-all active:scale-95">Uji</button>
-                        <button onclick="saveApiUrl('balapan')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all active:scale-95 shadow-xs">Simpan</button>
-                        <button onclick="editApiUrl('balapan')" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold rounded-xl transition-all active:scale-95">Edit</button>
-                        <button onclick="deleteApiUrl('balapan')" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold rounded-xl transition-all active:scale-95">Hapus</button>
-                        <button onclick="copyGasCode('balapan')" class="ml-auto px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all active:scale-95"><i class="fa-regular fa-copy"></i> Salin Kod GAS</button>
-                    </div>
-                    <div id="testUrlResultBalapan" class="hidden"></div>
-                </div>
-
-                <div class="bg-slate-50/80 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-person-running text-indigo-600"></i> Web App URL - Acara Relay
-                        </span>
-                        <span id="badgeRelayStatus" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">Belum Disimpan</span>
-                    </div>
-                    <input type="url" id="webAppUrlRelayInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                    <div class="flex flex-wrap gap-2 pt-1">
-                        <button onclick="testApiUrl('relay')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition-all active:scale-95">Uji</button>
-                        <button onclick="saveApiUrl('relay')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all active:scale-95 shadow-xs">Simpan</button>
-                        <button onclick="editApiUrl('relay')" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold rounded-xl transition-all active:scale-95">Edit</button>
-                        <button onclick="deleteApiUrl('relay')" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold rounded-xl transition-all active:scale-95">Hapus</button>
-                        <button onclick="copyGasCode('relay')" class="ml-auto px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all active:scale-95"><i class="fa-regular fa-copy"></i> Salin Kod GAS</button>
-                    </div>
-                    <div id="testUrlResultRelay" class="hidden"></div>
-                </div>
-
-                <div class="bg-slate-50/80 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-arrows-left-right-to-line text-amber-600"></i> Web App URL - Acara Padang
-                        </span>
-                        <span id="badgePadangAcaraStatus" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">Belum Disimpan</span>
-                    </div>
-                    <input type="url" id="webAppUrlPadangAcaraInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                    <div class="flex flex-wrap gap-2 pt-1">
-                        <button onclick="testApiUrl('padang_acara')" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition-all active:scale-95">Uji</button>
-                        <button onclick="saveApiUrl('padang_acara')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all active:scale-95 shadow-xs">Simpan</button>
-                        <button onclick="editApiUrl('padang_acara')" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold rounded-xl transition-all active:scale-95">Edit</button>
-                        <button onclick="deleteApiUrl('padang_acara')" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold rounded-xl transition-all active:scale-95">Hapus</button>
-                        <button onclick="copyGasCode('padang_acara')" class="ml-auto px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all active:scale-95"><i class="fa-regular fa-copy"></i> Salin Kod GAS</button>
-                    </div>
-                    <div id="testUrlResultPadangAcara" class="hidden"></div>
-                </div>
-            </div>
-
-            <div id="adminTabContent-users" class="space-y-4 hidden">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-200">Senarai Pengguna Dibenarkan</h3>
-                    <button onclick="openAddUserModal()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all active:scale-95 flex items-center gap-2 shadow-xs">
-                        <i class="fa-solid fa-user-plus"></i> Tambah Pengguna
-                    </button>
-                </div>
-
-                <div class="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-slate-800">
-                    <table class="w-full text-xs text-left min-w-[500px]">
-                        <thead class="bg-slate-100 dark:bg-slate-900 text-slate-700 font-bold border-b border-slate-200/80">
-                            <tr>
-                                <th class="p-3">Nama Pengguna</th>
-                                <th class="p-3 text-center">ID Pengguna</th>
-                                <th class="p-3 text-center">Kata Laluan</th>
-                                <th class="p-3 text-center">Peranan</th>
-                                <th class="p-3 text-center">Status</th>
-                                <th class="p-3 text-center">Tindakan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="adminTabContent-logs" class="space-y-4 hidden">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-200">Sejarah & Rekod Log Aktiviti</h3>
-                    <button onclick="clearActivityLogs()" class="px-3.5 py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-bold rounded-xl transition-all active:scale-95 flex items-center gap-1.5">
-                        <i class="fa-solid fa-trash-can"></i> Kosongkan Log
-                    </button>
-                </div>
-
-                <div class="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-slate-800 max-h-80">
-                    <table class="w-full text-xs text-left min-w-[680px]">
-                        <thead class="bg-slate-100 dark:bg-slate-900 text-slate-700 font-bold border-b border-slate-200/80 sticky top-0">
-                            <tr>
-                                <th class="p-3 w-36">Masa & Tarikh</th>
-                                <th class="p-3">Pengguna</th>
-                                <th class="p-3">Kategori</th>
-                                <th class="p-3">Butiran Aktiviti</th>
-                                <th class="p-3 text-center">Status</th>
-                                <th class="p-3">IP, Peranti & Sistem</th>
-                            </tr>
-                        </thead>
-                        <tbody id="logsTableBody" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </div>
-
+            <h3 class="font-black text-base sm:text-lg text-rose-600 dark:text-rose-400 uppercase tracking-wide">RALAT RANK</h3>
+            <p id="rankErrorText" class="text-xs text-slate-600 dark:text-slate-300 my-3 font-semibold leading-relaxed">Rank digunakan lebih daripada sekali. Sila betulkan data sebelum pengesahan.</p>
+            <button onclick="closeRankErrorModal()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-md">
+                Faham, Betulkan Data
+            </button>
         </div>
     </div>
 
-    <div id="userEditModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200/80 dark:border-slate-800 my-auto">
-            <h3 id="userFormTitle" class="font-black text-sm sm:text-base text-slate-900 dark:text-white mb-4">Kemaskini Pengguna</h3>
-            <form onsubmit="saveUserForm(event)" class="space-y-3.5">
-                <input type="hidden" id="userFormIndex" value="-1">
-                <div>
-                    <label class="block text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">Nama Pengguna</label>
-                    <input type="text" id="userFormName" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">ID Pengguna</label>
-                    <input type="text" id="userFormId" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">Kata Laluan</label>
-                    <input type="text" id="userFormPass" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-mono focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">Peranan</label>
-                    <select id="userFormRole" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                        <option value="pegawai">Pegawai</option>
-                        <option value="admin">Admin Utama</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">Status Akaun</label>
-                    <select id="userFormStatus" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-hidden">
-                        <option value="Aktif">Aktif</option>
-                        <option value="Nyahaktif">Nyahaktif</option>
-                    </select>
-                </div>
-                <div class="flex gap-2.5 pt-4">
-                    <button type="button" onclick="closeUserEditModal()" class="w-1/2 py-2.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all active:scale-95">Batal</button>
-                    <button type="submit" class="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-md">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="toastContainer" class="no-print fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-3"></div>
-
-    <!-- Print Modal Overlay Fallback for Sandboxed iFrames -->
-    <div id="printModalFallback" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex flex-col p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-4xl w-full mx-auto p-6 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto flex flex-col max-h-[90vh]">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-4">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-file-arrow-down text-blue-600 dark:text-blue-400 text-lg"></i>
-                    <h3 class="font-black text-slate-900 dark:text-white text-base">Paparan & Muat Turun Keputusan</h3>
-                </div>
-                <div class="flex items-center gap-2 flex-wrap">
-                    <button onclick="downloadPrintDocument()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-arrow-down"></i> Muat Turun Fail
-                    </button>
-                    <button onclick="closePrintModalFallback()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                </div>
+    <!-- Category Confirmation Popup -->
+    <div id="categoryConfirmModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto text-center">
+            <div class="w-14 h-14 bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-circle-check text-2xl"></i>
             </div>
-            <div id="printModalFallbackBody" class="overflow-y-auto flex-grow p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100"></div>
+            <h3 class="font-black text-base sm:text-lg text-slate-900 dark:text-white uppercase tracking-wide">PENGESAHAN KATEGORI</h3>
+            <p id="categoryConfirmText" class="text-xs text-slate-600 dark:text-slate-300 my-3 font-medium leading-relaxed">Adakah anda pasti mahu mengesahkan keputusan kategori ini?</p>
+            <div class="flex gap-2.5 pt-2">
+                <button onclick="closeCategoryConfirmModal()" class="w-1/2 py-2.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all active:scale-95">BATAL</button>
+                <button id="btnConfirmCategoryAction" onclick="proceedCategoryVerification()" class="w-1/2 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-md">YA, SAHKAN</button>
+            </div>
         </div>
-    </div>
-
-    <!-- Printable Official Footer Stamp for native print -->
-    <div class="hidden print-only print-footer-stamp">
-        Hak Cipta Terpelihara © <span id="printFooterYear">2026</span> eL_mioZ. OFFICIAL STATISTICS CENTER.
     </div>
 
     <script>
@@ -1122,6 +1254,221 @@ function getColLetter(colIndex) {
         let currentUser = null;
         let usersList = JSON.parse(localStorage.getItem('sports_users_list')) || DEFAULT_USERS;
         let activityLogs = JSON.parse(localStorage.getItem('sports_activity_logs')) || [];
+
+        // Category verification state storage
+        let categoryVerifyState = JSON.parse(localStorage.getItem('sports_category_verify_status')) || {};
+
+        let pendingCategoryConfirmTarget = null; // { type, eventName, categoryKey, catLabel }
+
+        function getCategoryVerificationKey(type, eventName, categoryKey) {
+            return `${type}_${eventName}_${categoryKey}`;
+        }
+
+        function isCategoryVerified(type, eventName, categoryKey) {
+            const key = getCategoryVerificationKey(type, eventName, categoryKey);
+            return categoryVerifyState[key] === true;
+        }
+
+        function setCategoryVerified(type, eventName, categoryKey, verified = true) {
+            const key = getCategoryVerificationKey(type, eventName, categoryKey);
+            categoryVerifyState[key] = verified;
+            localStorage.setItem('sports_category_verify_status', JSON.stringify(categoryVerifyState));
+        }
+
+        function openRankErrorModal(msg) {
+            const el = document.getElementById('rankErrorText');
+            if (el) el.innerText = msg;
+            const modal = document.getElementById('rankErrorModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeRankErrorModal() {
+            const modal = document.getElementById('rankErrorModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function openCategoryConfirmModal(type, eventName, categoryKey, catLabel) {
+            pendingCategoryConfirmTarget = { type, eventName, categoryKey, catLabel };
+            const textEl = document.getElementById('categoryConfirmText');
+            if (textEl) textEl.innerText = `Adakah anda pasti mahu mengesahkan keputusan kategori ${catLabel}?`;
+            
+            const btnConfirm = document.getElementById('btnConfirmCategoryAction');
+            if (btnConfirm) btnConfirm.innerText = `YA, SAHKAN ${catLabel.toUpperCase()}`;
+
+            const modal = document.getElementById('categoryConfirmModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeCategoryConfirmModal() {
+            pendingCategoryConfirmTarget = null;
+            const modal = document.getElementById('categoryConfirmModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function proceedCategoryVerification() {
+            if (!pendingCategoryConfirmTarget) return;
+            const { type, eventName, categoryKey, catLabel } = pendingCategoryConfirmTarget;
+            
+            setCategoryVerified(type, eventName, categoryKey, true);
+            closeCategoryConfirmModal();
+
+            logActivity('Pengesahan Kategori', `${currentUser ? currentUser.name : 'Pegawai'} mengesahkan kategori ${catLabel} [${type.toUpperCase()} - ${eventName}]`, 'Berjaya');
+            showToast(`Kategori ${catLabel} [${eventName}] telah DISAHKAN!`, "success");
+
+            renderAllTables();
+            updateStats();
+        }
+
+        function unverifyCategory(type, eventName, categoryKey, catLabel) {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showToast("Hanya Admin Utama yang dibenarkan membatalkan pengesahan kategori.", "error");
+                return;
+            }
+            setCategoryVerified(type, eventName, categoryKey, false);
+            logActivity('Nyahsahkan Kategori', `${currentUser.name} membatalkan pengesahan kategori ${catLabel} [${type.toUpperCase()} - ${eventName}]`, 'Berjaya');
+            showToast(`Pengesahan kategori ${catLabel} telah dibatalkan.`, "info");
+            renderAllTables();
+            updateStats();
+        }
+
+        function validateAndInitiateVerification(type, eventName, categoryKey, catLabel) {
+            const evData = dataset[eventName];
+            if (!evData) {
+                openRankErrorModal("Data acara tidak ditemui.");
+                return;
+            }
+
+            let athleteList = [];
+            if (type === 'padang') {
+                if (categoryKey === 'male') {
+                    athleteList = [...(evData.maleS1 || []), ...(evData.maleS2 || [])];
+                } else if (categoryKey === 'female') {
+                    athleteList = [...(evData.femaleS1 || []), ...(evData.femaleS2 || [])];
+                }
+            } else {
+                athleteList = evData[categoryKey] || [];
+            }
+
+            if (!athleteList || athleteList.length === 0) {
+                openRankErrorModal("Tiada senarai peserta dikesan dalam kategori ini.");
+                return;
+            }
+
+            const ranksUsed = [];
+            let hasAnyData = false;
+
+            for (let i = 0; i < athleteList.length; i++) {
+                const rRaw = athleteList[i].rank ? athleteList[i].rank.toString().trim() : '';
+                const tRaw = athleteList[i].time ? athleteList[i].time.toString().trim() : '';
+                const bRaw = athleteList[i].best ? athleteList[i].best.toString().trim() : '';
+
+                if (rRaw !== '' || tRaw !== '' || bRaw !== '') {
+                    hasAnyData = true;
+                }
+
+                if (rRaw !== '') {
+                    const rNum = parseInt(rRaw);
+                    if (!isNaN(rNum) && rNum > 0) {
+                        if (ranksUsed.includes(rNum)) {
+                            const errText = `RALAT RANK: Rank ${rNum} digunakan lebih daripada sekali bagi Kategori ${catLabel}. Sila betulkan data terlebih dahulu.`;
+                            logActivity('Ralat Pengesahan Rank', errText, 'Gagal');
+                            openRankErrorModal(`Rank ${rNum} digunakan lebih daripada sekali bagi Kategori ${catLabel}. Sila pastikan setiap peserta mempunyai rank yang unik.`);
+                            return;
+                        }
+                        ranksUsed.push(rNum);
+                    }
+                }
+            }
+
+            if (!hasAnyData || ranksUsed.length === 0) {
+                openRankErrorModal(`Kategori ${catLabel} belum mengandungi sebarang keputusan/rank yang sah. Sila isi data sebelum mengesahkan.`);
+                return;
+            }
+
+            openCategoryConfirmModal(type, eventName, categoryKey, catLabel);
+        }
+
+        function evaluateCategoryStatus(type, eventName, categoryKey) {
+            if (isCategoryVerified(type, eventName, categoryKey)) {
+                return { status: 'DISAHKAN', badgeClass: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-300', text: '✅ DISAHKAN' };
+            }
+
+            const evData = dataset[eventName];
+            if (!evData) return { status: 'BELUM_DIISI', badgeClass: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-slate-300', text: '⏳ BELUM DIISI' };
+
+            let list = [];
+            if (type === 'padang') {
+                if (categoryKey === 'male') list = [...(evData.maleS1 || []), ...(evData.maleS2 || [])];
+                else if (categoryKey === 'female') list = [...(evData.femaleS1 || []), ...(evData.femaleS2 || [])];
+            } else {
+                list = evData[categoryKey] || [];
+            }
+
+            let rankCount = 0;
+            list.forEach(r => {
+                if (r.rank && r.rank.toString().trim() !== '') rankCount++;
+            });
+
+            if (rankCount === 0) {
+                return { status: 'BELUM_DIISI', badgeClass: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-slate-300', text: '⏳ BELUM DIISI' };
+            } else if (rankCount >= 3 || rankCount >= list.length) {
+                return { status: 'SIAP', badgeClass: 'bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300 border-amber-300', text: '📋 SIAP UNTUK DISAHKAN' };
+            } else {
+                return { status: 'SEDANG_DIISI', badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border-blue-300', text: '✍️ SEDANG DIISI' };
+            }
+        }
+
+        function renderCategoryVerifyControls(type, eventName, categoryKey, catLabel, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const verified = isCategoryVerified(type, eventName, categoryKey);
+            const statusInfo = evaluateCategoryStatus(type, eventName, categoryKey);
+
+            if (verified) {
+                container.innerHTML = `
+                    <span class="px-2.5 py-1 rounded-xl text-[11px] font-black border ${statusInfo.badgeClass}">
+                        ${statusInfo.text}
+                    </span>
+                    ${currentUser && currentUser.role === 'admin' ? `
+                        <button onclick="unverifyCategory('${type}', '${eventName}', '${categoryKey}', '${catLabel}')" class="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[10px] font-bold rounded-xl transition-all active:scale-95" title="Admin: Membatalkan Pengesahan">
+                            <i class="fa-solid fa-rotate-left"></i> Nyahsahkan
+                        </button>
+                    ` : ''}
+                `;
+            } else {
+                container.innerHTML = `
+                    <span class="px-2.5 py-1 rounded-xl text-[10px] font-extrabold border ${statusInfo.badgeClass}">
+                        ${statusInfo.text}
+                    </span>
+                    <button onclick="validateAndInitiateVerification('${type}', '${eventName}', '${categoryKey}', '${catLabel}')" class="px-3 py-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl text-[11px] transition-all active:scale-95 shadow-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-check"></i> SAHKAN KATEGORI ${catLabel.toUpperCase()}
+                    </button>
+                `;
+            }
+        }
+
+        function renderOverallEventStatus(type, eventName, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const maleVerified = isCategoryVerified(type, eventName, 'male');
+            const femaleVerified = isCategoryVerified(type, eventName, 'female');
+
+            let badgeHTML = '';
+
+            if (maleVerified && femaleVerified) {
+                badgeHTML = `<span class="px-3 py-1 rounded-full text-xs font-black bg-emerald-500 text-white border border-emerald-400 shadow-xs flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> 🟢 ACARA SELESAI</span>`;
+            } else if (maleVerified && !femaleVerified) {
+                badgeHTML = `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500 text-white border border-amber-400 shadow-xs flex items-center gap-1.5"><i class="fa-solid fa-clock"></i> 🟡 MENUNGGU PENGESAHAN PEREMPUAN</span>`;
+            } else if (!maleVerified && femaleVerified) {
+                badgeHTML = `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500 text-white border border-amber-400 shadow-xs flex items-center gap-1.5"><i class="fa-solid fa-clock"></i> 🟡 MENUNGGU PENGESAHAN LELAKI</span>`;
+            } else {
+                badgeHTML = `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-rose-500 text-white border border-rose-400 shadow-xs flex items-center gap-1.5"><i class="fa-solid fa-hourglass-start"></i> 🔴 BELUM SELESAI</span>`;
+            }
+
+            container.innerHTML = badgeHTML;
+        }
 
         // Toast & Spinner Helper Functions
         function showToast(message, type = 'info') {
@@ -1664,6 +2011,10 @@ function getColLetter(colIndex) {
             renderTrackTable('tableSaringanMale2', evData.maleS2, 'padang', currentSaringanEvent, 'maleS2', isSpecial ? 14 : 18, 5, 6);
             renderTrackTable('tableSaringanFemale1', evData.femaleS1, 'padang', currentSaringanEvent, 'femaleS1', 5, 13, 14);
             renderTrackTable('tableSaringanFemale2', evData.femaleS2, 'padang', currentSaringanEvent, 'femaleS2', isSpecial ? 14 : 18, 13, 14);
+
+            renderCategoryVerifyControls('padang', currentSaringanEvent, 'male', 'Lelaki', 'categoryVerifyHeader-padang-male');
+            renderCategoryVerifyControls('padang', currentSaringanEvent, 'female', 'Perempuan', 'categoryVerifyHeader-padang-female');
+            renderOverallEventStatus('padang', currentSaringanEvent, 'overallEventStatusBadge-padang');
         }
 
         function renderBalapanTables() {
@@ -1672,6 +2023,10 @@ function getColLetter(colIndex) {
             const isSpecial = currentBalapanEvent === '300';
             renderTrackTable('tableBalapanMale', evData.male, 'balapan', currentBalapanEvent, 'male', 6, 5, 6);
             renderTrackTable('tableBalapanFemale', evData.female, 'balapan', currentBalapanEvent, 'female', isSpecial ? 16 : 20, 5, 6);
+
+            renderCategoryVerifyControls('balapan', currentBalapanEvent, 'male', 'Lelaki', 'categoryVerifyHeader-balapan-male');
+            renderCategoryVerifyControls('balapan', currentBalapanEvent, 'female', 'Perempuan', 'categoryVerifyHeader-balapan-female');
+            renderOverallEventStatus('balapan', currentBalapanEvent, 'overallEventStatusBadge-balapan');
         }
 
         function renderAllTables() {
@@ -1946,6 +2301,10 @@ function getColLetter(colIndex) {
 
             renderRelayRows('tableRelayMale', evData.male, 'male', 5, 3, 5);
             renderRelayRows('tableRelayFemale', evData.female, 'female', 5, 11, 13);
+
+            renderCategoryVerifyControls('relay', currentRelayEvent, 'male', 'Lelaki', 'categoryVerifyHeader-relay-male');
+            renderCategoryVerifyControls('relay', currentRelayEvent, 'female', 'Perempuan', 'categoryVerifyHeader-relay-female');
+            renderOverallEventStatus('relay', currentRelayEvent, 'overallEventStatusBadge-relay');
         }
 
         function renderPadangAcaraTables() {
@@ -1995,6 +2354,10 @@ function getColLetter(colIndex) {
 
             renderPadangRows('tablePadangAcaraMale', evData.male, 'male', 9);
             renderPadangRows('tablePadangAcaraFemale', evData.female, 'female', 26);
+
+            renderCategoryVerifyControls('padang_acara', currentPadangAcaraEvent, 'male', 'Lelaki', 'categoryVerifyHeader-padang_acara-male');
+            renderCategoryVerifyControls('padang_acara', currentPadangAcaraEvent, 'female', 'Perempuan', 'categoryVerifyHeader-padang_acara-female');
+            renderOverallEventStatus('padang_acara', currentPadangAcaraEvent, 'overallEventStatusBadge-padang_acara');
         }
 
         async function handleSingleCellSave(type, eventName, category, rowIndex, colIndex, value) {
