@@ -793,24 +793,26 @@ function getColLetter(colIndex) {
         </div>
 
         <div id="mainTabContent-pingat" class="space-y-6 hidden">
-            <div class="bg-white rounded-3xl p-5 sm:p-7 shadow-glass border border-slate-200/80">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800 mb-5">
-                    <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 flex items-center gap-2.5">
-                        <i class="fa-solid fa-chart-line text-emerald-600"></i>
-                        Kedudukan & Pungutan Pingat Pasukan
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-7 shadow-glass border border-slate-200/80 dark:border-slate-800 space-y-6">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <h2 class="font-extrabold text-sm sm:text-lg text-slate-800 dark:text-slate-100 flex items-center gap-2.5">
+                        <i class="fa-solid fa-trophy text-amber-500"></i>
+                        🏆 KEDUDUKAN PINGAT
                     </h2>
                     <button onclick="triggerPrint()" class="no-print px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-all active:scale-95 shadow-sm">
                         <i class="fa-solid fa-print"></i> Cetak Keputusan
                     </button>
                 </div>
-                <div id="houseStatsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+                <!-- Dynamic Podium & Standings Container -->
+                <div id="houseStatsGrid" class="space-y-8"></div>
             </div>
         </div>
 
     </main>
 
     <footer class="no-print mt-auto py-5 text-center text-xs text-slate-500 border-t border-slate-200/80 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm">
-        <p class="font-bold tracking-wide">Hak Cipta Terpelihara @ 2026 eL_mioZ AthletiX</p>
+        <p class="font-bold tracking-wide">Hak Cipta Terpelihara @ 2026 eL_mioZ</p>
     </footer>
 
     <div id="loginOverlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto">
@@ -1091,6 +1093,156 @@ function getColLetter(colIndex) {
         let usersList = JSON.parse(localStorage.getItem('sports_users_list')) || DEFAULT_USERS;
         let activityLogs = JSON.parse(localStorage.getItem('sports_activity_logs')) || [];
 
+        // Toast & Spinner Helper Functions
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const bgColors = {
+                success: 'bg-emerald-600 text-white',
+                error: 'bg-rose-600 text-white',
+                info: 'bg-slate-800 text-white border border-slate-700'
+            };
+            const icons = {
+                success: 'fa-circle-check text-emerald-200',
+                error: 'fa-circle-xmark text-rose-200',
+                info: 'fa-circle-info text-blue-300'
+            };
+
+            toast.className = `pointer-events-auto flex items-center justify-between gap-3 p-3.5 rounded-2xl shadow-xl ${bgColors[type] || bgColors.info} text-xs font-semibold transform transition-all duration-300 ease-out translate-y-2 opacity-0`;
+            toast.innerHTML = `
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid ${icons[type] || icons.info} text-base shrink-0"></i>
+                    <span>${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="p-1 text-white/70 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        function showAutoSyncSpinner(show) {
+            const spinner = document.getElementById('autoSyncSpinner');
+            if (spinner) {
+                if (show) spinner.classList.remove('hidden'), spinner.classList.add('flex');
+                else spinner.classList.add('hidden'), spinner.classList.remove('flex');
+            }
+        }
+
+        function testApiUrl(type) {
+            const inputIds = { padang: 'webAppUrlPadangInput', balapan: 'webAppUrlBalapanInput', relay: 'webAppUrlRelayInput', padang_acara: 'webAppUrlPadangAcaraInput' };
+            const resultIds = { padang: 'testUrlResultPadang', balapan: 'testUrlResultBalapan', relay: 'testUrlResultRelay', padang_acara: 'testUrlResultPadangAcara' };
+            const input = document.getElementById(inputIds[type]);
+            const resDiv = document.getElementById(resultIds[type]);
+
+            if (!input || !resDiv) return;
+            const url = input.value.trim();
+
+            if (!url) {
+                showToast("Sila masukkan URL Web App untuk diuji.", "error");
+                return;
+            }
+
+            resDiv.className = "mt-2 p-2.5 rounded-xl text-xs font-semibold bg-blue-50 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300 flex items-center gap-2";
+            resDiv.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Testing sambungan ke Google Sheets...`;
+            resDiv.classList.remove('hidden');
+
+            fetch(`${url}?t=${new Date().getTime()}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        resDiv.className = "mt-2 p-2.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 flex items-center gap-2";
+                        resDiv.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> Sambungan Berjaya! Web App bersedia.`;
+                        showToast("Sambungan URL Web App Berjaya!", "success");
+                    } else {
+                        resDiv.className = "mt-2 p-2.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 flex items-center gap-2";
+                        resDiv.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> Ralat Google Sheets: ${data.message || 'Format tidak dikenali'}`;
+                        showToast("Format jawapan Google Sheets tidak sah.", "error");
+                    }
+                })
+                .catch(err => {
+                    resDiv.className = "mt-2 p-2.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 flex items-center gap-2";
+                    resDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600"></i> Gagal menyambung: ${err.message}`;
+                    showToast("Gagal menyambung ke URL Web App.", "error");
+                });
+        }
+
+        function saveApiUrl(type) {
+            const inputIds = { padang: 'webAppUrlPadangInput', balapan: 'webAppUrlBalapanInput', relay: 'webAppUrlRelayInput', padang_acara: 'webAppUrlPadangAcaraInput' };
+            const storageKeys = { padang: 'sports_webapp_url_padang', balapan: 'sports_webapp_url_balapan', relay: 'sports_webapp_url_relay', padang_acara: 'sports_webapp_url_padang_acara' };
+            const input = document.getElementById(inputIds[type]);
+
+            if (!input) return;
+            const val = input.value.trim();
+            localStorage.setItem(storageKeys[type], val);
+
+            if (type === 'padang') webAppUrlPadang = val;
+            else if (type === 'balapan') webAppUrlBalapan = val;
+            else if (type === 'relay') webAppUrlRelay = val;
+            else if (type === 'padang_acara') webAppUrlPadangAcara = val;
+
+            setFieldSavedState(type, !!val);
+            logActivity('Tetapan API', `Simpan URL API bagi Acara ${type.toUpperCase()}`, 'Berjaya');
+            showToast(`URL API ${type.toUpperCase()} berjaya disimpan!`, "success");
+            fetchDataFromBackend(true);
+        }
+
+        function editApiUrl(type) {
+            const inputIds = { padang: 'webAppUrlPadangInput', balapan: 'webAppUrlBalapanInput', relay: 'webAppUrlRelayInput', padang_acara: 'webAppUrlPadangAcaraInput' };
+            const input = document.getElementById(inputIds[type]);
+            if (input) {
+                input.focus();
+                input.select();
+                showToast("Mod suntingan diaktifkan untuk URL API.", "info");
+            }
+        }
+
+        function deleteApiUrl(type) {
+            const inputIds = { padang: 'webAppUrlPadangInput', balapan: 'webAppUrlBalapanInput', relay: 'webAppUrlRelayInput', padang_acara: 'webAppUrlPadangAcaraInput' };
+            const storageKeys = { padang: 'sports_webapp_url_padang', balapan: 'sports_webapp_url_balapan', relay: 'sports_webapp_url_relay', padang_acara: 'sports_webapp_url_padang_acara' };
+            const input = document.getElementById(inputIds[type]);
+
+            if (input) input.value = '';
+            localStorage.removeItem(storageKeys[type]);
+
+            if (type === 'padang') webAppUrlPadang = '';
+            else if (type === 'balapan') webAppUrlBalapan = '';
+            else if (type === 'relay') webAppUrlRelay = '';
+            else if (type === 'padang_acara') webAppUrlPadangAcara = '';
+
+            setFieldSavedState(type, false);
+            logActivity('Tetapan API', `Hapus URL API bagi Acara ${type.toUpperCase()}`, 'Berjaya');
+            showToast(`URL API ${type.toUpperCase()} telah dihapuskan.`, "info");
+        }
+
+        function copyGasCode(type) {
+            let code = GAS_CODE_PADANG;
+            if (type === 'balapan') code = GAS_CODE_BALAPAN;
+            else if (type === 'relay') code = GAS_CODE_RELAY;
+            else if (type === 'padang_acara') code = GAS_CODE_PADANG_ACARA;
+
+            const tempInput = document.createElement("textarea");
+            tempInput.value = code;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast(`Kod Google Apps Script (${type.toUpperCase()}) berjaya disalin!`, "success");
+        }
+
         // Dynamic event lock state (Default: ALL LOCKED)
         let eventLockState = JSON.parse(localStorage.getItem('sports_event_lock_state')) || {
             padang: true,
@@ -1130,6 +1282,29 @@ function getColLetter(colIndex) {
                 document.body.classList.remove('dark');
                 updateThemeIcon(false);
             }
+        }
+
+        function setFieldSavedState(type, isSaved) {
+            const badgeIds = {
+                padang: 'badgePadangStatus',
+                balapan: 'badgeBalapanStatus',
+                relay: 'badgeRelayStatus',
+                padang_acara: 'badgePadangAcaraStatus'
+            };
+            const badge = document.getElementById(badgeIds[type]);
+            if (badge) {
+                badge.className = isSaved 
+                    ? 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                    : 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300';
+                badge.innerText = isSaved ? 'Tersimpan' : 'Belum Disimpan';
+            }
+        }
+
+        function updateBadge() {
+            setFieldSavedState('padang', !!webAppUrlPadang);
+            setFieldSavedState('balapan', !!webAppUrlBalapan);
+            setFieldSavedState('relay', !!webAppUrlRelay);
+            setFieldSavedState('padang_acara', !!webAppUrlPadangAcara);
         }
 
         function toggleDarkMode() {
@@ -1990,23 +2165,24 @@ function getColLetter(colIndex) {
         }
 
         function renderHouseStats() {
-            const grid = document.getElementById('houseStatsGrid');
-            if (!grid) return;
+            const container = document.getElementById('houseStatsGrid');
+            if (!container) return;
 
-            const houses = [
-                { name: 'Garuda', color: 'border-red-500/80 bg-red-50/50 dark:bg-red-950/30 text-red-600 dark:text-red-400', dot: 'bg-red-500' },
-                { name: 'Rajawali', color: 'border-blue-500/80 bg-blue-50/50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400', dot: 'bg-blue-500' },
-                { name: 'Helang', color: 'border-emerald-500/80 bg-emerald-50/50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400', dot: 'bg-emerald-500' },
-                { name: 'Kenyalang', color: 'border-amber-400/80 bg-amber-50/50 dark:bg-amber-950/30 text-amber-500 dark:text-yellow-400', dot: 'bg-yellow-400' }
-            ];
-
-            const houseMedals = {
-                Garuda: { gold: 0, silver: 0, bronze: 0, points: 0 },
-                Rajawali: { gold: 0, silver: 0, bronze: 0, points: 0 },
-                Helang: { gold: 0, silver: 0, bronze: 0, points: 0 },
-                Kenyalang: { gold: 0, silver: 0, bronze: 0, points: 0 }
+            const houseMetadata = {
+                Garuda: { name: 'Garuda', color: 'border-red-500/80 bg-red-50/50 dark:bg-red-950/30 text-red-600 dark:text-red-400', badgeBg: 'bg-red-600 text-white', accentColor: 'from-red-500 to-rose-600', ringColor: 'ring-red-500/30' },
+                Rajawali: { name: 'Rajawali', color: 'border-blue-500/80 bg-blue-50/50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400', badgeBg: 'bg-blue-600 text-white', accentColor: 'from-blue-500 to-indigo-600', ringColor: 'ring-blue-500/30' },
+                Helang: { name: 'Helang', color: 'border-emerald-500/80 bg-emerald-50/50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400', badgeBg: 'bg-emerald-600 text-white', accentColor: 'from-emerald-500 to-teal-600', ringColor: 'ring-emerald-500/30' },
+                Kenyalang: { name: 'Kenyalang', color: 'border-amber-400/80 bg-amber-50/50 dark:bg-amber-950/30 text-amber-500 dark:text-yellow-400', badgeBg: 'bg-amber-500 text-slate-950 font-black', accentColor: 'from-amber-400 to-yellow-500', ringColor: 'ring-amber-400/30' }
             };
 
+            const houseMedals = {
+                Garuda: { name: 'Garuda', gold: 0, silver: 0, bronze: 0, total: 0, points: 0 },
+                Rajawali: { name: 'Rajawali', gold: 0, silver: 0, bronze: 0, total: 0, points: 0 },
+                Helang: { name: 'Helang', gold: 0, silver: 0, bronze: 0, total: 0, points: 0 },
+                Kenyalang: { name: 'Kenyalang', gold: 0, silver: 0, bronze: 0, total: 0, points: 0 }
+            };
+
+            // Tally medals directly from single source of truth
             const tallyEvents = (sheets) => {
                 sheets.forEach(sName => {
                     const ev = dataset[sName];
@@ -2030,239 +2206,214 @@ function getColLetter(colIndex) {
             tallyEvents(RELAY_SHEETS);
             tallyEvents(PADANG_ACARA_SHEETS);
 
-            grid.innerHTML = houses.map(h => {
-                const stats = houseMedals[h.name];
-                return `
-                    <div class="rounded-3xl p-4 sm:p-5 border-2 ${h.color} transition-all hover:shadow-md">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="font-black text-xs sm:text-sm flex items-center gap-2 ${getHouseTextColor(h.name)}">
-                                <span class="w-3 h-3 rounded-full ${h.dot}"></span>
-                                Rumah ${h.name}
-                            </span>
-                            <span class="text-[11px] sm:text-xs font-black bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-xs">
-                                ${stats.points} Mata
-                            </span>
+            // Compute Total Medals
+            Object.keys(houseMedals).forEach(h => {
+                houseMedals[h].total = houseMedals[h].gold + houseMedals[h].silver + houseMedals[h].bronze;
+            });
+
+            // Official Ranking Formula Priority:
+            // 1. Most Gold Medals
+            // 2. If Gold equal -> Most Silver
+            // 3. If Gold & Silver equal -> Most Bronze
+            // 4. If all medals equal -> Most Points
+            const sortedHouses = Object.values(houseMedals).sort((a, b) => {
+                if (b.gold !== a.gold) return b.gold - a.gold;
+                if (b.silver !== a.silver) return b.silver - a.silver;
+                if (b.bronze !== a.bronze) return b.bronze - a.bronze;
+                return b.points - a.points;
+            });
+
+            // Filter out houses with active records or show standard list
+            const totalRecordedMedals = sortedHouses.reduce((sum, h) => sum + h.total, 0);
+
+            if (totalRecordedMedals === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 px-4 bg-slate-50 dark:bg-slate-800/40 rounded-3xl border border-dashed border-slate-300 dark:border-slate-700">
+                        <div class="w-16 h-16 mx-auto mb-3 text-amber-400 bg-amber-50 dark:bg-amber-950/40 rounded-2xl flex items-center justify-center border border-amber-200 dark:border-amber-900/60 shadow-sm">
+                            <i class="fa-solid fa-trophy text-2xl"></i>
                         </div>
-                        <div class="grid grid-cols-3 gap-2 text-center text-[11px] sm:text-xs">
-                            <div class="bg-amber-100/90 text-amber-900 rounded-2xl p-2 font-bold border border-amber-200/60 shadow-xs">
-                                🥇 <span class="block text-xs sm:text-sm font-black mt-0.5">${stats.gold}</span> Emas
-                            </div>
-                            <div class="bg-slate-200/90 text-slate-800 rounded-2xl p-2 font-bold border border-slate-300/60 shadow-xs">
-                                🥈 <span class="block text-xs sm:text-sm font-black mt-0.5">${stats.silver}</span> Perak
-                            </div>
-                            <div class="bg-amber-800/10 text-amber-950 dark:text-amber-200 rounded-2xl p-2 font-bold border border-amber-900/10 shadow-xs">
-                                🥉 <span class="block text-xs sm:text-sm font-black mt-0.5">${stats.bronze}</span> Gangsa
-                            </div>
-                        </div>
+                        <h3 class="font-extrabold text-sm sm:text-base text-slate-800 dark:text-slate-200">Belum Ada Rekod Pingat</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">Keputusan rasmi bagi acara balapan, relay, dan padang akan dipaparkan secara automatik di sini sebaik sahaja disahkan.</p>
                     </div>
                 `;
-            }).join('');
-        }
-
-        function saveApiUrl(type) {
-            let inputId = 'webAppUrlPadangInput';
-            if (type === 'balapan') inputId = 'webAppUrlBalapanInput';
-            else if (type === 'relay') inputId = 'webAppUrlRelayInput';
-            else if (type === 'padang_acara') inputId = 'webAppUrlPadangAcaraInput';
-
-            const input = document.getElementById(inputId);
-            let url = input ? input.value.trim() : '';
-
-            if (url) {
-                url = url.replace(/\/edit.*$/, '/exec');
-                if (type === 'padang') { localStorage.setItem('sports_webapp_url_padang', url); webAppUrlPadang = url; }
-                else if (type === 'balapan') { localStorage.setItem('sports_webapp_url_balapan', url); webAppUrlBalapan = url; }
-                else if (type === 'relay') { localStorage.setItem('sports_webapp_url_relay', url); webAppUrlRelay = url; }
-                else if (type === 'padang_acara') { localStorage.setItem('sports_webapp_url_padang_acara', url); webAppUrlPadangAcara = url; }
-
-                setFieldSavedState(type, true);
-                logActivity('Tetapan API', `Menyimpan URL Web App [${type}]`, 'Berjaya');
-                showToast(`URL Web App (${type}) berjaya disimpan!`, "success");
-                updateBadge();
-                fetchDataFromBackend(true);
-            } else {
-                showToast("Sila masukkan URL Web App.", "error");
-            }
-        }
-
-        function editApiUrl(type) { setFieldSavedState(type, false); }
-
-        function deleteApiUrl(type) {
-            let inputId = 'webAppUrlPadangInput';
-            if (type === 'padang') { localStorage.removeItem('sports_webapp_url_padang'); webAppUrlPadang = ''; }
-            else if (type === 'balapan') { localStorage.removeItem('sports_webapp_url_balapan'); webAppUrlBalapan = ''; inputId = 'webAppUrlBalapanInput'; }
-            else if (type === 'relay') { localStorage.removeItem('sports_webapp_url_relay'); webAppUrlRelay = ''; inputId = 'webAppUrlRelayInput'; }
-            else if (type === 'padang_acara') { localStorage.removeItem('sports_webapp_url_padang_acara'); webAppUrlPadangAcara = ''; inputId = 'webAppUrlPadangAcaraInput'; }
-
-            const input = document.getElementById(inputId);
-            if (input) input.value = '';
-            setFieldSavedState(type, false);
-            updateBadge();
-            logActivity('Tetapan API', `Menghapus URL Web App [${type}]`, 'Berjaya');
-            showToast(`URL Web App (${type}) dihapuskan.`, "info");
-        }
-
-        function setFieldSavedState(type, isSaved) {
-            let badgeId = 'badgePadangStatus';
-            let inputId = 'webAppUrlPadangInput';
-
-            if (type === 'balapan') { badgeId = 'badgeBalapanStatus'; inputId = 'webAppUrlBalapanInput'; }
-            else if (type === 'relay') { badgeId = 'badgeRelayStatus'; inputId = 'webAppUrlRelayInput'; }
-            else if (type === 'padang_acara') { badgeId = 'badgePadangAcaraStatus'; inputId = 'webAppUrlPadangAcaraInput'; }
-
-            const badge = document.getElementById(badgeId);
-            const input = document.getElementById(inputId);
-
-            if (badge) {
-                badge.className = isSaved ? "text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800" : "text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800";
-                badge.innerText = isSaved ? "Tersimpan" : "Belum Disimpan";
-            }
-            if (input) input.readOnly = isSaved;
-        }
-
-        async function testApiUrl(type) {
-            let inputId = 'webAppUrlPadangInput';
-            let resultDivId = 'testUrlResultPadang';
-
-            if (type === 'balapan') { inputId = 'webAppUrlBalapanInput'; resultDivId = 'testUrlResultBalapan'; }
-            else if (type === 'relay') { inputId = 'webAppUrlRelayInput'; resultDivId = 'testUrlResultRelay'; }
-            else if (type === 'padang_acara') { inputId = 'webAppUrlPadangAcaraInput'; resultDivId = 'testUrlResultPadangAcara'; }
-
-            const input = document.getElementById(inputId);
-            const resultDiv = document.getElementById(resultDivId);
-            const url = input ? input.value.trim() : '';
-
-            if (!url) {
-                if (resultDiv) {
-                    resultDiv.className = "mt-2.5 text-xs p-3.5 rounded-2xl font-mono bg-rose-50 text-rose-700 border border-rose-200";
-                    resultDiv.innerText = "Masukkan URL Web App dahulu.";
-                    resultDiv.classList.remove('hidden');
-                }
                 return;
             }
 
-            if (resultDiv) {
-                resultDiv.className = "mt-2.5 text-xs p-3.5 rounded-2xl font-mono bg-amber-50 text-amber-700 border border-amber-200";
-                resultDiv.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Menguji sambungan ${type}...`;
-                resultDiv.classList.remove('hidden');
+            // Split houses into Podium (Top 3) and Next Positions (4th+)
+            const top1 = sortedHouses[0] || null;
+            const top2 = sortedHouses[1] || null;
+            const top3 = sortedHouses[2] || null;
+            const remaining = sortedHouses.slice(3);
+
+            // Construct Podium Card HTML Helper
+            const renderPodiumCard = (item, rankPos) => {
+                if (!item) return '';
+                const meta = houseMetadata[item.name] || { name: item.name, color: 'border-slate-300 bg-slate-50 text-slate-800', badgeBg: 'bg-slate-700 text-white', accentColor: 'from-slate-500 to-slate-700', ringColor: 'ring-slate-400/30' };
+
+                let orderStyle = 'order-1 sm:order-2'; // 1st Place (Center)
+                let heightStyle = 'min-h-[260px] sm:min-h-[310px] scale-100 sm:scale-105 z-10 border-amber-400 dark:border-amber-500 shadow-glow-blue';
+                let rankBadge = '<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-amber-950 shadow-md mb-2"><i class="fa-solid fa-crown text-amber-800"></i> TEMPAT 1</div>';
+                let pedestalBg = 'bg-gradient-to-t from-amber-500/20 via-amber-400/10 to-transparent border-t-4 border-amber-400';
+                let rankIcon = '🥇';
+
+                if (rankPos === 2) {
+                    orderStyle = 'order-2 sm:order-1'; // 2nd Place (Left)
+                    heightStyle = 'min-h-[230px] sm:min-h-[270px] z-0 border-slate-300 dark:border-slate-700';
+                    rankBadge = '<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-sm mb-2">🥈 TEMPAT 2</div>';
+                    pedestalBg = 'bg-gradient-to-t from-slate-400/20 via-slate-300/10 to-transparent border-t-4 border-slate-300 dark:border-slate-600';
+                    rankIcon = '🥈';
+                } else if (rankPos === 3) {
+                    orderStyle = 'order-3'; // 3rd Place (Right)
+                    heightStyle = 'min-h-[220px] sm:min-h-[250px] z-0 border-amber-700/50 dark:border-amber-800/50';
+                    rankBadge = '<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-900/20 text-amber-900 dark:text-amber-200 shadow-sm mb-2">🥉 TEMPAT 3</div>';
+                    pedestalBg = 'bg-gradient-to-t from-amber-800/20 via-amber-700/10 to-transparent border-t-4 border-amber-700/60';
+                    rankIcon = '🥉';
+                }
+
+                return `
+                    <div class="flex-1 flex flex-col justify-between rounded-3xl p-4 sm:p-5 border-2 ${meta.color} ${heightStyle} ${orderStyle} transition-all transform hover:-translate-y-1 duration-300 relative overflow-hidden bg-white dark:bg-slate-900/90 shadow-md">
+                        <!-- Top Header Section -->
+                        <div class="text-center relative z-10">
+                            ${rankBadge}
+                            <h3 class="text-base sm:text-xl font-black tracking-tight uppercase mt-1 ${getHouseTextColor(item.name)}">
+                                Rumah ${item.name}
+                            </h3>
+                            <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                ${item.points} Mata Kebangsaan
+                            </span>
+                        </div>
+
+                        <!-- Medal Breakdown Badges -->
+                        <div class="my-3 grid grid-cols-3 gap-1.5 sm:gap-2 text-center text-[11px] sm:text-xs relative z-10">
+                            <div class="bg-amber-100/90 dark:bg-amber-950/50 text-amber-950 dark:text-amber-200 rounded-2xl p-1.5 sm:p-2 font-bold border border-amber-200/80 dark:border-amber-800/50 shadow-2xs">
+                                <span class="block text-xs sm:text-sm font-black">🥇 ${item.gold}</span>
+                                <span class="text-[9px] uppercase font-bold tracking-wider text-amber-800 dark:text-amber-300">Emas</span>
+                            </div>
+                            <div class="bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 rounded-2xl p-1.5 sm:p-2 font-bold border border-slate-200 dark:border-slate-700 shadow-2xs">
+                                <span class="block text-xs sm:text-sm font-black">🥈 ${item.silver}</span>
+                                <span class="text-[9px] uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">Perak</span>
+                            </div>
+                            <div class="bg-amber-900/10 dark:bg-amber-950/30 text-amber-900 dark:text-amber-200 rounded-2xl p-1.5 sm:p-2 font-bold border border-amber-900/20 dark:border-amber-800/40 shadow-2xs">
+                                <span class="block text-xs sm:text-sm font-black">🥉 ${item.bronze}</span>
+                                <span class="text-[9px] uppercase font-bold tracking-wider text-amber-800 dark:text-amber-400">Gangsa</span>
+                            </div>
+                        </div>
+
+                        <!-- Footer Total Box Pedestal Base -->
+                        <div class="pt-2 px-3 py-2 rounded-2xl ${pedestalBg} text-center relative z-10 flex items-center justify-between">
+                            <span class="text-[10px] sm:text-xs font-black uppercase text-slate-500 dark:text-slate-400">JUMLAH PINGAT</span>
+                            <span class="text-sm sm:text-lg font-black text-slate-900 dark:text-white bg-white/80 dark:bg-slate-800/90 px-2.5 py-0.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
+                                🏅 ${item.total}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            };
+
+            let htmlOutput = `
+                <!-- PODIUM SECTION -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-end justify-center gap-4 sm:gap-3 pt-2 pb-4">
+                    ${top2 ? renderPodiumCard(top2, 2) : ''}
+                    ${top1 ? renderPodiumCard(top1, 1) : ''}
+                    ${top3 ? renderPodiumCard(top3, 3) : ''}
+                </div>
+            `;
+
+            // REMAINING POSITIONS SECTION (#4 AND ONWARDS)
+            if (remaining.length > 0) {
+                htmlOutput += `
+                    <div class="pt-6 border-t border-slate-100 dark:border-slate-800">
+                        <h3 class="font-extrabold text-xs sm:text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-3.5 flex items-center gap-2">
+                            <i class="fa-solid fa-list-ol text-blue-600"></i> KEDUDUKAN SETERUSNYA
+                        </h3>
+                        <div class="space-y-2.5">
+                            ${remaining.map((item, idx) => {
+                                const rankNum = idx + 4;
+                                const meta = houseMetadata[item.name] || { color: 'border-slate-200 bg-white text-slate-800' };
+                                return `
+                                    <div class="flex flex-wrap items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 hover:border-slate-300 transition-all gap-3 shadow-2xs">
+                                        <div class="flex items-center gap-3">
+                                            <span class="w-8 h-8 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-black text-xs sm:text-sm flex items-center justify-center shrink-0">
+                                                #${rankNum}
+                                            </span>
+                                            <div>
+                                                <h4 class="font-bold text-xs sm:text-sm ${getHouseTextColor(item.name)}">
+                                                    Rumah ${item.name}
+                                                </h4>
+                                                <span class="text-[10px] text-slate-400 font-medium">${item.points} Mata</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center gap-2 sm:gap-4 ml-auto font-bold text-xs sm:text-sm">
+                                            <span class="px-2 py-1 rounded-xl bg-amber-100/80 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 text-[11px] font-black border border-amber-200/50">
+                                                🥇 ${item.gold}
+                                            </span>
+                                            <span class="px-2 py-1 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-[11px] font-black border border-slate-300/50">
+                                                🥈 ${item.silver}
+                                            </span>
+                                            <span class="px-2 py-1 rounded-xl bg-amber-900/10 dark:bg-amber-950/30 text-amber-900 dark:text-amber-200 text-[11px] font-black border border-amber-800/20">
+                                                🥉 ${item.bronze}
+                                            </span>
+                                            <span class="px-2.5 py-1 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-black text-xs sm:text-sm border border-slate-300 dark:border-slate-700 shadow-2xs">
+                                                🏅 ${item.total}
+                                            </span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
             }
 
-            try {
-                const response = await fetch(`${url}?t=${new Date().getTime()}`, { redirect: 'follow' });
-                const data = JSON.parse(await response.text());
-                if (data.status === 'success') {
-                    if (resultDiv) {
-                        resultDiv.className = "mt-2.5 text-xs p-3.5 rounded-2xl font-mono bg-emerald-50 text-emerald-800 border border-emerald-200";
-                        resultDiv.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> <b>Sambungan Berjaya!</b> Google Sheets merespon.`;
-                    }
-                    logActivity('Ujian API', `Sambungan API [${type}] berjaya`, 'Berjaya');
-                } else {
-                    throw new Error(data.message || "Ralat tidak diketahui.");
-                }
-            } catch (err) {
-                if (resultDiv) {
-                    resultDiv.className = "mt-2.5 text-xs p-3.5 rounded-2xl font-mono bg-rose-50 text-rose-800 border border-rose-200";
-                    resultDiv.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> <b>Sambungan Gagal:</b> ${err.message}`;
-                }
-                logActivity('Ujian API Gagal', `Sambungan API [${type}] gagal: ${err.message}`, 'Gagal');
-            }
+            container.innerHTML = htmlOutput;
         }
 
-        function copyGasCode(type) {
-            let codeText = GAS_CODE_PADANG;
-            if (type === 'balapan') codeText = GAS_CODE_BALAPAN;
-            else if (type === 'relay') codeText = GAS_CODE_RELAY;
-            else if (type === 'padang_acara') codeText = GAS_CODE_PADANG_ACARA;
-
-            const temp = document.createElement('textarea');
-            temp.value = codeText;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
-            logActivity('Salin Kod GAS', `Salin kod Google Apps Script [${type}]`, 'Berjaya');
-            showToast(`Kod Apps Script (${type}) berjaya disalin!`, "success");
-        }
-
-        function triggerPrint() {
-            // Update printable document timestamp & header
-            const printSubHeader = document.getElementById('printDocSubHeader');
-            const printTimestamp = document.getElementById('printDocTimestamp');
-            if (printSubHeader) {
-                const tabTitles = {
-                    padang: 'Keputusan Acara Saringan',
-                    balapan: 'Keputusan Akhir Balapan',
-                    relay: 'Keputusan Acara Relay',
-                    padang_acara: 'Keputusan Acara Padang',
-                    pingat: 'Kedudukan & Pungutan Pingat Pasukan'
-                };
-                printSubHeader.innerText = tabTitles[currentMainTab] || 'Dokumen Keputusan Rasmi Kejohanan';
-            }
-            if (printTimestamp) {
-                printTimestamp.innerText = `Dicetak pada: ${new Date().toLocaleString('ms-MY')}`;
+        // Global functions exposed explicitly to window for inline onclick handlers
+        window.triggerPrint = function() {
+            const printDocTimestamp = document.getElementById('printDocTimestamp');
+            if (printDocTimestamp) {
+                printDocTimestamp.innerText = `Dijana pada: ${new Date().toLocaleString('ms-MY')}`;
             }
 
-            // Attempt native window.print() or fallback to print modal for sandboxed iframe environments
             try {
                 window.print();
             } catch (err) {
+                console.warn('Direct print blocked or failed, opening fallback modal...', err);
                 openPrintModalFallback();
             }
-        }
+        };
 
-        function showToast(message, type = "info") {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
+        window.openPrintModalFallback = function() {
+            const modal = document.getElementById('printModalFallback');
+            const body = document.getElementById('printModalFallbackBody');
+            if (!modal || !body) return;
 
-            const toast = document.createElement('div');
-            let bgStyle = "bg-slate-900/95 text-white border-slate-700 shadow-xl backdrop-blur-md";
-            let icon = "fa-info-circle text-blue-400";
-
-            if (type === 'success') {
-                bgStyle = "bg-emerald-950/95 text-emerald-100 border-emerald-700/80 shadow-glow-blue backdrop-blur-md";
-                icon = "fa-circle-check text-emerald-400";
-            } else if (type === 'error') {
-                bgStyle = "bg-rose-950/95 text-rose-100 border-rose-800/80 shadow-xl backdrop-blur-md";
-                icon = "fa-circle-exclamation text-rose-400";
+            let activeContent = document.getElementById(`mainTabContent-${currentMainTab}`);
+            if (activeContent) {
+                body.innerHTML = activeContent.innerHTML;
             }
+            modal.classList.remove('hidden');
+        };
 
-            toast.className = `p-4 rounded-2xl border shadow-2xl text-xs flex items-center gap-3 transition-all duration-300 transform translate-y-2 opacity-0 ${bgStyle}`;
-            toast.innerHTML = `<i class="fa-solid ${icon} text-base"></i><span class="font-bold flex-grow">${message}</span>`;
+        window.closePrintModalFallback = function() {
+            const modal = document.getElementById('printModalFallback');
+            if (modal) modal.classList.add('hidden');
+        };
 
-            container.appendChild(toast);
-            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
-
-        function showAutoSyncSpinner(show) {
-            const spinner = document.getElementById('autoSyncSpinner');
-            if (!spinner) return;
-            if (show) {
-                spinner.classList.remove('hidden');
-                spinner.classList.add('flex');
-            } else {
-                spinner.classList.add('hidden');
-                spinner.classList.remove('flex');
-            }
-        }
-
-        function updateBadge() {
-            const badge = document.getElementById('connectionBadge');
-            if (!badge) return;
-
-            const activeServices = [webAppUrlPadang, webAppUrlBalapan, webAppUrlRelay, webAppUrlPadangAcara].filter(Boolean).length;
-
-            if (activeServices > 0) {
-                badge.className = "hidden sm:flex items-center gap-1.5 bg-slate-800/90 border border-slate-700/80 px-3 py-1.5 rounded-full text-xs font-semibold text-emerald-400 shadow-sm backdrop-blur-sm";
-                badge.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i><span>Live (${activeServices}/4)</span>`;
-            } else {
-                badge.className = "hidden sm:flex items-center gap-1.5 bg-slate-800/90 border border-slate-700/80 px-3 py-1.5 rounded-full text-xs font-semibold text-amber-400 shadow-sm backdrop-blur-sm";
-                badge.innerHTML = `<i class="fa-solid fa-flask"></i><span>Mod Demo</span>`;
-            }
-        }
+        window.downloadPrintDocument = function() {
+            const body = document.getElementById('printModalFallbackBody');
+            if (!body) return;
+            const content = `<!DOCTYPE html><html><head><title>Keputusan Rasmi</title><script src="https://cdn.tailwindcss.com"><\/script></head><body class="p-8">${body.innerHTML}</body></html>`;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Keputusan_Kejohanan_${currentMainTab}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Fail cetakan telah dimuat turun.", "success");
+        };
     </script>
 </body>
 </html>
